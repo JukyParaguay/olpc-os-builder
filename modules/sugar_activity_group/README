@@ -1,0 +1,11 @@
+This module configures the resultant image to use a specific activity group
+within the Sugar Activity Update control panel applet.
+
+It also causes all of the activities from that group to be downloaded and
+installed in the build.
+
+You must specify the activity group URL in the configuration. Example:
+
+[sugar_activity_group]
+url=http://wiki.laptop.org/go/Activities/G1G1
+

@@ -1,0 +1,254 @@
+Git repo: git://dev.laptop.org/git/projects/olpc-os-builder
+Mailing list: http://lists.laptop.org/listinfo/devel
+
+olpc-os-builder is composed of a series of modules, and an INI-style
+configuration supplied by the user, which selects the modules to be used
+and any settings to apply to them.
+
+The build process is composed of a series of stages. In a nutshell, the
+progression of these stages is modelled around the following actions:
+ 1. Prepare
+ 2. Generate kickstart file
+ 3. Run image-builder with kickstart file
+ 4. Run some final modifications on resultant image
+ 5. Convert image into format appropriate for distribution to XOs
+ 6. Finalize and cleanup
+
+Each module has its own directory. A module can read the configuration
+supplied by the user, which may well have settings specific to the module
+in question. The convention is that each module should look out for its
+own section in the config file, and such a section should have the same
+name as the module itself.
+
+A module can define default configuration values, by providing a "defaults.ini"
+file in the module directory. While it is possible to provide default values
+for any section in this file, it is advised that all modules only provide
+default values for a section with the same name as the module itself. (The
+exception being 'base' which is where the [global] defaults are defined)
+
+Each module is composed of a series of parts, which are included in the
+module's directory. These are the files that make up the implementation
+of what the module tries to achieve.
+ - Each part belongs to one specific stage,
+ - A module can present multiple parts for each stage
+ - A module can provide parts for any subset of stages (it doesn't have to
+   provide a part for every single one)
+ - Each part is be labelled numerically to determine in which order it gets
+   executed within the execution of a stage (relative to parts provided from
+   other modules, which all share the same numbering namespace)
+ - A part can be a shell script, or a Python program, or a plain text file that
+   simply gets included in the output object.
+
+The filename format for a part is:
+	<stage>.<order>.<name>.<extension>
+
+ stage		one of the stages documented below
+
+ order		a 2-digit number indicating at which point during the execution of
+			a stage the part should be executed. When a stage is executed, all
+			of the parts from all of the modules are placed into a collection,
+			ordered by based on this number, and then executed from 00 to 99.
+
+ name		A textual name for the part
+
+ extension	.sh (shell), .py (python), or .inc (plain text for inclusion)
+
+Shell parts are always run under 'set -e' so you must be careful to trap
+any expected failures that are part of your regular script flow.
+
+Each stage either has a purpose of generating content for a specific output
+file (i.e. the kickstart file), or for running scripts/programs to formulate
+the output files.
+
+All of the stages that begin with 'ks' are for generating the kickstart file.
+Any output on stdout from the parts within will be included in the kickstart
+file.
+
+All of the other stages do not have a specific output file, but the part
+implementations themselves can (and do) generate their own output files
+in the output directory (explained below). It is not possible to use parts
+with the .inc extension in these other stages, they are only for scripts
+and programs.
+
+Much of the core functionality of the application (e.g. running image-builder)
+is embedded within the 'base' module.
+
+
+== STAGES ==
+
+- prepare
+Any initial preparations for the road ahead
+
+
+- ksmain
+Core kickstart options to be included at the top of the kickstart file
+(e.g. keyboard, lang, user)
+
+
+- kspkglist
+Entries to be included in the kickstart %packages list
+
+
+- kspost
+Each kspost part becomes its own bash-interpreted %post script.
+These scripts are run under "set -e" meaning that if any command fails,
+the script will abort with error. These scripts are run with
+"%post --erroronfail" which means that any such error will cause the whole
+build to abort.
+
+If you want to run a script outside of the chroot, include "nochroot" in the
+name of the part.
+
+Note that if you provide a .sh or .py script as a kspost part, this script
+will be executed in order to make a %post shell script. Therefore the task
+of your kspost part is *always* to produce shell code to be executed later
+(at build time). This is in contrast to your expectation that your kspost
+script would be called at %post time -- this is not the way it works.
+These 'ks' stages are *only* for generating the kickstart file.
+
+
+- build
+Once this stage is reached, the kickstart file is complete. image-creator
+is now executed by the base module within this stage in order to produce
+the intermediate image.
+
+
+- mountfs
+This stage is responsible for taking the output from image-creator and
+locating a filesystem image, moving it into the intermediates directory
+where it can be written to, and mounting it at the fsmount directory.
+
+
+- preimage
+This is where any final modifications are made to the filesystem before
+it is transformed into an XO-ready image. Note that where possible, all
+filesystem modifications should be made as kickstart %post scripts
+(see the kspost stage). This is only for the exceptional cases, and things
+that really really have to run at the very end.
+
+
+- image
+This is where any appropriate modules should take the contents of the fsmount
+and transform it into an XO-ready image.
+
+
+- postimage
+In this stage, modules can use the fsmount to produce any additional output,
+such as a package list or a tarball of the entire filesystem.
+
+
+- unmountfs
+This stage is responsible for unmounting the intermediate filesystem that
+was mounted by fsmount.
+
+
+- finalize
+Anything that needs to be run at the very end of a successful build.
+
+
+- cleanup
+This stage is special - if any other stage fails, then this stage is executed
+and then the whole build system bails out. Error codes from these parts
+are ignored.
+
+This stage does not need to worry about cleaning the output or intermediates
+directories, since they are cleaned automatically when appropriate.
+
+The usual task to do here is to unmount anything that was mounted by another
+part in the module, bearing in mind that it might not be mounted.
+
+
+== LIBRARY ==
+
+Parts can take advantage of files in the library directory 'libdir' in
+order to simply access to the build number, the various directories listed
+below, and to read the configuration.
+
+In a .py part, simply:
+	import ooblib
+
+In a shell script:
+	. $OOB__shlib
+
+The documentation for these libraries is available in the files themselves.
+
+
+== DIRECTORIES ==
+
+Parts are concerned with a series of directories:
+
+- fsmount
+This is where the fsmount stage should mount the filesystem for tweaking
+and conversion into XO-ready images.
+
+- libdir
+This is where shared library code is kept for the parts, simplifying various
+functions such as reading the build number.
+
+- bindir
+This is where some C programs that are part of the distribution can be
+found.
+
+- cachedir
+Modules can write files to this directory which will generally not be deleted
+between builds. For example, files that are downloaded can be saved here to
+avoid having to download them on every build.
+This directory can be legally deleted by the user between builds, so modules
+must be able to function even when the cache has been cleared (e.g. by
+re-downloading the required files)
+
+- intermediatesdir
+Parts can output files here to be used as inputs to other parts (even from
+different modules).
+This directory is cleaned before a build is started, and after completion
+of a successful build.
+
+- outputdir
+This is the final directory that is presented to the user. All final
+'deliverables' should be placed here.
+This directory is cleaned before a build is started.
+
+
+== CONVENTIONS IMPLEMENTED BY CORE MODULES ==
+
+- Build number
+Each build has a number. A module responsible for selecting a number should
+write it to a file named "buildnr" in the intermediatesdir during the prepare
+stage.
+
+- Output file naming
+Output files are generally named with the prefix 'os', followed by the build
+number, followed by a '.' and followed by some text to indicate what it is.
+e.g. os43.packages.txt for the package list
+
+- No overlap in output files
+Modules should avoid writing to the same output files.
+For example, sd_card_image and jffs2_image should name their resultant .img
+files differently. (e.g. osXX.img for jffs2, and osXX.disk.img for SD)
+
+
+== RELEASING AN OLPC OS BUILD ==
+
+When releasing an official OLPC OS build, you should do the following:
+ - Modify the config so that [base].official=1
+ - Make and test the build
+ (assuming test success...)
+ - Bump olpc-os-builder version number
+ - Modify config to set suggested_oob_version in [base] to the new version
+   number
+ - Delete [base].official setting from config
+ - Save config in examples/ directory with appropriate name
+ - Tag and release new olpc-os-builder
+
+The base.official option basically requires that the user supplies a
+base.customization_info setting. If they don't, "unofficial" will be used.
+However, if base.official is 1, customization_info can be left empty and
+no "unofficial" tag will be appended. This will allow us to easily distinguish
+between official OLPC releases, and releases that are made by third parties.
+
+Bumping the version and noting that version in the config is important in
+order to provide a firm record for the environment under which the build
+was made. If deployments try to replicate the same build but use a different
+oob version with different module code, then they will end up with the
+undesirable result of an OS build that is somewhat different from the official.
+

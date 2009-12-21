@@ -1,0 +1,21 @@
+This module implements the core functionality of olpc-os-builder.
+You don't want to exclude it.
+
+[base] options:
+
+- versioned_fs (default 1)
+Set to 0 to disable the "upgradeable" /versions-based filesystem layout.
+
+- make_iso (default 1)
+Set to 0 to disable generation of a .iso file in the output directory.
+This .iso can be used on a regular system as a LiveCD.
+
+- compress_iso (default 1)
+Set to 0 to disable squashfs compression of the filesystem on the .iso LiveCD.
+This will increase the speed of the build, but the resultant .iso will be
+about 3 times as big.
+
+- make_tree_tarball (default 1)
+Set to 0 to disable the generation of the LZMA-compressed filesystem tree
+tarball
+

@@ -1,0 +1,20 @@
+This module is for enabling the various official Fedora repositories as
+package sources for the build process.
+
+Note that the yum config on the resultant system is unmodified -- use
+the yumcfg module in addition to this one if you want to make the same
+changes to the resultant system.
+
+The configuration has 3 options: one for the release repo, one for updates,
+and one for updates-testing. Use 1 to enable and 0 to disable.
+
+Defaults: release and updates enabled, updates_testing disabled.
+
+
+Example:
+
+[fedora_repos]
+release=1
+updates=1
+updates_testing=1
+

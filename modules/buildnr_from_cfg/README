@@ -1,0 +1,10 @@
+This module sets the build number of the build from a value in the
+configuration file.
+This number will never be incremented - you must change it manually if
+that is what you desire.
+
+e.g.
+
+[buildnr_from_cfg]
+buildnr=45
+

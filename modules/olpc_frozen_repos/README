@@ -1,0 +1,18 @@
+This module allows for easy inclusion of OLPC's mock.laptop.org static
+RPM repos for the build.
+
+Like the 'fedora' module, the resultant yum configuration on the system is
+unmodified. This only affects build time. Use the yumcfg module to modify
+the resultant system configuration if desired.
+
+Configuration: a single 'mocktags' option, which is a comma-separated list of
+git tags from the 'repos' repo which should each be used as repositories.
+
+Example:
+
+[olpc_frozen_repos]
+mocktags=
+	koji.dist-f11,
+	koji.dist-f11-updates,
+	local.10.1,
+	local.10.1-xo1.5

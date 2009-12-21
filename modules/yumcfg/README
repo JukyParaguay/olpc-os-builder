@@ -1,0 +1,47 @@
+This module lets you tweak and customize the yum repos configuration in
+the resultant build.
+
+The tweaks you make here are not applied at build-time, they only apply
+for yum usage once the image has been flashed onto an XO, the XO has
+been booted, and the user runs 'yum'.
+
+Note that OLPC doesn't really support yum usage, as it degrades various
+internal systems (e.g. olpc-update) and workflows, and it is not robust
+enough for field usage.
+
+To add repositories, add uniquely-named options that start with "addrepo_",
+one per repository, such as:
+
+[yumcfg]
+addrepo_1=1,olpc,http://mock.laptop.org/repos/local.10.1
+
+There are 3 comma-separated fields in each addrepo option:
+ 1. whether or not packages in this repository contribute to the excludes list
+    (0 or 1)
+ 2. The name of the repository
+ 3. The baseurl of the repository
+
+
+If you mark a repository as contributing to the excludes list, the build
+script will examine that repository and add all those packages to an
+internal excludes list. Nothing happens with that excludes list, until
+you use the add_excludes_to option:
+
+[yumcfg]
+addrepo_1=1,olpc,http://mock.laptop.org/repos/local.10.1
+add_excludes_to=fedora,fedora-updates
+
+The above example says that the "olpc" repository is to be added, but every
+single package that exists in the "olpc" repository takes precedence over the
+fedora and fedora-updates repositories, even if those repositories hold a
+newer version.
+(all packages in the olpc repo are excluded from fedora and fedora-updates)
+
+
+Finally, there are 2 options which let you enable or disable the first
+already-disabled or already-enabled repository in each repo file:
+
+[yumcfg]
+force_enable=updates-testing
+force_disable=updates
+

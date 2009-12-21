@@ -1,0 +1,7 @@
+This module installs sugar activities (.xo) and content bundles (.xol) from
+a local directory. You must configure this directory.
+
+Example:
+[sugar_activities_local]
+path=/path/to/my/activity/collection
+

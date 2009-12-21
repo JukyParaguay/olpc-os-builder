@@ -1,0 +1,119 @@
+olpc-os-builder is an application to generate OS images for XO laptops.
+It is the successor to pilgrim and fedora-xo which were used to generate prior
+OLPC OS releases.
+
+The build is made based from a build configuration, which selects a series
+of modules which were installed by olpc-image-builder. These modules (and
+the configuration you provide) control the outcome of the build process.
+
+olpc-os-builder lets you build your own OLPC OS builds, with your own
+customizations. In fact, one of the design goals is to make it easier for
+OLPC deployments to make their own customizations. In this case, the general
+usage model is to take one of the example configurations which corresponds
+to the OLPC OS that you want to ship, and then make a handful of modifications
+according to your local requirements. These example configurations exactly
+match the build configurations that OLPC used to make the published OS release.
+
+When using olpc-os-builder in this fashion, you should take care to match
+your runtime environment with the one that OLPC used when the base OS image
+was originally released. For example, if OLPC OS release 10.2.0 was built with
+olpc-os-builder-1.0.3 on Fedora 11, and you want to modify this particular
+release but you are using olpc-os-builder-1.2.0 on Fedora 12 then the output
+images may differ significantly from the official OLPC OS release 10.2.0,
+which is probably not what you want.
+
+The example build configurations encode the version of olpc-os-builder which
+was used by OLPC at the time that each build was made. With this information,
+olpc-os-builder will warn you at the start of a build when you attempt to
+build such an image on a configuration that differs from the environment where
+the corresponding official OLPC OS release was made.
+
+
+Usage:
+	olpc-os-builder <path to build config>
+
+
+Configuration:
+
+Various build configurations can be found in the examples directory
+included with the distribution, including configurations used to build
+OLPC OS releases.
+
+Build configuration files have a series of sections, each section title is
+enclosed in square brackets. Inside each section, there are options.
+For example, "mysection" below has one option, named "option1" with value
+"myvalue":
+	[mysection]
+	option1=myvalue
+
+Options can reside on multiple lines, provided that all lines beyond the first
+one are indented, e.g.:
+	[mysection]
+	option1=this is
+		an option
+		that spans 4 lines
+		but lines 2 through 4 must be indented
+	option2=foo
+
+In general, each section that can exist in the configuration file corresponds
+to a specific module. The section name is the same as the module name.
+The options that can exist in these sections are documented in the individual
+module documentation files.
+
+There is one exception: the [global] section does not belong to any module.
+So we'll document it here, according to each possible setting:
+
+fedora_release			The numeric release number of the Fedora operating
+						system to base the OLPC OS build on. e.g. 11 for
+						Fedora 11
+
+olpc_version_major		The major version component of the OLPC version tag
+						to include in the OS image. For example, in the OLPC
+						OS 10.1.0 release, this would be 10
+
+olpc_version_minor		The minor version component of the OLPC version tag
+						to include in the OS image. For example, in the OLPC
+						OS 10.1.0 release, this would be 1
+
+olpc_version_release	The release version component of the OLPC version tag
+						to include in the OS image. For example, in the OLPC
+						OS 10.1.0 release, this would be 0
+
+target_platform			A textual description of the target platform for the
+						build, e.g. XO-1.5
+
+langs					A set of languages to support in the resultant OS image.
+
+modules					The selection of modules to include in the build.
+
+
+In general, options need to be set with care. Aim to stick with the values
+shown in the examples where possible. For example, if you were to exclude
+the "base" module from the build then you will get strange results. Also, you
+cannot arbitrarily change fedora_release without adapting all of the module
+code to work with the ever-changing components of each official Fedora release.
+
+
+
+Design goals:
+ - revolve around Fedora's image-creator infrastructure, meaning that we use a
+   lot of Fedora's official build infrastructure
+ - allow XO-1 and XO-1.5 builds from the codebase
+ - limit all configuration to a single INI-style text file
+ - through the configuration file, allow common deployment modifications to be
+   made without too much technical know-how
+ - copy elements of dracut's modular design to achieve the above
+ - eliminate the need for image-builder, which had the undesirable effect of
+   replicating some of the build infrastructure in 2 places
+ - avoid any 'difficult' system requirements so that this can be packaged
+   into official Fedora and hence easily installed and used by deployments
+
+
+Development:
+	See README.devel
+
+
+Contact:
+	devel@lists.laptop.org
+	http://lists.laptop.org/listinfo/devel
+

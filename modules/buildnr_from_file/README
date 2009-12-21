@@ -1,0 +1,12 @@
+This module sets the build number from a file.
+It reads a number from a text file, increments it, and uses that as
+the build number.
+During the 'cleanup' stage, the new build number is written, therefore
+the next build will have a build number that is 1 higher.
+
+The default path to the file where the build number is stored is
+/tmp/oob-buildnr but you can customize this in the configuration:
+
+[buildnr_from_file]
+path=/path/to/version/file
+

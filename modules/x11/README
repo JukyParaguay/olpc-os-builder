@@ -1,0 +1,4 @@
+This module contains various necessary tweaks for setting up a system
+that has a graphical user environment. You almost certainly want to
+include it.
+

@@ -1,0 +1,32 @@
+This module creates ext3 SD card images from the build output. These
+images contain partition tables and 2 partitions.
+
+It also produces .zd disk images from those images, suitable for
+fs-update. Corresponding .zsp files are produced too.
+
+The SD card sizes must be specified, in bytes. This module can create
+filesystems for multiple SD card capacities. Simply provide a list of
+uniquely-named options that start with "size_", one for each SD card size.
+
+The value for each of these options is the disk size (in bytes), optionally
+followed by a comma and a name. There can only be one un-named entry.
+
+For example:
+[sd_card_image]
+; 3780mb
+size_1=3964665000
+; 1985mb
+size_2=1977614336,2gb
+
+The output files will be:
+
+	(the 3780mb disk output)
+	osXX.disk.img
+	osXX.zd
+	osXX.zsp
+
+	(the 1985mb disk output)
+	osXX.2gb.disk.img
+	osXX.2gb.zd
+	osXX.2gb.zsp
+

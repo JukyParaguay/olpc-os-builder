@@ -1,0 +1,7 @@
+This module creates a jffs2 image (and a corresponding .crc file) suitable
+for flashing onto XO-1 using copy-nand or NANDblaster.
+
+Output files are:
+	osXX.img
+	osXX.crc
+

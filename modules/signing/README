@@ -1,0 +1,24 @@
+This module helps with signing of builds.
+
+It has 3 configuration options.
+
+[signing]
+extract=0
+make_fs_zip=1
+add_signed_content=/path/to/zip/file
+
+"extract" causes an output file named osXX.for-signing.zip to be generated,
+including all content needed for OS and FW signing (firmware, kernel,
+initramfs). Default 0.
+
+"make_fs_zip" results in an unsigned fs.zip files being created for every
+.zsp file output from the build. A file named os31.2gb.zsp will result in
+os31.2gb.fs.zip being created. Default 1.
+
+"add_signed_content" is an optional setting which lets you provide a zip
+file containing some combination of the following files:
+	bootfw.zip runos.zip runrd.zip actos.zip actrd.zip
+These will be copied to /boot in the resultant image.
+The idea is that you sign these files externally, then use this module to
+insert them into the next build.
+

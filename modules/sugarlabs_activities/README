@@ -1,0 +1,17 @@
+This module accepts a pre-configured comma-separated list of activity IDs,
+downloads those activities from http://activities.sugarlabs.org and unpacks
+them into the build.
+
+Both activities and content are supported.
+
+You can optionally provide the Sugar version number. This will cause the
+downloaded activities to be limited to ones that are marked as supporting
+that specific version of Sugar.
+
+Example configuration:
+[sugarlabs_activities]
+sugar_version=0.84
+activities=com.socialtext.SocialCalcActivity,
+	org.laptop.sugar.GetBooksActivity,
+	org.laptop.community.Colors
+

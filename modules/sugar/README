@@ -1,0 +1,18 @@
+This module adds the Sugar learning environment to the build.
+
+It has 2 optional configuration options which let you add or remove activities
+from the default favorites view. Both accept comma-separated lists of activity
+IDs.
+
+Example:
+
+[sugar]
+favorites_view_add=
+	org.sugarlabs.InfoSlicer,
+	org.sugarlabs.IRC,
+	org.laptop.StopWatchActivity,
+	org.laptop.community.Finance
+favorites_view_del=
+	org.laptop.Terminal,
+	org.laptop.Log
+
