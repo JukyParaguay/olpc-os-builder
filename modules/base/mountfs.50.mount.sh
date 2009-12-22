@@ -32,8 +32,8 @@ if [[ "$make_iso" == "1" ]]; then
 
 	# copy out fs image, mounting the squashfs if needed
 	if [ -e "$isomnt/LiveOS/squashfs.img" ]; then
-		umount $squashmnt &>/dev/null || :
 		echo "Extracting filesystem image from compressed ISO..."
+		mkdir -p $squashmnt
 		mount -o loop,ro $isomnt/LiveOS/squashfs.img $squashmnt
 		cp $squashmnt/LiveOS/ext3fs.img $target_img
 		umount $squashmnt
