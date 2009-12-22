@@ -89,7 +89,12 @@ class Stage(object):
             shenv = self._make_environment()
             proc = subprocess.Popen(["/bin/bash", path], shell=False,
                                     stdout=outtype, env=shenv)
-            (out, err) = proc.communicate()
+            try:
+                (out, err) = proc.communicate()
+            except (Exception, KeyboardInterrupt), e:
+                proc.terminate()
+                raise StageException(mod, part, repr(e))
+
             if not self.ignore_failures and proc.returncode != 0:
                 raise StageException(mod, part, proc.returncode)
             if not self.console_output:
@@ -98,7 +103,12 @@ class Stage(object):
             shenv = self._make_environment()
             proc = subprocess.Popen(["/usr/bin/python", path], shell=False,
                                     stdout=outtype, env=shenv)
-            (out, err) = proc.communicate()
+            try:
+                (out, err) = proc.communicate()
+            except (Exception, KeyboardInterrupt), e:
+                proc.terminate()
+                raise StageException(mod, part, repr(e))
+
             if not self.ignore_failures and proc.returncode != 0:
                 raise StageException(mod, part, proc.returncode)
             if not self.console_output:
@@ -344,7 +354,7 @@ class OsBuilder(object):
                     CleanupStage(self).run()
                 except:
                     pass
-                raise OsBuilderException("Failure in %s: module %s, part %s, error code %d" % (stage.__name__, ex.module, ex.part, ex.code))
+                raise OsBuilderException("Failure in %s: module %s, part %s, error code %s" % (stage.__name__, ex.module, ex.part, ex.code))
 
         # cleanup
         CleanupStage(self).run()
