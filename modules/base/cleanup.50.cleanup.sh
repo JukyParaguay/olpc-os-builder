@@ -17,10 +17,14 @@ for tmp in $(seq 10); do
 	oIFS=$IFS
 	IFS=$'\n'
 	for i in $(</proc/mounts); do
+		dev=${i%% *}
 		i=${i#* }
 		i=${i%% *}
 		if [[ "${i:0:18}" == "/var/tmp/imgcreate" ]]; then
 			umount $i &>/dev/null || :
+		fi
+		if [[ "${dev:0:9}" == "/dev/loop" ]]; then
+			losetup -d $dev &>/dev/null || :
 		fi
 	done
 	IFS=oIFS
