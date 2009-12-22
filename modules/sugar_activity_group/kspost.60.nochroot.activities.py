@@ -217,5 +217,6 @@ for suffix in suffixes:
     # only process the first working URL
     break
 
+print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
 print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
 
