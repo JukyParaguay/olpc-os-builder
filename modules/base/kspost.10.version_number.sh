@@ -11,13 +11,14 @@ official=$(read_config global official)
 custinfo=$(read_config global customization_info)
 buildnr=$(read_buildnr)
 
-[ -n "$custinfo" ] && custinfo="UNOFFICIAL"
+[ -z "$custinfo" ] && custinfo="customized"
 #add leading space
 custinfo=" $custinfo"
 
 custstr=
 if [[ "$official" != "1" ]]; then
 	custstr=",$custinfo"
+	custbstr="$custinfo"
 fi
 
 cat <<EOF
@@ -30,6 +31,6 @@ echo "$majver.$minver.$relver" > /etc/olpc-release
 sed -i -e "1s/.*/OLPC OS $majver.$minver for ${platform}${custstr} (build $buildnr)/" /etc/issue
 cp /etc/issue /etc/issue.net
 
-echo "${buildnr}${custinfo}" > /boot/olpc_build
+echo "${buildnr}${custbstr}" > /boot/olpc_build
 EOF
 
