@@ -1,0 +1,82 @@
+This module lets you control which RPM repositories are included in the build.
+The resultant yum configuration on the system is unmodified. This only affects
+build time. Use the yumcfg module to modify the resultant system configuration
+if desired.
+
+You almost certainly want to include this module, and ensure that Fedora's
+release repository (and perhaps update) or equivalent is enabled.
+
+Everything is done through the configuration.
+
+Firstly, the 'fedora' option:
+
+[repos]
+fedora=fedora,fedora-updates,fedora-updates-testing
+
+This is a comma-separated list of official Fedora repositories to enable
+for the build. The 3 possible options are fedora, fedora-update and
+fedora-updates-testing.
+
+
+
+The olpc_frozen_ options:
+
+Provide any number of options with unique names that start with "olpc_frozen_"
+to generate repo lines that correspond to the frozen RPM trees controlled on
+mock.laptop.org.
+The format of each value is a number (to determine whether the packages in
+this repository are added to the exclude list), followed by comma, then
+the name of the git tag of the 'repos' repo which you want to add as an RPM
+repository. Example:
+
+[repos]
+olpc_frozen_1=0,koji.dist-f11
+olpc_frozen_2=0,koji.dist-f11-updates
+olpc_frozen_3=1,local.10.1
+olpc_frozen_4=1,local.10.1-xo1.5
+
+
+
+The olpc_publicrpms_ options:
+
+Provide any number of options with unique names that start with
+"olpc_publicrpms_" in order to generate repo lines that correspond to the
+aggregation of OLPC developers public_rpms dropboxes, aggregated at
+http://xs-dev.laptop.org/~dsd/repos
+The format of each value is a number (to determine whether the packages in
+this repository are added to the exclude list), followed by comma, then the
+name of the repository. Example:
+
+[repos]
+olpc_publicrpms_1=1,f11
+olpc_publicrpms_2=1,f11-xo1.5
+
+
+
+The add_excludes_to option:
+
+In the options documented above, you were able to append the list of packages
+in a particular repository to an exclude list. This option allows you to
+apply that exclude list to any of the repo lines that were generated with
+the options above.
+
+For example, this is useful to specify that packages in OLPC's "override"
+repos take precedence over the official Fedora repos, even if the Fedora
+repo contains a newer version of a particular package.
+
+The add_excludes_to option value is a comma-separated list of repository
+names where the exclude list should be applied. The names are the same
+as the names (or tag names) of the options documented above. For example:
+
+[repos]
+fedora=fedora,fedora-updates
+olpc_publicrpms_1=1,f11
+olpc_publicrpms_2=1,f11-xo1.5
+add_excludes_to=fedora,fedora-updates
+
+
+This generates a repository configuration where fedora and fedora-updates
+official repositories are used as the main package source, but OLPC's
+public_rpm dropboxes are used as overrides for selected packages which have
+been uploaded there.
+
