@@ -67,6 +67,10 @@ into the real boot area, e.g.:
 	# cp -a /boot/* /versions/boot/current/boot/
 EOF
 
+# image-creator seems to conditionally create and populate this directory
+# based on the setup of the host computer. let's make it consistent,
+# we aren't using selinux...
+rm -rf $fsmount/selinux
 
 # normalize modification times of all files for faster updates (#4259)
 # note that python needs special consideration here: the mtime is encoded
