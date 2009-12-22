@@ -6,23 +6,11 @@ import sys
 import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
-from xml.etree.ElementTree import ElementTree
 
 import ooblib
 
 addrepos = []
 excludes = set()
-
-def add_excludes_from_xml(fd):
-    et = ElementTree(file=fd)
-    root = et.getroot()
-    for i in root.getchildren():
-        if not i.tag.endswith("}package"):
-            continue
-        for child in i.getchildren():
-            if not child.tag.endswith("}name"):
-                continue
-            excludes.add(child.text)
 
 # read in repos
 for var in os.environ:
@@ -41,7 +29,7 @@ for for_excludes, name, url in addrepos:
     data = fd.read()
     fd.close()
     fd = GzipFile(fileobj=StringIO(data))
-    add_excludes_from_xml(fd)
+    ooblib.add_packages_from_xml(fd, excludes)
 
 # write shell code to generate yum repo files
 for for_excludes, name, url in addrepos:
