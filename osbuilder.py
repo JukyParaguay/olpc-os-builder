@@ -121,7 +121,7 @@ class Stage(object):
         for part in partlist:
             bname = os.path.basename(part)
             mod = os.path.basename(os.path.dirname(part))
-            parts[bname] = os.path.join(mod, bname)
+            parts[bname + "//" + mod] = os.path.join(mod, bname)
         items = parts.keys()
         items.sort()
 
