@@ -28,7 +28,6 @@ openssh-askpass
 xorg-x11-server-Xorg
 xorg-x11-drv-void
 xorg-x11-drv-fbdev
-xorg-x11-drv-openchrome
 xorg-x11-drv-evdev
 xorg-x11-drv-keyboard
 xorg-x11-drv-mouse
