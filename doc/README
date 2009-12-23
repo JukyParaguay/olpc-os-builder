@@ -79,6 +79,13 @@ olpc_version_release	The release version component of the OLPC version tag
 						to include in the OS image. For example, in the OLPC
 						OS 10.1.0 release, this would be 0
 
+customization_info		Please set this to a string that indicates your
+						identity, to make clear that the resultant build is a
+						modified version of OLPC's official release.
+						For example, you could use something like
+						"customized for Paraguay" when producing an OS build
+						for OLPC's Paraguayan deployment.
+
 target_platform			A textual description of the target platform for the
 						build, e.g. XO-1.5
 

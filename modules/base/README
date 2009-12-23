@@ -26,14 +26,3 @@ about 3 times as big.
 Set to 0 to disable the generation of the LZMA-compressed filesystem tree
 tarball
 
-
-
-- customization_info (optional, suggested)
-Please set this to a string that indicates your identity, to make clear that
-the resultant build is a modified version of OLPC's official release.
-For example, you could use something like the following when producing
-an OS build for OLPC's Paraguayan deployment:
-
-[base]
-customization_info=customized by Paraguay
-

@@ -3,7 +3,7 @@
 
 . $OOB__shlib
 versioned_fs=$(read_config base versioned_fs)
-versioned_fs=$(read_config base prepopulate_run)
+prepopulate_run=$(read_config base prepopulate_run)
 
 buildnr=$(read_buildnr)
 isopath=$outputdir/os$buildnr.iso
@@ -116,8 +116,8 @@ if [ "$versioned_fs" = "1" ]; then
 
 	if [ "$prepopulate_run" = "1" ]; then
 		echo "Pre-populating /versions/run tree..."
-		cp -arl $fsmount/versions/pristine/$buildir \
-			$fsmount/versions/run/$buildir
+		cp -arl $fsmount/versions/pristine/$buildnr \
+			$fsmount/versions/run/$buildnr
 	fi
 fi
 
