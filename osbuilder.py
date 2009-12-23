@@ -17,7 +17,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #
 
+# canonical source of version number
 VERSION="1.0.0"
+
+# "make install" modifies this in the installed copy
+INSTALLED=0
 
 import sys
 import os
@@ -80,7 +84,7 @@ class Stage(object):
         else:
             outtype = subprocess.PIPE
 
-        path = os.path.join("modules", mod, part)
+        path = os.path.join(self.osb.moddir, mod, part)
         if path.endswith(".inc"):
             fd = open(path)
             for line in fd:
@@ -123,7 +127,8 @@ class Stage(object):
         # find all parts to execute for this stage
         partlist = []
         for mod in self.osb.modules:
-            matches = glob('modules/%s/%s.[0-9][0-9].*' % (mod, self.name))
+            matches = glob('%s/%s/%s.[0-9][0-9].*' \
+                           % (self.osb.moddir, mod, self.name))
             partlist.extend(matches)
 
         # sort them
@@ -245,10 +250,19 @@ class OsBuilder(object):
         self.build_config = build_config
 
         print " * OLPC OS builder v%s" % VERSION
-        self.libdir = os.path.join(sys.path[0], 'lib')
-        self.bindir = os.path.join(sys.path[0], 'bin')
-        self.builddir = os.path.join(sys.path[0], 'build')
-        self.cachedir = os.path.join(self.builddir, 'cache')
+        if INSTALLED:
+            self.moddir = "/usr/share/olpc-os-builder/modules.d"
+            self.libdir = "/usr/share/olpc-os-builder/lib"
+            self.bindir = "/usr/libexec/olpc-os-builder"
+            self.builddir = "/var/tmp/olpc-os-builder"
+            self.cachedir = "/var/cache/olpc-os-builder"
+        else:
+            self.moddir = os.path.join(sys.path[0], 'modules')
+            self.libdir = os.path.join(sys.path[0], 'lib')
+            self.bindir = os.path.join(sys.path[0], 'bin')
+            self.builddir = os.path.join(sys.path[0], 'build')
+            self.cachedir = os.path.join(self.builddir, 'cache')
+
         self.intermediatesdir = os.path.join(self.builddir, 'intermediates')
         self.outputdir = os.path.join(self.builddir, 'output')
         self.statedir = os.path.join(self.builddir, 'state')
@@ -293,7 +307,7 @@ class OsBuilder(object):
                 raise OsBuilderException("Invalid module name in config: %s" \
                                          % mod)
 
-            modpath = os.path.join("modules", mod)
+            modpath = os.path.join(self.moddir, mod)
             if not os.path.isdir(modpath):
                 raise OsBuilderException("Module %s doesn't exist" % mod)
 
