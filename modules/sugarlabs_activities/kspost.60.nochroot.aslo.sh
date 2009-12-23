@@ -14,8 +14,15 @@ for id in $activities; do
 	qurl="http://activities.sugarlabs.org/services/update-aslo.php?id=$id"
 	[ -n "$sugarver" ] && qurl="${qurl}&appVersion=${sugarver}"
 
-	aurl=$(wget --inet4-only -q -O- "$qurl" | grep updateLink | sed -e 's/<[^>]*>//g')
-	wget --inet4-only -P $cache -N "$aurl"
+	echo "Examining $qurl ..." >&2
+	aurl=$(wget --inet4-only -q -O- "$qurl" | grep updateLink | sed -e 's/[[:space:]]*<[^>]*>//g')
+	if [ -z "$aurl" ]; then
+		echo "ERROR: Could not find download URL for $id" >&2
+		exit 1
+	fi
+
+	echo "Downloading from $aurl ..." >&2
+	wget --no-verbose --inet4-only -P $cache -N "$aurl"
 
 	outfile=$cache/$(basename "$aurl")
 	if [ "${outfile:(-4)}" == ".xol" ]; then
