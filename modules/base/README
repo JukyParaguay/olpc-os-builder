@@ -6,6 +6,13 @@ You don't want to exclude it.
 - versioned_fs (default 1)
 Set to 0 to disable the "upgradeable" /versions-based filesystem layout.
 
+- prepopulate_run (default 1)
+Only applicable when building a versioned filesystem layout.
+This will cause the /versions/run tree to be populate with a link-farm
+from the image in /versions/pristine. This will be done at first-boot time
+otherwise, but given that it takes a minute or more, it is a fair improvement
+to do it at build time.
+
 - make_iso (default 1)
 Set to 0 to disable generation of a .iso file in the output directory.
 This .iso can be used on a regular system as a LiveCD.
@@ -18,6 +25,8 @@ about 3 times as big.
 - make_tree_tarball (default 1)
 Set to 0 to disable the generation of the LZMA-compressed filesystem tree
 tarball
+
+
 
 - customization_info (optional, suggested)
 Please set this to a string that indicates your identity, to make clear that

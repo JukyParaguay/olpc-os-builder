@@ -3,6 +3,7 @@
 
 . $OOB__shlib
 versioned_fs=$(read_config base versioned_fs)
+versioned_fs=$(read_config base prepopulate_run)
 
 buildnr=$(read_buildnr)
 isopath=$outputdir/os$buildnr.iso
@@ -112,6 +113,12 @@ if [ "$versioned_fs" = "1" ]; then
 	chroot $fsmount/versions/pristine/$buildnr /usr/sbin/olpc-contents-create -f /.xo-files -p /etc/passwd -g /etc/group /
 	mv $fsmount/versions/pristine/$buildnr/.xo-files $fsmount/versions/contents/$buildnr
 	cp $fsmount/versions/contents/$buildnr $outputdir/os$buildnr.toc
+
+	if [ "$prepopulate_run" = "1" ]; then
+		echo "Pre-populating /versions/run tree..."
+		cp -arl $fsmount/versions/pristine/$buildir \
+			$fsmount/versions/run/$buildir
+	fi
 fi
 
 # now normalize mtimes again
