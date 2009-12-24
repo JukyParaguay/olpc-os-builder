@@ -4,10 +4,14 @@
 . $OOB__shlib
 versioned_fs=$(read_config base versioned_fs)
 prepopulate_run=$(read_config base prepopulate_run)
+python_optimize=$(read_config base python_optimize)
 
 buildnr=$(read_buildnr)
 isopath=$outputdir/os$buildnr.iso
 
+if [[ "$python_optimize" != "0" ]]; then
+	export PYTHONOPTIMIZE=$python_optimize
+fi
 
 
 # due to popular demand

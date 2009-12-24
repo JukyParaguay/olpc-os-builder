@@ -26,3 +26,10 @@ about 3 times as big.
 Set to 0 to disable the generation of the LZMA-compressed filesystem tree
 tarball
 
+- python_optimize (default 2)
+When 0, pyc files will be generated for all Python code in the OS build.
+When set to 1, basic optimizations will be enabled, and pyo files will be
+generated instead of pyc.
+When set to 2, the effects will be the same as 1 except docstrings will
+be discarded when generating pyc files.
+
