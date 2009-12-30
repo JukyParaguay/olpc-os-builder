@@ -21,12 +21,17 @@ size_2=1977614336,2gb
 The output files will be:
 
 	(the 3780mb disk output)
-	osXX.disk.img
+	osXX.disk.img.tar.gz
 	osXX.zd
 	osXX.zsp
 
 	(the 1985mb disk output)
-	osXX.2gb.disk.img
+	osXX.2gb.disk.img.tar.gz
 	osXX.2gb.zd
 	osXX.2gb.zsp
+
+The .img file is archived in tar (in sparse mode) and then compressed with
+gzip. Tar preserves the sparseness of the file (the fact that some part of the
+image is made up of unallocated disk blocks). To disable this
+archiving/compression, set the compress_disk_image option to 0 (default is 1).
 

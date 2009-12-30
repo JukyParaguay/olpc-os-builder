@@ -3,6 +3,7 @@
 
 . $OOB__shlib
 buildnr=$(read_buildnr)
+compress=$(read_config sd_card_image compress_disk_image)
 
 oIFS=$IFS
 IFS=$'\n'
@@ -20,6 +21,12 @@ for line in $(env); do
 	pfx=$outputdir/$osname
 	echo "Making ZD image for $osname..."
 	$bindir/zhashfs 0x20000 sha256 $pfx.disk.img $pfx.zsp $pfx.zd
+
+	if [[ "$compress" == "1" ]]; then
+		echo "Compressing disk image..."
+		tar -czSf $pfx.disk.img.tar.gz $pfx.disk.img
+		rm -f $pfx.disk.img
+	fi
 done
 IFS=$oIFS
 
