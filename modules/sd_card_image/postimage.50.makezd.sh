@@ -24,7 +24,7 @@ for line in $(env); do
 
 	if [[ "$compress" == "1" ]]; then
 		echo "Compressing disk image..."
-		tar -czSf $pfx.disk.img.tar.gz $pfx.disk.img
+		tar -czS -f $pfx.disk.img.tar.gz -C $outputdir $osname.disk.img
 		rm -f $pfx.disk.img
 	fi
 done
