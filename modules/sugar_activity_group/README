@@ -9,3 +9,14 @@ You must specify the activity group URL in the configuration. Example:
 [sugar_activity_group]
 url=http://wiki.laptop.org/go/Activities/G1G1
 
+
+The install_activities option (default 1) can be set to 0 to disable the
+build-time parsing/download/installation of activities from the activity
+group URL. This will cause the activity group URL to be written into the
+resultant build but the specified activities will not be downloaded or
+installed. e.g.:
+
+[sugar_activity_group]
+url=http://wiki.laptop.org/go/Activities/G1G1
+install_activities=0
+

@@ -170,52 +170,56 @@ if not os.path.exists(cache):
 
 
 baseurl = ooblib.read_config('sugar_activity_group', 'url')
-vmaj = int(ooblib.read_config('global', 'olpc_version_major'))
-vmin = int(ooblib.read_config('global', 'olpc_version_minor'))
-vrel = int(ooblib.read_config('global', 'olpc_version_release'))
+install_activities = ooblib.read_config_bool('sugar_activity_group',
+                                             'install_activities')
 
-suffixes = ["%d.%d.%d" % (vmaj, vmin, vrel), "%d.%d" % (vmaj, vmin), ""]
+if install_activities:
+    vmaj = int(ooblib.read_config('global', 'olpc_version_major'))
+    vmin = int(ooblib.read_config('global', 'olpc_version_minor'))
+    vrel = int(ooblib.read_config('global', 'olpc_version_release'))
 
-for suffix in suffixes:
-    if len(suffix) > 0:
-        grpurl = urlparse.urljoin(baseurl + "/", urllib.quote(suffix))
-    else:
-        grpurl = baseurl
+    suffixes = ["%d.%d.%d" % (vmaj, vmin, vrel), "%d.%d" % (vmaj, vmin), ""]
 
-    print >>sys.stderr, "Trying group URL", grpurl
-    name, desc, results = parse_url(grpurl)
-    if len(results) == 0 or (name is None and desc is None):
-        continue
-    print >>sys.stderr, "Found activity group:", name
+    for suffix in suffixes:
+        if len(suffix) > 0:
+            grpurl = urlparse.urljoin(baseurl + "/", urllib.quote(suffix))
+        else:
+            grpurl = baseurl
 
-    for name, info in results.items():
-        (version, url) = only_best_update(info)
-        print >>sys.stderr, "Examining", name, "v%d" % version
-        fd = urllib2.urlopen(url)
-        headers = fd.info()
-        if not 'Content-length' in headers:
-            raise Exception("No content length for %s" % url)
-        length = int(headers['Content-length'])
-        path = urlparse.urlsplit(fd.geturl())[2]
-        path = os.path.basename(path)
+        print >>sys.stderr, "Trying group URL", grpurl
+        name, desc, results = parse_url(grpurl)
+        if len(results) == 0 or (name is None and desc is None):
+            continue
+        print >>sys.stderr, "Found activity group:", name
 
-        localpath = os.path.join(cache, path)
-        if os.path.exists(localpath):
-            localsize = os.stat(localpath).st_size
-            if localsize == length:
-                print >>sys.stderr, "Not downloading, already in cache."
-                generate_install_cmd(localpath)
-                continue
+        for name, info in results.items():
+            (version, url) = only_best_update(info)
+            print >>sys.stderr, "Examining", name, "v%d" % version
+            fd = urllib2.urlopen(url)
+            headers = fd.info()
+            if not 'Content-length' in headers:
+                raise Exception("No content length for %s" % url)
+            length = int(headers['Content-length'])
+            path = urlparse.urlsplit(fd.geturl())[2]
+            path = os.path.basename(path)
 
-        print >>sys.stderr, "Downloading (%dkB)..." % (length/1024)
-        localfd = open(localpath, 'w')
-        localfd.write(fd.read())
-        fd.close()
-        localfd.close()
-        generate_install_cmd(localpath)
+            localpath = os.path.join(cache, path)
+            if os.path.exists(localpath):
+                localsize = os.stat(localpath).st_size
+                if localsize == length:
+                    print >>sys.stderr, "Not downloading, already in cache."
+                    generate_install_cmd(localpath)
+                    continue
 
-    # only process the first working URL
-    break
+            print >>sys.stderr, "Downloading (%dkB)..." % (length/1024)
+            localfd = open(localpath, 'w')
+            localfd.write(fd.read())
+            fd.close()
+            localfd.close()
+            generate_install_cmd(localpath)
+
+        # only process the first working URL
+        break
 
 print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
 print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
