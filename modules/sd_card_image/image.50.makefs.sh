@@ -71,7 +71,13 @@ EOF
 	# (e.g. updated tests) before the OS has ever booted
 	mkdir -p $BOOT/runin
 
+	# we put /security here as it's used by OFW, and should persist between
+	# updates
 	mkdir -p $BOOT/security
+
+	# this is where Fedora's statetab tmpfs mount system puts its data.
+	# the directory has to be created in advance
+	mkdir -p $BOOT/security/state
 
 	if [ "$versioned_fs" = "1" ]; then
 		local tgt=$BOOT/boot-versions/$buildnr
