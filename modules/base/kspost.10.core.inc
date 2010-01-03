@@ -1,11 +1,13 @@
 # from the liveuser script
 # and add /ofw
+# and limit tmpfs mounts to 5%
 cat >> /etc/fstab <<EOF
-/tmp            /tmp            tmpfs         rw          0 0
+/tmp            /tmp            tmpfs         rw,size=5%  0 0
 varcacheyum     /var/cache/yum  tmpfs         rw,mode=755 0 0
-vartmp          /var/tmp        tmpfs         rw          0 0
+vartmp          /var/tmp        tmpfs         rw,size=5%  0 0
 none            /ofw            promfs		  defaults    0 0
 EOF
+sed -i -e '/\/dev\/shm/ s/ defaults / defaults,size=5% /' /etc/fstab
 
 mkdir /ofw
 mkdir /bootpart
@@ -60,6 +62,9 @@ sed -i -e 's/TEMPORARY_STATE=no/TEMPORARY_STATE=yes/' \
 
 # Remove resolv.conf from rwtab so that it can be updated atomically (#2748)
 sed -i -e "/resolv.conf/d" /etc/rwtab
+
+# ensure temporary state directory doesn't get too fat (#9636)
+sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/sysconfig/readonly-root
 
 # Things to store separately in persistent storage
 # This means these files can be writable at runtime without breaking the
