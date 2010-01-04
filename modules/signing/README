@@ -1,24 +1,175 @@
-This module helps with signing of builds.
+OLPC XO laptops can optionally include a security system, parts of which
+aim to ensure the following:
+ 1. Only trusted kernels and initramfs image (early boot code) can be booted
+ 2. Only trusted OS images can be installed on the laptop
 
-It has 3 configuration options.
+Trust is established through the verification of signatures of the above
+components. The XO laptop flash includes a set of public keys which are used
+to perform this verification.
 
-[signing]
-extract=0
-make_fs_zip=1
-add_signed_content=/path/to/zip/file
+These security systems are typically disabled for small deployments, but are
+enabled for large deployments who have sufficient technical resources to
+meet the technical challenges presented by this system. It's complex.
 
-"extract" causes an output file named osXX.for-signing.zip to be generated,
-including all content needed for OS and FW signing (firmware, kernel,
-initramfs). Default 0.
+Other security systems are available too (e.g. developer keys,
+activation leases) but these fall out of the scope of the tasks that
+olpc-os-builder is concerned with.
 
-"make_fs_zip" results in an unsigned fs.zip files being created for every
-.zsp file output from the build. A file named os31.2gb.zsp will result in
-os31.2gb.fs.zip being created. Default 1.
+See http://wiki.laptop.org/go/Firmware_security for more information. The
+following instructions assume you understand the basics and know what you are
+doing.
 
-"add_signed_content" is an optional setting which lets you provide a zip
-file containing some combination of the following files:
-	bootfw.zip runos.zip runrd.zip actos.zip actrd.zip
-These will be copied to /boot in the resultant image.
-The idea is that you sign these files externally, then use this module to
-insert them into the next build.
+Some of the options below require you to have a local and ready-built checkout
+of OLPC's bios-crypto git repository. You probably have one of these already,
+because you've used this to create the keypairs that you'll be using for
+signing, right? If not, instructions for this step can be found at
+http://wiki.laptop.org/go/OSBuilder
+
+Once you have done this, you should tell olpc-os-builder about this, as follows:
+
+	[signing]
+	bios_crypto_path=/home/myuser/bios-crypto
+
+The above bios_crypto_path should point to the root directory of the git
+checkout.
+
+
+When following the instructions below, it is possible to combine a few steps.
+For example, it is perfectly OK to configure olpc-os-builder to sign the
+firmware, kernel, initramfs and resultant OS image all in the same build.
+
+
+=== SIGNING KERNEL, INITRAMFS, AND FIRMWARE ===
+
+These components must be signed and included in the OS build. There are
+2 approaches that you can take here.
+
+
+1. External signing
+
+You can ask olpc-os-builder to extract various components from the build which
+need signing, by enabling the "extract" option (default 0, disabled):
+
+	[signing]
+	extract=1
+
+This causes an output file named osXX.for-signing.zip to be generated,
+including all content needed for signing:
+ - an unsigned /boot/bootfw.zip is expected to be included in the build,
+   if found then this will be extracted
+ - if found, the kernel at /boot/vmlinuz will be extracted as an unsigned
+   runos.zip
+ - if found, the initramfs at /boot/initrd.img (or /boot/olpcrd.img) will be
+   extracted as an unsigned runrd.zip
+
+You would then sign these components by your own means, perhaps on another
+computer system, kept in a safe and never connected to any networks for
+security purposes.
+
+The output from this process should be some subset of the following files:
+
+	bootfw.zip - signed kernel
+	actos.zip - signed kernel for activation
+	runos.zip - signed kernel for regular boot
+	actrd.zip - signed initramfs for activation
+	runrd.zip - signed initramfs for regular boot
+
+At this point, put all these zip files (without renaming them) into another
+zip file, and run another build, this time with the following configuration:
+
+	[signing]
+	add_signed_content=/path/to/zip/file
+
+The files from this zip file will be included in /boot in the final image.
+It's OK to skip some files. act* and run* files will be created as symlinks
+if they don't exist. For example, if you don't provide a actos.zip, a symlink
+named "actos.zip" will be created, pointing at runos.zip. This is useful
+when there is no difference between the signed content used for booting the
+activation environment vs the regular system (as is true for all OLPC builds,
+at the time of writing).
+
+
+2. Signing at build time
+
+If the keypairs are available at build time, you can sign these components
+as part of the regular build process. bios-crypto is required here.
+
+If you supply a 'w' key, the firmware found at /boot/bootfw.zip in your build
+will be (re-)signed with that key.
+
+If you supply an 'o' key, the kernel found at /boot/vmlinuz and the initramfs
+found at /boot/initrd.img will be signed into runos.zip and runrd.zip
+respectively, and actos/actrd symlinks will be set up.
+
+If you supply both keys, the firmware, kernel and initramfs will all be signed.
+This is usually what you want.
+
+	[signing]
+	bios_crypto_path=/home/myuser/bios-crypto
+	okey=/home/myuser/keys/o1
+	wkey=/home/myuser/keys/w1
+
+In the above example, the root of the bios-crypto git checkout is at
+/home/myuser/bios-crypto, and the public/private keys in question are found at:
+
+	/home/myuser/keys/o1.public
+	/home/myuser/keys/o1.private
+	/home/myuser/keys/w1.public
+	/home/myuser/keys/w1.private
+
+
+
+=== SIGNING OS IMAGE ===
+
+The 2nd step in the signing process is to sign the resultant OS image file,
+allowing it to be used for NANDblaster and secure reflash. A similar pair
+of options apply.
+
+1. External signing
+
+For XO-1.5, you need to sign the .zsp file that is produced as part of the
+SD card image generation process. The following option will produce a fs.zip
+file for every outputted .zsp file:
+
+	[signing]
+	make_zsp_fs_zip=1
+
+A file named os31.2gb.zsp will result in os31.2gb.fs.zip being generated.
+
+
+For XO-1, bios-crypto is required.
+	[signing]
+	bios_crypto_path=/home/myuser/bios-crypto
+	make_img_fs_zip=1
+
+All output .img files will be signed into (e.g.) os52.fs.zip.
+
+
+In both cases, these fs.zip output files are unsigned and must be externally
+resigned using your private 's' key before it becomes useful.
+
+
+2. Signing at build time
+
+If the 's' keypair is available at build time, you can sign the resultant
+build simply by specifying it's path in addition to following the instructions
+above. bios-crypto is required in both cases.
+
+e.g. for XO-1.5:
+	[signing]
+	bios_crypto_path=/home/myuser/bios-crypto
+	skey=/home/myuser/keys/s1
+	make_zsp_fs_zip=1
+
+e.g. for XO-1:
+	[signing]
+	bios_crypto_path=/home/myuser/bios-crypto
+	skey=/home/myuser/keys/s1
+	make_img_fs_zip=1
+
+In both cases, the resultant fs.zip files will be signed with the 's' keypair,
+whose files are expected to be found at:
+
+	/home/myuser/keys/s1.public
+	/home/myuser/keys/s1.private
 
