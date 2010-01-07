@@ -1,9 +1,11 @@
 export VERSION=$(shell grep "^VERSION=" osbuilder.py | sed 's/^VERSION="\(.*\)"/\1/')
 export docdir=$(DESTDIR)/usr/share/doc/olpc-os-builder-$(VERSION)
 
-all: bin
+all: bin_
 
-bin:
+bin: bin_
+
+bin_:
 	$(MAKE) -C bin
 
 install: all
