@@ -5,8 +5,9 @@
 buildnr=$(read_buildnr)
 treetar=$outputdir/os$buildnr.tree.tar.lzma
 pkglist=$outputdir/os$buildnr.packages.txt
-
-isopath=$outputdir/os$buildnr.iso
+actlist=$outputdir/os$buildnr.activities.txt
+liblist=$outputdir/os$buildnr.libraries.txt
+fillist=$outputdir/os$buildnr.files.txt
 
 maketree=$(read_config base make_tree_tarball)
 if [[ "$maketree" == "1" ]]; then
@@ -26,3 +27,27 @@ fi
 
 chroot $chroot_path /bin/rpm -qa | sort > $pkglist
 
+# generate an activity version listing for comparison.
+find $fsmount -name activity.info \
+    -exec awk '/activity_version/ { print FILENAME "-" $3; }' {} \; | \
+  sed -e "s%$fsmount%%g" \
+      -e 's/\/home\/olpc\/Activities\///g' \
+      -e 's/.activity\/activity\/activity.info//g' | \
+  sort > $actlist
+
+# generate a library version listing for comparison.
+find $fsmount -name library.info \
+    -exec awk '/library_version/ { print FILENAME "-" $3; }' {} \; | \
+  sed -e "s%$fsmount%%g" \
+      -e 's/\/home\/olpc\/Library\///g' \
+      -e 's/\/library\/library.info//g' | \
+  sort > $liblist
+
+# generate a file listing for comparison,
+# removing the build number.
+find $fsmount | \
+  sed -e "s%$fsmount%%g" \
+      -e "s%/versions/pristine/${buildnr}%/versions/pristine/\${BUILD}%g" \
+      -e "s%/versions/run/${buildnr}%/versions/run/\${BUILD}%g" \
+      -e "s%/versions/contents/${buildnr}%/versions/contents/\${BUILD}%g" | \
+  gzip - > $fillist.gz
