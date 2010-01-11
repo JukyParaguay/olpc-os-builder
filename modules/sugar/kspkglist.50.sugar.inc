@@ -20,6 +20,9 @@ pygame
 python-json
 squeak-vm
 sugar-update-control
+# Browse
+gnome-python2-gnome
+# Terminal
 vte
 # dependencies for Epub support in Read
 pywebkitgtk
