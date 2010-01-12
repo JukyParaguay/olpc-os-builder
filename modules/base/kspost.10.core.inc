@@ -167,6 +167,6 @@ EOF
 # https://bugzilla.redhat.com/show_bug.cgi?id=546215
 rm -f /etc/avahi/etc/localtime
 
-# prelink now not later #9947
-/usr/sbin/prelink --verbose --all --conserve-memory --random
-
+# prelink now, and then disable it (#9947)
+/usr/sbin/prelink --all --conserve-memory --random
+chmod -x /etc/cron.daily/prelink
