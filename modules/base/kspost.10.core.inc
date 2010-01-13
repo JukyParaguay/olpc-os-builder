@@ -170,3 +170,9 @@ rm -f /etc/avahi/etc/localtime
 # prelink now, and then disable it (#9947)
 /usr/sbin/prelink --all --conserve-memory --random
 chmod -x /etc/cron.daily/prelink
+
+# suppress generation of certain SSH host keys in the same way we did
+# it on XO-1 builds, so as to reduce first boot time by several
+# seconds (#9964)
+sed -i -e 's%\t\tdo_dsa%#\t\tdo_dsa%g' \
+       -e 's%\t\tdo_rsa1%#\t\tdo_rsa1%g' /etc/init.d/sshd
