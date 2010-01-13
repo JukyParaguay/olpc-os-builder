@@ -14,7 +14,7 @@ for line in $(env); do
 	name=
 	expr index "$vals" ',' &>/dev/null && name=${vals#*,}
 	if [ -n "$name" ]; then
-		osname=os$buildnr.$name
+		osname=os$buildnr-$name
 	else
 		osname=os$buildnr
 	fi

@@ -26,9 +26,9 @@ The output files will be:
 	osXX.zsp
 
 	(the 1985mb disk output)
-	osXX.2gb.disk.img.tar.gz
-	osXX.2gb.zd
-	osXX.2gb.zsp
+	osXX-2gb.disk.img.tar.gz
+	osXX-2gb.zd
+	osXX-2gb.zsp
 
 The .img file is archived in tar (in sparse mode) and then compressed with
 gzip. Tar preserves the sparseness of the file (the fact that some part of the
