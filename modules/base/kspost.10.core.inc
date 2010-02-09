@@ -1,3 +1,8 @@
+# Get rid of extra locale stuff #(9982)
+localedef --list-archive | grep -v -i -E 'en|es|ar|pl|pt_BR|pt|fr|ht|mn|mr_IN|am_ET|km_KH|ne_NP|ur_PK|rw|ps|fa_AF|si|zh_CN' | xargs localedef --delete-from-archive
+mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+/usr/sbin/build-locale-archive
+
 # from the liveuser script
 # and add /ofw
 # and limit tmpfs mounts to 5%
