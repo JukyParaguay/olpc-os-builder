@@ -15,6 +15,9 @@ olpc-switch-desktop
 PolicyKit-gnome
 notification-daemon
 
+# battery applet
+batterymon
+
 # internet
 xulrunner
 firefox
