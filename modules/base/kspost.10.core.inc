@@ -24,7 +24,7 @@ sed -i -e "s/OLPC HGPK ALPS HGPK/OLPC ALPS HGPK/;" /usr/share/hal/fdi/policy/10o
 
 # create olpc user
 # Provide access to ttyUSB nodes (#8434)
-/usr/sbin/useradd -m -c "olpc user" -G audio,wheel,uucp,video olpc
+/usr/sbin/useradd -m -c "olpc user" -G audio,wheel,uucp,video,dialout olpc
 /usr/bin/passwd -d olpc
 
 # make sure to own home directory and relax permissions a little
