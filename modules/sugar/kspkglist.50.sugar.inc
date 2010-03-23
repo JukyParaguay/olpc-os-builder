@@ -13,7 +13,6 @@ gtksourceview2
 gvfs
 libffi
 numpy
-# ohm
 csound
 csound-python
 pygame

@@ -6,6 +6,7 @@ kernel.i586
 tar
 wget
 diffutils
+rfkill
 
 # basic debugging
 strace
@@ -17,7 +18,7 @@ olpc-bootanim
 olpc-update
 PolicyKit-olpc
 ds-backup-client
-ohm
+olpc-powerd
 bootfw
 olpc-runin-tests
 
