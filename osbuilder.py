@@ -246,8 +246,9 @@ class OsBuilderException(Exception):
     pass
 
 class OsBuilder(object):
-    def __init__(self, build_config):
+    def __init__(self, build_config, additional_defaults):
         self.build_config = build_config
+        self.additional_defaults = additional_defaults
 
         print " * OLPC OS builder v%s" % VERSION
         if INSTALLED:
@@ -314,7 +315,11 @@ class OsBuilder(object):
             # read in defaults
             self.cfg.read(os.path.join(modpath, 'defaults.ini'))
 
-        # now load the users config, overriding defaults where specified
+        # read in defaults specified on the command line
+        if self.additional_defaults is not None:
+            self.cfg.read(self.additional_defaults)
+
+        # now load the users config, overriding other settings where specified
         self.cfg.read(self.build_config)
 
         for section in self.cfg.sections():
@@ -387,13 +392,16 @@ def main():
     op.add_option('--no-clean-intermediates', dest="clean_intermediates",
                   action="store_false", default=True,
                   help="Don't clean intermediates directory on startup or exit")
+    op.add_option('--additional-defaults', dest="additional_defaults",
+                  action="store", default=None,
+                  help="Additional config file with default settings")
     (options, args) = op.parse_args()
 
     if len(args) != 1:
         op.error("incorrect number of arguments")
 
     try:
-        osb = OsBuilder(args[0])
+        osb = OsBuilder(args[0], options.additional_defaults)
         osb.build(clean_output=options.clean_output,
                   clean_intermediates=options.clean_intermediates)
     except OsBuilderException, e:
