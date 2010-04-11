@@ -1,0 +1,19 @@
+This module allows you to copy files from a local directory structure into
+/usr/share/library-common on the resultant system, overwriting files that
+already exist.
+
+This allows you to customize the Browse activity homepage by providing
+customized versions of the files layout.tmpl and library_homepage.tmpl
+
+Take care - this module will also let you break the homepage (e.g. it lets you
+overwrite and break make_index.py)
+
+Example configuration:
+[library_homepage]
+path=/home/myuser/customized-library
+
+In the above example, the directory /home/myuser/customized-library could have
+2 files including the customizations:
+	/home/myuser/customized-library/layout.tmpl
+	/home/myuser/customized-library/library_homepage.tmpl
+
