@@ -1,0 +1,19 @@
+This module allows you to configure an OATS server used by olpc-update,
+overriding the default of antitheft.laptop.org
+
+It has 2 options:
+
+server: the address of an OATS server to use
+
+ignore_xs: by default, the OATS client always contacts the school server
+before trying other servers (maybe not even trying them at all). set this to 1
+to override this behaviour, the school server will not be tried. Useful in
+deployments with good connectivity where antitheft is controlled in a central
+location (as opposed to the specific school).
+
+
+Example configuration:
+[oats_cfg]
+server=my-oats-server.mydeployment.com
+ignore_xs=1
+
