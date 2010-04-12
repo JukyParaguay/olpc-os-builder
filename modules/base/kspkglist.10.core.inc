@@ -37,6 +37,10 @@ xorg-x11-utils
 xorg-x11-xinit
 xorg-x11-xauth
 
+# cron needs sendmail, which is provided by exim by default
+# and exim needs perl... so let's use ssmtp, which is much lighter
+ssmtp
+
 # save some space
 -cracklib-dicts
 -nss_db
