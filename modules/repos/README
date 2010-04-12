@@ -53,6 +53,23 @@ olpc_publicrpms_2=1,f11-xo1.5
 
 
 
+The custom_repo_ options:
+
+Provide any number of options with unique names that start with
+"custom_repo_" in order to generate repo lines which point at repositories
+of your choosing.
+The format of each value is a number (to determine whether the packages in this
+repository are added to the exclude list), a comma, the name of the
+repository, a comma, then the URL of the repository. The usual
+kickstart-supported protocols are accepted (including http:// and file://)
+Example:
+
+[repos]
+custom_repo_1=1,additional,file:///home/dsd/additional_packages
+custom_repo_2=0,extrapackages,http://www.extrapackages.net/myrepo
+
+
+
 The add_excludes_to option:
 
 In the options documented above, you were able to append the list of packages

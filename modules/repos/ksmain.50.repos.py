@@ -49,7 +49,12 @@ for key, value in os.environ.iteritems():
         if for_excludes:
             add_to_excludes(url, excludepkgs)
         repos[name] = ("baseurl", url)
-
+    elif key.startswith("CFG_repos__custom_repo_"):
+        for_excludes, name, url = value.split(',', 2)
+        for_excludes = int(for_excludes)
+        if for_excludes:
+            add_to_excludes(url, excludepkgs)
+        repos[name] = ("baseurl", url)
 
 if fedora is not None:
     for repo in fedora.split(','):
