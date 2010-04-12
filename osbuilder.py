@@ -273,6 +273,10 @@ class OsBuilder(object):
         self.cfg = ConfigParser()
         self.cfg.read(self.build_config)
 
+        # read in defaults specified on the command line
+        if self.additional_defaults is not None:
+            self.cfg.read(self.additional_defaults)
+
         if self.cfg.has_option('global', 'suggested_oob_version'):
             suggested = self.cfg.get('global','suggested_oob_version')
             if suggested != VERSION:
@@ -288,9 +292,18 @@ class OsBuilder(object):
                 print "Press Ctrl+C to abort. Continuing in 15 seconds."
                 time.sleep(15)
 
-        self.modules = self.cfg.get('global','modules').split(',')
+        self.modules = []
+        for option in self.cfg.options('global'):
+            if not option.startswith('modules_') and option != "modules":
+                continue
+            self.modules.extend(self.cfg.get('global', option).split(','))
+
+        # clean up
         for idx, mod in enumerate(self.modules):
             self.modules[idx] = mod.strip()
+
+        # remove duplicates
+        self.modules = list(set(self.modules))
 
         self.read_config()
 

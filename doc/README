@@ -140,7 +140,12 @@ langs
 
 modules
 
-    The selection of modules to include in the build.
+    A comma-separated selection of modules to include in the build.
+
+modules_<ANYTHING>
+
+    Additional modules to include (allowing you to append to the list of
+    modules in an additional configuration file)
 
 
 In general, options need to be set with care.  Aim to stick with the
