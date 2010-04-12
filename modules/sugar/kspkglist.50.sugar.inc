@@ -28,3 +28,9 @@ pywebkitgtk
 python-BeautifulSoup
 python-lxml
 olpc-library
+
+# explicitly specify dependencies on GNOME's implementation of certain
+# components, otherwise the KDE ones will be brought in by default
+PolicyKit-gnome
+notification-daemon
+
