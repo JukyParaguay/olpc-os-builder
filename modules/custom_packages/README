@@ -1,0 +1,9 @@
+This module allows you to specify a comma-separated list of packages to add
+to the build, from the repositories already configured (usually through the
+repos module).
+
+Example:
+
+[custom_packages]
+add_packages=tomboy,gnucash,pidgin
+
