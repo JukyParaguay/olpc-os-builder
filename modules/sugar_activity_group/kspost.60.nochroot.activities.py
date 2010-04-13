@@ -187,7 +187,12 @@ if install_activities:
             grpurl = baseurl
 
         print >>sys.stderr, "Trying group URL", grpurl
-        name, desc, results = parse_url(grpurl)
+        try:
+            name, desc, results = parse_url(grpurl)
+        except urllib2.HTTPError, e:
+            if e.code == 404:
+                continue
+            raise e
         if len(results) == 0 or (name is None and desc is None):
             continue
         print >>sys.stderr, "Found activity group:", name
