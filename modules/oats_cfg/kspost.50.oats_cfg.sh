@@ -7,10 +7,10 @@ server=$(read_config oats_cfg server)
 ignore_xs=$(read_config oats_cfg ignore_xs)
 
 if [ "$ignore_xs" = "1" ]; then
-	echo "touch /security/oats-ignore-xs"
+	echo "touch /etc/oats-ignore-xs"
 fi
 
 if [ -n "$server" ]; then
-	echo "echo '$server' > /security/oats-server"
+	echo "echo '$server' > /etc/oats-server"
 fi
 
