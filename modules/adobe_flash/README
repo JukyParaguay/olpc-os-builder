@@ -1,0 +1,29 @@
+This module installs Adobe Flash in the build.
+There is no configuration, simply include this module in your configuration.
+
+
+***** WARNING *****
+
+Adobe Flash has a proprietary license which prevents redistribution.
+It will be in violation of the license to distribute your resultant build
+unless you have received special permission from Adobe.
+
+You can request such permission on the Adobe website.
+
+
+
+While Flash is available as a standard Fedora RPM distributed by Adobe, it
+breaks the rules of packaging and conditionally installs files based on the
+package set present on the system at time of installation -- it only installs
+the Mozilla plugin if Mozilla is installed prior to the installation of Flash.
+
+For this reason, if you simply add the Flash package as an extra package in
+the build, it is possible (and likely?) to be installed before Mozilla,
+meaning that Flash doesn't actually work in your resultant image, even
+though the RPM was included.
+
+The workaround is to use this module, which adds the Adobe repository to the
+build and yum repository configuration, includes the package in the build,
+and includes a small amount of hackery to make sure that the plugin
+installation is performed after installation of all other packages.
+
