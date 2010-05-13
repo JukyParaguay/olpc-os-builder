@@ -60,7 +60,6 @@ ssmtp
 -hplip
 -hpijs
 -sendmail
--ssmtp
 -numactl
 -isdn4k-utils
 -autofs

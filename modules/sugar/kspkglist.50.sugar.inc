@@ -21,6 +21,9 @@ squeak-vm
 sugar-update-control
 # Browse
 gnome-python2-gnome
+totem-mozplugin
+-totem-xine
+-xine-lib
 # Terminal
 vte
 # dependencies for Epub support in Read
