@@ -79,3 +79,8 @@ EOF
 
 chown -R olpc: /home/olpc/.scim
 
+# disable Firefox's OGG plugin in favour of totem, because no hw accel is
+# available. #10152
+[ -e /usr/lib/xulrunner-*/greprefs/all.js ] && \
+	sed -i -e 's:\(media.ogg.enabled",\) true:\1 false:g' /usr/lib/xulrunner-*/greprefs/all.js
+
