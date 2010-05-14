@@ -172,6 +172,8 @@ if not os.path.exists(cache):
 baseurl = ooblib.read_config('sugar_activity_group', 'url')
 install_activities = ooblib.read_config_bool('sugar_activity_group',
                                              'install_activities')
+systemwide = ooblib.read_config_bool('sugar_activity_group',
+                                     'activity_group_systemwide')
 
 if install_activities:
     vmaj = int(ooblib.read_config('global', 'olpc_version_major'))
@@ -226,6 +228,10 @@ if install_activities:
         # only process the first working URL
         break
 
-print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
-print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
+if systemwide:
+	print "mkdir -p $INSTALL_ROOT/etc/olpc-update"
+	print "echo '%s' > $INSTALL_ROOT/etc/olpc-update/activity-groups" % baseurl
+else:
+	print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
+	print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
 
