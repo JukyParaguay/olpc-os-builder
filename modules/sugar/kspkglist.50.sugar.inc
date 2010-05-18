@@ -31,6 +31,8 @@ pywebkitgtk
 python-BeautifulSoup
 python-lxml
 olpc-library
+# for Tuxmath activity
+SDL_Pango
 
 # explicitly specify dependencies on GNOME's implementation of certain
 # components, otherwise the KDE ones will be brought in by default
