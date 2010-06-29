@@ -233,5 +233,6 @@ if systemwide:
 	print "echo '%s' > $INSTALL_ROOT/etc/olpc-update/activity-groups" % baseurl
 else:
 	print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
-	print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
+
+print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
 
