@@ -20,7 +20,6 @@ PolicyKit-olpc
 ds-backup-client
 olpc-powerd
 bootfw
-olpc-runin-tests
 
 # graphical base environment
 olpc-kbdshim
