@@ -1,0 +1,10 @@
+This module allows for customization of the configuration of powerd,
+the OLPC-developed power management controller.
+
+By default, powerd will automatically suspend the XO after a period of
+inactivity. If you wish to disable this behaviour, you can include the
+following configuration option:
+
+[powerd]
+enable_idle_suspend=0
+
