@@ -10,6 +10,3 @@ echo "%__dbi_cdb create private nommap" > /etc/rpm/macros.rpmdb
 # what's more, olpc.fth really shouldnt specify a root device
 sed -i -e 's:root=mtd0:root=/dev/mtdblock0:g' /boot/olpc.fth
 
-# FIXME: need an OFW release that runs smbios by default
-sed -i -e 's/^olpc-fth-boot-me/setup-smbios olpc-fth-boot-me/' /boot/olpc.fth
-
