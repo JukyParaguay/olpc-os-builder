@@ -92,21 +92,6 @@ EOF
 # this allows olpc-configure to set a hostname based on the MAC address
 echo "NM_IGNORE_HOSTNAME_LOCALHOST=yes" >> /etc/sysconfig/network
 
-# FIXME: fix this bug and remove this hack
-cat >/etc/NetworkManager/dispatcher.d/adhoc-route <<EOF
-#!/bin/sh
-# workaround for http://dev.laptop.org/ticket/9669
-[ "\$1" = "eth0" ] || exit 0
-if [ "\$2" = "down" ]; then
-	/sbin/ip route del 224.0.0.0/4 dev eth0 &>/dev/null
-else
-	/sbin/iwconfig \$1 | /bin/grep -q "Mode:Ad-Hoc" && \
-		/sbin/ip route add 224.0.0.0/4 dev eth0 &>/dev/null
-fi
-exit 0
-EOF
-chmod a+x /etc/NetworkManager/dispatcher.d/adhoc-route
-
 # OLPC CA certificate (#9624)
 # this is used by wget, but the Web activity uses cert8.db in its own
 # installation (which is then copied into user's profile dir)
