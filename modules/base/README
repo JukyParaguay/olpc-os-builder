@@ -13,9 +13,9 @@ from the image in /versions/pristine. This will be done at first-boot time
 otherwise, but given that it takes a minute or more, it is a fair improvement
 to do it at build time.
 
-- make_iso (default 1)
-Set to 0 to disable generation of a .iso file in the output directory.
-This .iso can be used on a regular system as a LiveCD.
+- make_iso (default 0)
+Set to 1 to enable generation of a .iso file in the output directory.
+This .iso may or may not function on a regular system as a LiveCD.
 
 - compress_iso (default 1)
 Set to 0 to disable squashfs compression of the filesystem on the .iso LiveCD.
