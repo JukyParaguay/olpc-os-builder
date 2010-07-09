@@ -24,3 +24,6 @@ gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults
 # disable annoying pop-ups from IM settings daemon (we use our own IM settings mechanism for now)
 gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults -s -t bool /apps/imsettings-applet/notify_on_bubble false
 
+# Remove email-launcher icon from panel
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type list --list-type string --set  /apps/panel/general/object_id_list [menu_bar,web_launcher]
+
