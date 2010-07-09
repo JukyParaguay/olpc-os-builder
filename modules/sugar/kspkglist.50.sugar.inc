@@ -21,6 +21,7 @@ squeak-vm
 sugar-update-control
 # Browse
 gnome-python2-gnome
+gnash-plugin
 totem-mozplugin
 -totem-xine
 -xine-lib
