@@ -22,6 +22,9 @@ for line in $(env); do
 	echo "Making ZD image for $osname..."
 	$bindir/zhashfs 0x20000 sha256 $pfx.disk.img $pfx.zsp $pfx.zd
 
+	echo "Creating MD5sum of $pfx.zd..."
+	md5sum $pfx.zd > $pfx.zd.md5
+
 	if [[ "$compress" == "1" ]]; then
 		echo "Compressing disk image..."
 		tar -czS -f $pfx.disk.img.tar.gz -C $outputdir $osname.disk.img
