@@ -22,8 +22,10 @@ for line in $(env); do
 	echo "Making ZD image for $osname..."
 	$bindir/zhashfs 0x20000 sha256 $pfx.disk.img $pfx.zsp $pfx.zd
 
-	echo "Creating MD5sum of $pfx.zd..."
-	md5sum $pfx.zd > $pfx.zd.md5
+	echo "Creating MD5sum of $osname.zd..."
+	pushd $outputdir >/dev/null
+	md5sum $osname.zd > $osname.zd.md5
+	popd >/dev/null
 
 	if [[ "$compress" == "1" ]]; then
 		echo "Compressing disk image..."
