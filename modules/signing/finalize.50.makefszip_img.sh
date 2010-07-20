@@ -33,7 +33,8 @@ make_signed_img()
 	echo "Generating signed fs.zip for $(basename $1)..."
 	local outfile=$outputdir/$(basename $1).fs.zip
 	pushd $bios_crypto/build
-	$bios_crypto/build/make-fs.sh --signingkey $skey $1 $outfile
+	./make-fs.sh --signingkey $skey $1
+	mv fs.zip $outfile
 	popd
 }
 
