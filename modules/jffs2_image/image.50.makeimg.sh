@@ -8,7 +8,8 @@ versioned_fs=$(read_config base versioned_fs)
 
 tmpdir=$intermediatesdir/jffs2-fs
 tmpimg=$intermediatesdir/jffs2tmp.img
-img=$outputdir/os$buildnr.img
+outfile=os$buildnr.img
+img=$outputdir/$outfile
 
 
 echo "Copying image contents..."
@@ -30,4 +31,7 @@ mkfs.jffs2 -x rtime -n -e128KiB -r $tmpdir -o $tmpimg
 echo "Creating checksums..."
 sumtool -n -p -e 128KiB -i $tmpimg -o $img
 $bindir/crcimg $img
-md5sum $img > $img.md5
+
+pushd $outputdir >/dev/null
+md5sum $outfile > $outfile.md5
+popd >/dev/null

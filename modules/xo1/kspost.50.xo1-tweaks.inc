@@ -10,7 +10,3 @@ echo "%__dbi_cdb create private nommap" > /etc/rpm/macros.rpmdb
 # what's more, olpc.fth really shouldnt specify a root device
 sed -i -e 's:root=mtd0:root=/dev/mtdblock0:g' /boot/olpc.fth
 
-# Temporarily disable pretty boot to aid diagnosis of boot hangs
-# (could be http://dev.laptop.org/ticket/9100 )
-sed -i -e 's: boot$: visible unfreeze boot:g' /boot/olpc.fth
-

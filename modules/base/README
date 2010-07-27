@@ -16,6 +16,8 @@ to do it at build time.
 - make_iso (default 0)
 Set to 1 to enable generation of a .iso file in the output directory.
 This .iso may or may not function on a regular system as a LiveCD.
+dm-snapshot support is required on the build system (both the userspace
+utilities and kernel level support).
 
 - compress_iso (default 1)
 Set to 0 to disable squashfs compression of the filesystem on the .iso LiveCD.
