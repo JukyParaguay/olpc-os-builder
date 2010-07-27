@@ -28,7 +28,7 @@ echo "OLPC release $majver (based on Fedora $fver)" > /etc/fedora-release
 # this is used by the activity updater
 echo "$majver.$minver.$relver" > /etc/olpc-release
 
-sed -i -e "1s/.*/OLPC OS $majver.$minver for ${platform}${custstr} (build $buildnr)/" /etc/issue
+sed -i -e "1s/.*/OLPC OS $majver.$minver.$relver for ${platform}${custstr} (build $buildnr)/" /etc/issue
 cp /etc/issue /etc/issue.net
 
 echo "${buildnr}${custbstr}" > /boot/olpc_build
