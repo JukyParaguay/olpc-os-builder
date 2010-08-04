@@ -16,6 +16,7 @@ numpy
 csound
 csound-python
 pygame
+python-alsaaudio
 python-json
 squeak-vm
 sugar-update-control
