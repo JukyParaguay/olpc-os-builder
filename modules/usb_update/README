@@ -1,0 +1,10 @@
+This module creates produces an output file named osXX.usb. This file can
+be used with the command "olpc-update --usb" to update the software on a
+laptop.
+
+This module requires the versioned_fs option in the base module to be enabled.
+(the update system revolves around the fact that a versioned fs is used)
+
+The .usb file is actually an ISO image in disguise. In the future, we should
+enable squashfs in the XO kernel and distribute a squashfs image instead.
+
