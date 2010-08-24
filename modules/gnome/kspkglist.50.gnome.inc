@@ -38,8 +38,6 @@ audacity
 totem
 totem-gstreamer
 totem-mozplugin
--totem-xine
--xine-lib
 
 # more desktop stuff
 file-roller

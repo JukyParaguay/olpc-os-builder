@@ -13,9 +13,6 @@ sed -i -e '/\/dev\/shm/ s/ defaults / defaults,size=50m /' /etc/fstab
 mkdir /ofw
 mkdir /bootpart
 
-# fix /usr/share/hal/fdi/policy/10osvendor/05-olpc-detect.fdi
-sed -i -e "s/OLPC HGPK ALPS HGPK/OLPC ALPS HGPK/;" /usr/share/hal/fdi/policy/10osvendor/05-olpc-detect.fdi
-
 # create olpc user
 # Provide access to ttyUSB nodes (#8434)
 /usr/sbin/useradd -m -c "olpc user" -G audio,wheel,uucp,video,dialout olpc
@@ -78,15 +75,15 @@ cat >/etc/statetab.d/olpc <<EOF
 /var/lib/random-seed
 EOF
 
-#prefdm tweaks
-sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/event.d/prefdm
+#prefdm tweaks - FIXME update for systemd
+#sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/event.d/prefdm
 
-cat >>/etc/event.d/prefdm <<EOF
+#cat >>/etc/event.d/prefdm <<EOF
 # make sure dcon is unfrozen if something goes wrong.
-post-stop script
-  echo 0 > /sys/devices/platform/dcon/freeze
-end script
-EOF
+#post-stop script
+#  echo 0 > /sys/devices/platform/dcon/freeze
+#end script
+#EOF
 
 # prevent NM from setting the hostname and modifying /etc/hosts to reflect this
 # this allows olpc-configure to set a hostname based on the MAC address
@@ -158,13 +155,14 @@ rm -f /etc/avahi/etc/localtime
 chmod -x /etc/cron.daily/prelink
 
 # kill a load of non-interesting anacron tasks (#10247)
-chmod -x /etc/cron.daily/{logrotate,rpm,tmpwatch}
-chmod -x /etc/cron.daily/{makewhatis,mlocate,readahead}.cron
+chmod -x /etc/cron.daily/{logrotate,tmpwatch}
+chmod -x /etc/cron.daily/{mlocate,readahead,man-db}.cron
 chmod -x /etc/cron.weekly/99-raid-check
 chmod -x /etc/cron.monthly/readahead-monthly.cron
 
+# FIXME: update for F14
 # suppress generation of certain SSH host keys in the same way we did
 # it on XO-1 builds, so as to reduce first boot time by several
 # seconds (#9964)
-sed -i -e 's%\t\tdo_dsa%#\t\tdo_dsa%g' \
-       -e 's%\t\tdo_rsa1%#\t\tdo_rsa1%g' /etc/init.d/sshd
+#sed -i -e 's%\t\tdo_dsa%#\t\tdo_dsa%g' \
+#       -e 's%\t\tdo_rsa1%#\t\tdo_rsa1%g' /etc/init.d/sshd

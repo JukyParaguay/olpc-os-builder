@@ -95,6 +95,9 @@ find $fsmount/usr/share -xdev -name "*.py[oc]" -delete
 echo "Normalize file times..."
 find $fsmount -xdev -print0 | xargs -0 touch -c -d "$OLPC_EPOCH" || :
 
+# fails to compile due to "..."
+rm -f $fsmount/usr/lib/python2.7/lib2to3/tests/data/py3_test_grammar.py*
+
 # now regenerate the .pyc files
 # (add -OO to generate .pyo files instead when we tackle dlo trac #8431)
 echo "Compiling python bytecode..."

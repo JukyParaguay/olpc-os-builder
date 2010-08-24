@@ -77,7 +77,7 @@ cat > /home/olpc/.scim/global << EOF
 /SupportedUnicodeLocales = en_US.UTF-8,zh_CN.UTF-8
 EOF
 
-chown -R olpc: /home/olpc/.scim
+chown -R olpc:olpc /home/olpc/.scim
 
 # disable Firefox's OGG plugin in favour of totem, because no hw accel is
 # available. #10152

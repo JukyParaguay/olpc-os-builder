@@ -4,9 +4,8 @@ dejavu-lgc-sans-fonts
 dejavu-lgc-sans-mono-fonts
 dejavu-lgc-serif-fonts
 khmeros-base-fonts
-lohit-hindi-fonts
+lohit-devanagari-fonts
 nafees-web-naskh-fonts
-google-droid-fonts-common
 google-droid-sans-fonts
 google-droid-sans-mono-fonts
 google-droid-serif-fonts

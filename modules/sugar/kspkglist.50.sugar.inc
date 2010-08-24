@@ -4,8 +4,8 @@ sugar
 # additional sugar packages
 hulahop
 pyabiword
-gnome-python2-evince
-DeviceKit-disks
+#gnome-python2-evince
+udisks
 espeak
 etoys
 evince-djvu
@@ -17,15 +17,11 @@ csound
 csound-python
 pygame
 python-alsaaudio
-python-json
 squeak-vm
-sugar-update-control
 # Browse
 gnome-python2-gnome
 gnash-plugin
 totem-mozplugin
--totem-xine
--xine-lib
 # Terminal
 vte
 # dependencies for Epub support in Read

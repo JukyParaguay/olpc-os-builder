@@ -16,7 +16,8 @@ olpc-utils
 olpc-netutils
 olpc-bootanim
 olpc-update
-PolicyKit-olpc
+# FIXME: revive PolicyKit-olpc for F14
+#PolicyKit-olpc
 ds-backup-client
 olpc-powerd
 olpc-powerd-dbus
@@ -45,7 +46,7 @@ ssmtp
 -cracklib-dicts
 -nss_db
 -acpid
--anacron
+-cronie-anacron
 -mailcap
 -wavpack
 -createrepo
@@ -72,6 +73,7 @@ ssmtp
 -pam_krb5
 -pam_pkcs11
 -pcmciautils
+-mdadm
 
 # dictionaries are big
 -aspell-*
@@ -108,6 +110,7 @@ ssmtp
 -fbset
 -exim
 -deltarpm
+-perf
 
 # remove SELinux stack
 -setroubleshoot
@@ -136,3 +139,6 @@ isomd5sum
 # GSM/CDMA USB modem support, #7172
 usb_modeswitch
 usb_modeswitch-data
+
+# provides lokkit, needed for disabling SELinux
+system-config-firewall-base
