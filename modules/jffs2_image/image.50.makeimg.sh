@@ -30,7 +30,7 @@ mkfs.jffs2 -x rtime -n -e128KiB -r $tmpdir -o $tmpimg
 
 echo "Creating checksums..."
 sumtool -n -p -e 128KiB -i $tmpimg -o $img
-$bindir/crcimg $img
+crcimg $img
 
 pushd $outputdir >/dev/null
 md5sum $outfile > $outfile.md5

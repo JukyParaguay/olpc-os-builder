@@ -17,7 +17,7 @@ Quick Start:
 
     4.  install the run-time dependencies:
 
-        yum install python-imgcreate bitfrost zip unzip
+        yum install python-imgcreate bitfrost zip unzip crcimg
 
     5.  produce a build:
 
