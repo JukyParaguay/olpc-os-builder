@@ -160,9 +160,8 @@ chmod -x /etc/cron.daily/{mlocate,readahead,man-db}.cron
 chmod -x /etc/cron.weekly/99-raid-check
 chmod -x /etc/cron.monthly/readahead-monthly.cron
 
-# FIXME: update for F14
 # suppress generation of certain SSH host keys in the same way we did
 # it on XO-1 builds, so as to reduce first boot time by several
 # seconds (#9964)
-#sed -i -e 's%\t\tdo_dsa%#\t\tdo_dsa%g' \
-#       -e 's%\t\tdo_rsa1%#\t\tdo_rsa1%g' /etc/init.d/sshd
+echo "AUTOCREATE_SERVER_KEYS=RSAONLY" >> /etc/sysconfig/sshd
+
