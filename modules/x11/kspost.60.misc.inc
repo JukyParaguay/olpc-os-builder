@@ -79,10 +79,15 @@ EOF
 
 chown -R olpc: /home/olpc/.scim
 
-# disable Firefox's OGG plugin in favour of totem, because no hw accel is
-# available. #10152
-[ -e /usr/lib/xulrunner-*/greprefs/all.js ] && \
+if [ -e /usr/lib/xulrunner-*/greprefs/all.js ]; then
+	# disable Firefox's OGG plugin in favour of totem, because no hw accel is
+	# available. #10152
 	sed -i -e 's:\(media.ogg.enabled",\) true:\1 false:g' /usr/lib/xulrunner-*/greprefs/all.js
+
+	# sl#2259: The layout.css.dpi default setting results in a too big layout and fonts
+	sed -i -e 's:\(layout.css.dpi",\) -1:\1 96:' /usr/lib/xulrunner-*/greprefs/all.js
+fi
+
 
 # remove gstreamer pulse element so that totem doesn't try to use it (#10158)
 [ -e /usr/lib/gstreamer-0.10/libgstpulse.so ] && rm /usr/lib/gstreamer-0.10/libgstpulse.so
