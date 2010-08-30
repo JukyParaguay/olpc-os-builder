@@ -47,10 +47,11 @@ SYSFONT=sun12x22
 __EOF__
 
 # Restore VT layout and behaviour from OLPC 8.2 builds (#9517)
-echo "start on started prefdm" >> /etc/event.d/tty1
+sed -i -e 's/Conflicts=getty@tty1.service /Conflicts=/' \
+	/lib/systemd/system/prefdm.service
 sed -i -e 's/mingetty/mingetty --loginpause --autologin root --noclear/' \
-	/etc/event.d/tty[12]
-rm -f /etc/event.d/tty[3-6]
+	/lib/systemd/system/getty\@.service
+rm -f /etc/systemd/system/getty.target.wants/getty\@tty[3-6].service
 
 # Enable tmpfs mounts dictated by rwtab (#9637)
 mkdir -p /security/state
