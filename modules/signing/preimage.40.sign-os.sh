@@ -21,6 +21,16 @@ if [ -e "$fsmount/boot/initrd.img" ]; then
 	pushd $bios_crypto/build
 	$bios_crypto/build/sign-os.sh $okey $fsmount/boot/initrd.img $fsmount/boot/runrd.zip
 	popd
-	[ -e $fsmount/boot/actrd.zip ] || ln -s runrd.zip $fsmount/boot/actrd.zip
 fi
+
+if [ -e "$fsmount/boot/actrd.img" ]; then
+	echo "Signing activation initramfs..."
+	pushd $bios_crypto/build
+	$bios_crypto/build/sign-os.sh $okey $fsmount/boot/actrd.img $fsmount/boot/actrd.zip
+	popd
+fi
+
+# If no separate activation initramfs was provided, assume that the regular
+# initramfs also handles activation.
+[ -e $fsmount/boot/actrd.zip ] || ln -s runrd.zip $fsmount/boot/actrd.zip
 
