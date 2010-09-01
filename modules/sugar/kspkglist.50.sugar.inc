@@ -4,7 +4,7 @@ sugar
 # additional sugar packages
 hulahop
 pyabiword
-#gnome-python2-evince
+gnome-python2-evince
 udisks
 espeak
 etoys
