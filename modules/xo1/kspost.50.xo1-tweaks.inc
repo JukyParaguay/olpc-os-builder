@@ -6,7 +6,8 @@ echo "%__dbi_cdb create private nommap" > /etc/rpm/macros.rpmdb
 # any nicer way to fix this?
 [ -e "/boot/olpcrd.img" ] || ln -s initrd.img /boot/olpcrd.img
 
-# FIXME: really need to teach dracut about mtd devices and stop using mtdblock
-# what's more, olpc.fth really shouldnt specify a root device
-sed -i -e 's:root=mtd0:root=/dev/mtdblock0:g' /boot/olpc.fth
+# olpc.fth really shouldnt specify a root device or filesystem, the initramfs
+# figures this out (like in the signed boot path).
+# FIXME: fix bootfw package
+sed -i -e 's:root=mtd0 rootfstype=jffs2::g' /boot/olpc.fth
 
