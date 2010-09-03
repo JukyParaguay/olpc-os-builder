@@ -1,7 +1,3 @@
-# permanently set %__dbi_cdb rpm macro to work around jffs2's lack of writeable mmap()
-mkdir -p /etc/rpm
-echo "%__dbi_cdb create private nommap" > /etc/rpm/macros.rpmdb
-
 # FIXME: old olpc.fth looks for olpcrd.img, but we now use initrd.img
 # any nicer way to fix this?
 [ -e "/boot/olpcrd.img" ] || ln -s initrd.img /boot/olpcrd.img
