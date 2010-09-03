@@ -1,0 +1,11 @@
+This module creates a partitioned nand filesystem image, with the first
+partition as a small JFFS2 "boot" partition, and the second partition as a
+UBI volume with a single ubifs "system" partition.
+
+Output files are:
+	osXXu.img
+	osXXu.onu
+
+To install on an XO, pass the onu file to the "update-nand" command at the
+"ok" firmware prompt.
+
