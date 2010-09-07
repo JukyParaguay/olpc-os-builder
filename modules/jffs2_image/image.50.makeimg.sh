@@ -8,7 +8,7 @@ versioned_fs=$(read_config base versioned_fs)
 
 tmpdir=$intermediatesdir/jffs2-fs
 tmpimg=$intermediatesdir/jffs2tmp.img
-outfile=os$buildnr.img
+outfile=$(image_name).img
 img=$outputdir/$outfile
 
 

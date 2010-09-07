@@ -7,7 +7,7 @@ prepopulate_run=$(read_config base prepopulate_run)
 python_optimize=$(read_config base python_optimize)
 
 buildnr=$(read_buildnr)
-isopath=$outputdir/os$buildnr.iso
+isopath=$outputdir/$(image_name).iso
 
 if [[ "$python_optimize" != "0" ]]; then
 	export PYTHONOPTIMIZE=$python_optimize
@@ -116,7 +116,7 @@ if [ "$versioned_fs" = "1" ]; then
 	echo "Generating contents manifest..."
 	chroot $fsmount/versions/pristine/$buildnr /usr/sbin/olpc-contents-create -f /.xo-files -p /etc/passwd -g /etc/group /
 	mv $fsmount/versions/pristine/$buildnr/.xo-files $fsmount/versions/contents/$buildnr
-	cp $fsmount/versions/contents/$buildnr $outputdir/os$buildnr.toc
+	cp $fsmount/versions/contents/$buildnr $outputdir/$(image_name).toc
 
 	if [ "$prepopulate_run" = "1" ]; then
 		echo "Pre-populating /versions/run tree..."

@@ -3,11 +3,11 @@
 
 . $OOB__shlib
 buildnr=$(read_buildnr)
-treetar=$outputdir/os$buildnr.tree.tar.lzma
-pkglist=$outputdir/os$buildnr.packages.txt
-actlist=$outputdir/os$buildnr.activities.txt
-liblist=$outputdir/os$buildnr.libraries.txt
-fillist=$outputdir/os$buildnr.files.txt
+treetar=$outputdir/$(image_name).tree.tar.lzma
+pkglist=$outputdir/$(image_name).packages.txt
+actlist=$outputdir/$(image_name).activities.txt
+liblist=$outputdir/$(image_name).libraries.txt
+fillist=$outputdir/$(image_name).files.txt
 
 maketree=$(read_config base make_tree_tarball)
 if [[ "$maketree" == "1" ]]; then

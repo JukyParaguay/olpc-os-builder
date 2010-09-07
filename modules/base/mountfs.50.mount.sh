@@ -13,8 +13,7 @@ umount $isomnt &>/dev/null || :
 mkdir -p $isomnt
 
 # find iso
-buildnr=$(read_buildnr)
-isopath=$outputdir/os$buildnr.iso
+isopath=$outputdir/$(image_name).iso
 
 cleanup() {
 	umount $squashmnt &>/dev/null || :

@@ -35,9 +35,9 @@ make_image()
 	local os_part1_begin=$(($NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
 
 	if [ -n "$name" ]; then
-		local img=$outputdir/os$buildnr-$name.disk.img
+		local img=$outputdir/$(image_name)-$name.disk.img
 	else
-		local img=$outputdir/os$buildnr.disk.img
+		local img=$outputdir/$(image_name).disk.img
 	fi
 
 	dd if=/dev/zero of=$img bs=$BLOCK_SIZE count=0 seek=$(($image_size / $BLOCK_SIZE))

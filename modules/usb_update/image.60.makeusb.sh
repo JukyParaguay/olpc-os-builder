@@ -14,5 +14,5 @@ if [ "$versioned_fs" != "1" ]; then
 fi
 
 echo "Making USB olpc-update image..."
-mkisofs -o $outputdir/os$buildnr.usb -quiet -cache-inodes -iso-level 4 -publisher "olpc-os-builder" -R -V "$majver.$minver.$relver $buildnr" $fsmount/versions/pristine/*
+mkisofs -o $outputdir/$(image_name).usb -quiet -cache-inodes -iso-level 4 -publisher "olpc-os-builder" -R -V "$majver.$minver.$relver $buildnr" $fsmount/versions/pristine/*
 

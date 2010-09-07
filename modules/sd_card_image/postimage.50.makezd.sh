@@ -2,7 +2,6 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 . $OOB__shlib
-buildnr=$(read_buildnr)
 compress=$(read_config sd_card_image compress_disk_image)
 
 oIFS=$IFS
@@ -14,9 +13,9 @@ for line in $(env); do
 	name=
 	expr index "$vals" ',' &>/dev/null && name=${vals#*,}
 	if [ -n "$name" ]; then
-		osname=os$buildnr-$name
+		osname=$(image_name)-$name
 	else
-		osname=os$buildnr
+		osname=$(image_name)
 	fi
 	pfx=$outputdir/$osname
 	echo "Making ZD image for $osname..."
