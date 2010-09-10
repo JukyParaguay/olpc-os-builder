@@ -1,4 +1,4 @@
-This module creates ext3 SD card images from the build output. These
+This module creates ext4 SD card images from the build output. These
 images contain partition tables and 2 partitions.
 
 It also produces .zd disk images from those images, suitable for

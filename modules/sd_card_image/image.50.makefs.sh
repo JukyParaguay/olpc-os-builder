@@ -57,7 +57,7 @@ EOF
 	mke2fs -O dir_index,^resize_inode -L Boot -F /dev/loop6
 	mount /dev/loop6 $BOOT
 
-	mkfs.ext3 -O dir_index,^huge_file -E resize=8G -m1 -L OLPCRoot /dev/loop7
+	mkfs.ext4 -O dir_index,^huge_file -E resize=8G -m1 -L OLPCRoot /dev/loop7
 	tune2fs -o journal_data_ordered /dev/loop7
 	mount /dev/loop7 $ROOT
 
