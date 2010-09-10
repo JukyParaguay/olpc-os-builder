@@ -17,7 +17,7 @@ Quick Start:
 
     4.  install the run-time dependencies:
 
-        yum install python-imgcreate bitfrost zip unzip crcimg
+        yum install python-imgcreate bitfrost zip unzip crcimg mtd-utils
 
     5.  produce a build:
 
@@ -120,6 +120,13 @@ olpc_version_release
     The release version component of the OLPC version tag to include
     in the OS image.  For example, in the OLPC OS 10.1.0 release, this
     would be 0.
+
+image_name
+
+    The naming scheme to use for the output files. The value of this field
+    must include "%d", this will be replaced with the build number. For
+    example, a value of "per%d-6" would result the output being called
+    "per703-6" for build number 703. The default value is "os%d"
 
 customization_info
 

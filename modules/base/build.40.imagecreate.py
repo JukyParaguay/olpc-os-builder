@@ -14,24 +14,21 @@ def main():
     if not os.path.exists(cache_dir):
         os.mkdir(cache_dir)
 
-    buildnr_path = os.path.join(ooblib.intermediatesdir, 'buildnr')
-    image_num = open(buildnr_path, "r").readline()
-    image_name = "os%d" % int(image_num)
-
+    name = ooblib.image_name()
     kspath = os.path.join(ooblib.intermediatesdir, 'build.ks')
     ks = imgcreate.read_kickstart(kspath)
 
     make_iso = ooblib.read_config_bool('base', 'make_iso')
     if make_iso:
         print "Building ISO image..."
-        creator = imgcreate.LiveImageCreator(ks, image_name, image_name)
+        creator = imgcreate.LiveImageCreator(ks, name, name)
         compress = ooblib.read_config_bool('base', 'compress_iso')
         if compress is None:
             compress = False
         creator.skip_compression = not compress
     else:
         print "Building directly into FS image..."
-        creator = imgcreate.LoopImageCreator(ks, 'imgcreatefs', image_name)
+        creator = imgcreate.LoopImageCreator(ks, 'imgcreatefs', name)
 
     try:
         creator.mount(cachedir=cache_dir)

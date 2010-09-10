@@ -26,3 +26,8 @@ read_buildnr() {
 	fi
 }
 
+image_name() {
+	local name_tmpl=$(read_config global image_name)
+	printf $name_tmpl $(read_buildnr)
+}
+

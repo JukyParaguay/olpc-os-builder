@@ -25,6 +25,16 @@ def read_config_bool(module, option):
         return None
     return bool(int(os.environ[vname]))
 
+def read_buildnr():
+    buildnr_path = os.path.join(intermediatesdir, 'buildnr')
+    if not os.path.isfile(buildnr_path):
+        return "0"
+    return open(buildnr_path, "r").readline().strip()
+
+def image_name():
+    name_tmpl = read_config('global', 'image_name')
+    return name_tmpl % int(read_buildnr())
+
 def add_packages_from_xml(fd, pkglist):
     et = ElementTree(file=fd)
     root = et.getroot()

@@ -7,9 +7,8 @@
 enabled=$(read_config signing extract)
 [[ "$enabled" == "1" ]] || exit 0
 
-buildnr=$(read_buildnr)
 tgt=$intermediatesdir/for-signing
-outzip=$outputdir/os$buildnr.for-signing.zip
+outzip=$outputdir/$(image_name).for-signing.zip
 rm -rf $tgt
 mkdir -p $tgt
 
