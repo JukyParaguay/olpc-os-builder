@@ -95,3 +95,5 @@ fi
 # if totem is installed, set default volume to 100% (#10158)
 gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --dir-exists /apps/totem && gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type int --set /apps/totem/volume 100
 
+exit 0
+
