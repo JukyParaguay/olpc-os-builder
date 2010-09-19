@@ -48,8 +48,9 @@ __EOF__
 
 # OLPC custom VT layout and serial console setup (#9517, #10354)
 sed -i -e 's/mingetty/mingetty --loginpause --autologin root --noclear/' \
-	/lib/systemd/system/getty\@.service
-rm -f /etc/systemd/system/getty.target.wants/getty\@tty[4-6].service
+	/etc/init/tty.conf
+sed -i -e 's:ACTIVE_CONSOLES=/dev/tty\[1-6\]:ACTIVE_CONSOLES=/dev/tty[1-3]:' \
+	/etc/sysconfig/init
 
 # Enable tmpfs mounts dictated by rwtab (#9637)
 mkdir -p /security/state
@@ -74,15 +75,15 @@ cat >/etc/statetab.d/olpc <<EOF
 /var/lib/random-seed
 EOF
 
-#prefdm tweaks - FIXME update for systemd
-#sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/event.d/prefdm
+#prefdm tweaks
+sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
 
-#cat >>/etc/event.d/prefdm <<EOF
+cat >>/etc/init/prefdm.conf <<EOF
 # make sure dcon is unfrozen if something goes wrong.
-#post-stop script
-#  echo 0 > /sys/devices/platform/dcon/freeze
-#end script
-#EOF
+post-stop script
+  echo 0 > /sys/devices/platform/dcon/freeze
+end script
+EOF
 
 # prevent NM from setting the hostname and modifying /etc/hosts to reflect this
 # this allows olpc-configure to set a hostname based on the MAC address
