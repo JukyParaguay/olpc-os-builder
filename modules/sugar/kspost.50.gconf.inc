@@ -10,4 +10,5 @@ gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults
 # set empty jabber server so that no gabble connection is attempted by default
 gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /desktop/sugar/collaboration/jabber_server ''
 
-
+# Ask for the nick name when starting Sugar the first time
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /desktop/sugar/user/default_nick 'disabled'
