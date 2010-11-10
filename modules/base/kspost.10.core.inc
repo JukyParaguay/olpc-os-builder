@@ -155,10 +155,8 @@ rm -f /etc/avahi/etc/localtime
 chmod -x /etc/cron.daily/prelink
 
 # kill a load of non-interesting anacron tasks (#10247)
-chmod -x /etc/cron.daily/{logrotate,tmpwatch}
-chmod -x /etc/cron.daily/{mlocate,readahead,man-db}.cron
+chmod -x /etc/cron.daily/logrotate
 chmod -x /etc/cron.weekly/99-raid-check
-chmod -x /etc/cron.monthly/readahead-monthly.cron
 
 # suppress generation of certain SSH host keys in the same way we did
 # it on XO-1 builds, so as to reduce first boot time by several
