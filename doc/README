@@ -5,7 +5,7 @@ to generate prior OLPC OS releases.
 
 Quick Start:
 
-    1.  install Fedora 11,
+    1.  install Fedora 14,
 
     2.  install the build dependencies:
 
@@ -21,7 +21,7 @@ Quick Start:
 
     5.  produce a build:
 
-        olpc-os-builder examples/f11-xo1.5.ini
+        olpc-os-builder examples/f14-xo1.5.ini
 
     6.  view or use the build result files:
 
@@ -183,12 +183,6 @@ Design goals:
  - avoid any 'difficult' system requirements so that this can be
    packaged into official Fedora and hence easily installed and used
    by deployments
-
-
-Fedora 11 Dependencies:
-
-	Build-Requires: zlib-devel libtomcrypt-devel glibc-headers
-	Requires: python-imgcreate bitfrost
 
 
 Development:
