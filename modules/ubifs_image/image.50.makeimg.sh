@@ -15,8 +15,8 @@ root_tmp_img=$intermediatesdir/root_tmp.img
 root_img=$intermediatesdir/root.img
 ubinize_cfg=$intermediatesdir/ubinize.cfg
 
-output_img=os${buildnr}u.img
-output_script=os${buildnr}u.onu # onu = ofw nand update
+output_img=$(image_name).uim # uim = UBIFS image
+output_script=$(image_name).onu # onu = ofw nand update
 output_img_path=$outputdir/$output_img
 output_script_path=$outputdir/$output_script
 
