@@ -7,3 +7,5 @@
 # FIXME: fix bootfw package
 sed -i -e 's:root=mtd0 rootfstype=jffs2::g' /boot/olpc.fth
 
+# do not show the Sugar default ad-hoc networks on the XO-1
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type bool --set /desktop/sugar/network/adhoc false
