@@ -16,6 +16,7 @@ vim-minimal
 rpm
 yum
 tree
+nano
 
 # basic debugging
 strace
