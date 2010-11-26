@@ -3,7 +3,7 @@
 
 . $OOB__shlib
 buildnr=$(read_buildnr)
-treetar=$outputdir/$(image_name).tree.tar.lzma
+treetar=$(image_name).tree.tar.lzma
 pkglist=$outputdir/$(image_name).packages.txt
 actlist=$outputdir/$(image_name).activities.txt
 liblist=$outputdir/$(image_name).libraries.txt
@@ -11,11 +11,13 @@ fillist=$outputdir/$(image_name).files.txt
 
 maketree=$(read_config base make_tree_tarball)
 if [[ "$maketree" == "1" ]]; then
+        pushd $outputdir >/dev/null
 	echo "Make tree tarball..."
 	tar -c -C $fsmount . | lzma -1 > $treetar
 
 	echo "Checksum tree tarball..."
 	md5sum $treetar > $treetar.md5
+        popd >/dev/null
 fi
 
 versioned_fs=$(read_config base versioned_fs)
