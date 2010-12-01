@@ -16,7 +16,7 @@ PolicyKit-gnome
 notification-daemon
 
 # battery applet
-batterymon
+batti
 
 # internet
 xulrunner
