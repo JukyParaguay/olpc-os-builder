@@ -1,8 +1,10 @@
 This module adds the Sugar learning environment to the build.
 
 It has 2 optional configuration options which let you add or remove activities
-from the default favorites view. Both accept comma-separated lists of activity
-IDs.
+from the default favorites view, and a list of protected activities to disable
+the posibility of erasing them by the user.
+
+All accept comma-separated lists of activity IDs.
 
 Example:
 
@@ -15,4 +17,6 @@ favorites_view_add=
 favorites_view_del=
 	org.laptop.Terminal,
 	org.laptop.Log
-
+protected_activities=org.laptop.WebActivity,
+	org.laptop.Terminal,
+	org.laptop.Log
