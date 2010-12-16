@@ -26,8 +26,7 @@ olpc-utils
 olpc-netutils
 olpc-bootanim
 olpc-update
-# FIXME: revive PolicyKit-olpc for F14
-#PolicyKit-olpc
+PolicyKit-olpc
 ds-backup-client
 olpc-powerd
 olpc-powerd-dbus
