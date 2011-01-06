@@ -89,6 +89,15 @@ the first one are indented, e.g.:
 		but lines 2 through 4 must be indented
 	option2=foo
 
+Interpolation (basic assignment and use of variables) can be used, according
+to Python's ConfigParser documentation.
+
+Default variables automatically provided:
+
+oob_config_dir
+
+	The directory where the currently selected config file resides
+
 In general, each section that can exist in the configuration file
 corresponds to a specific module.  The section name is the same as the
 module name.  The options that can exist in these sections are

@@ -69,6 +69,8 @@ class Stage(object):
         env['OOB__statedir'] = self.osb.statedir
         env['OOB__fsmount'] = self.osb.fsmount
 
+        env['oob_config_dir'] = os.path.dirname(self.osb.build_config)
+
         for section in self.osb.cfg.sections():
             for option in self.osb.cfg.options(section):
                 val = self.osb.cfg.get(section, option)
@@ -247,7 +249,7 @@ class OsBuilderException(Exception):
 
 class OsBuilder(object):
     def __init__(self, build_config, additional_defaults):
-        self.build_config = build_config
+        self.build_config = os.path.abspath(build_config)
         self.additional_defaults = additional_defaults
 
         print " * OLPC OS builder v%s" % VERSION
@@ -270,7 +272,9 @@ class OsBuilder(object):
         self.fsmount = os.path.join(self.builddir, 'mnt-fs')
 
         # load config to find module list
-        self.cfg = ConfigParser()
+        # and set interpolation default for oob_config_dir
+        self.cfg = ConfigParser({'oob_config_dir':
+                                 os.path.dirname(self.build_config)})
         self.cfg.read(self.build_config)
 
         # read in defaults specified on the command line
@@ -313,7 +317,8 @@ class OsBuilder(object):
     def read_config(self):
         """Read and validate config (including module defaults)"""
         # reset config since we want to load the module defaults first
-        self.cfg = ConfigParser()
+        self.cfg = ConfigParser({'oob_config_dir':
+                                 os.path.dirname(self.build_config)})
 
         for mod in self.modules:
             m = re.match(r"[A-Za-z_][A-Za-z0-9_]*$", mod)
