@@ -90,7 +90,7 @@ the first one are indented, e.g.:
 	option2=foo
 
 Interpolation (basic assignment and use of variables) can be used, according
-to Python's ConfigParser documentation.
+to Python's SafeConfigParser documentation.
 
 Default variables automatically provided:
 
@@ -133,9 +133,12 @@ olpc_version_release
 image_name
 
     The naming scheme to use for the output files. The value of this field
-    must include "%d", this will be replaced with the build number. For
-    example, a value of "per%d-6" would result the output being called
-    "per703-6" for build number 703. The default value is "os%d"
+    must include "%%d", this will be replaced with the build number.
+    For example, a value of "per%%d-6" would result the output being called
+    "per703-6" for build number 703. The default value is "os%%d".
+    The reason that 2 percentage signs are needed is because RawConfigParser
+    is in use; a % therefore triggers the INI interpolation feature, unless
+    presented in the escaped form %%.
 
 customization_info
 

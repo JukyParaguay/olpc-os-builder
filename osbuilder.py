@@ -27,7 +27,7 @@ import sys
 import os
 import os.path
 from glob import glob
-from ConfigParser import ConfigParser
+from ConfigParser import SafeConfigParser
 from StringIO import StringIO
 import subprocess
 import shutil
@@ -273,8 +273,8 @@ class OsBuilder(object):
 
         # load config to find module list
         # and set interpolation default for oob_config_dir
-        self.cfg = ConfigParser({'oob_config_dir':
-                                 os.path.dirname(self.build_config)})
+        self.cfg = SafeConfigParser({'oob_config_dir':
+                                     os.path.dirname(self.build_config)})
         self.cfg.read(self.build_config)
 
         # read in defaults specified on the command line
@@ -317,8 +317,8 @@ class OsBuilder(object):
     def read_config(self):
         """Read and validate config (including module defaults)"""
         # reset config since we want to load the module defaults first
-        self.cfg = ConfigParser({'oob_config_dir':
-                                 os.path.dirname(self.build_config)})
+        self.cfg = SafeConfigParser({'oob_config_dir':
+                                     os.path.dirname(self.build_config)})
 
         for mod in self.modules:
             m = re.match(r"[A-Za-z_][A-Za-z0-9_]*$", mod)
