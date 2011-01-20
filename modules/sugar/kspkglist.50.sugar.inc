@@ -2,6 +2,7 @@
 sugar
 
 # additional sugar packages
+libxml2-python
 hulahop
 pyabiword
 gnome-python2-evince
