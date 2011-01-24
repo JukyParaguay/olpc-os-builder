@@ -23,8 +23,8 @@ make_image()
 {
 	local vals=$1
 	local disk_size=${vals%,*}
-	local name=
-	expr index "$vals" ',' &>/dev/null && name=${vals#*,}
+	local ext=
+	expr index "$vals" ',' &>/dev/null && ext=${vals#*,}
 	echo "Making image of size $disk_size"
 
 	echo "Create disk and partitions..."
@@ -34,11 +34,8 @@ make_image()
 	local image_size=$(($num_cylinders * $NUM_HEADS * $NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
 	local os_part1_begin=$(($NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
 
-	if [ -n "$name" ]; then
-		local img=$outputdir/$(image_name)-$name.disk.img
-	else
-		local img=$outputdir/$(image_name).disk.img
-	fi
+	[ -z "$ext" ] && ext="zd"
+	local img=$intermediatesdir/$(image_name).$ext.disk.img
 
 	dd if=/dev/zero of=$img bs=$BLOCK_SIZE count=0 seek=$(($image_size / $BLOCK_SIZE))
 	/sbin/sfdisk -S 32 -H 32 --force -uS $img <<EOF

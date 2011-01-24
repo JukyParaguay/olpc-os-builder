@@ -1,36 +1,52 @@
 This module creates ext4 SD card images from the build output. These
 images contain partition tables and 2 partitions.
 
-It also produces .zd disk images from those images, suitable for
-fs-update. Corresponding .zsp files are produced too.
+These images are in the "ZD" format, suitable for flashing via OpenFirmware's
+fs-update command. Corresponding .zsp files are produced too.
 
 The SD card sizes must be specified, in bytes. This module can create
 filesystems for multiple SD card capacities. Simply provide a list of
 uniquely-named options that start with "size_", one for each SD card size.
 
 The value for each of these options is the disk size (in bytes), optionally
-followed by a comma and a name. There can only be one un-named entry.
+followed by a comma and a custom extension. There can only be one un-named
+entry, which will default to the extension "zd".
 
 For example:
 [sd_card_image]
 ; 3780mb
 size_1=3964665000
 ; 1985mb
-size_2=1977614336,2gb
+size_2=1977614336,zd2
 
 The output files will be:
 
 	(the 3780mb disk output)
-	osXX.disk.img.tar.gz
 	osXX.zd
 	osXX.zsp
 
 	(the 1985mb disk output)
-	osXX-2gb.disk.img.tar.gz
-	osXX-2gb.zd
-	osXX-2gb.zsp
+	osXX.zd2
+	osXX.zd2.zsp
 
-The .img file is archived in tar (in sparse mode) and then compressed with
+A "keep_disk_image" option is available, which can be used to retain the
+raw disk image file (basically a file that looks like a block device) that was
+used to produce the ZD image, which you could flash with Linux using the "dd"
+command.
+
+For example:
+
+[sd_card_image]
+keep_disk_image=1
+size_1=3964665000
+
+The output files will be:
+
+	osXX.zd
+	osXX.zsp
+	osXX.zd.disk.img.tar.gz
+
+The raw image file is archived in tar (in sparse mode) and then compressed with
 gzip. Tar preserves the sparseness of the file (the fact that some part of the
 image is made up of unallocated disk blocks). To disable this
 archiving/compression, set the compress_disk_image option to 0 (default is 1).
