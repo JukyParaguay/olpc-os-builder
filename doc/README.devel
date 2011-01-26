@@ -1,5 +1,36 @@
+== GETTING STARTED ==
+
 Git repo: git://dev.laptop.org/git/projects/olpc-os-builder
 Mailing list: http://lists.laptop.org/listinfo/devel
+
+olpc-os-builder can be run in "uninstalled mode" from a standard git
+checkout.
+
+ 1. Install build and run-time dependencies
+
+    These can be found in the olpc-os-builder.spec file in Fedora GIT. Instead
+    of going to the hassle to look them up, you could just run:
+
+       yum install olpc-os-builder
+
+    This will ensure that all dependencies are present, and having a systemwide
+    installation of olpc-os-builder will in no way affect your "uninstalled"
+    version.
+
+ 2. Build the relevant binaries, from the git checkout:
+
+       make
+
+ 3. Produce a build: (must be run as root)
+
+       ./osbuilder.py examples/f14-xo1.5.ini
+
+ 4. View and use build result files:
+
+       ls -l build/output
+
+
+== DESIGN ==
 
 olpc-os-builder is composed of a series of modules, and an INI-style
 configuration supplied by the user, which selects the modules to be used
