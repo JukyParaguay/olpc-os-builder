@@ -3,7 +3,6 @@
 # and limit tmpfs mounts to 5%
 cat >> /etc/fstab <<EOF
 /tmp            /tmp            tmpfs         rw,size=50m 0 0
-varcacheyum     /var/cache/yum  tmpfs         rw,mode=755 0 0
 vartmp          /var/tmp        tmpfs         rw,size=50m 0 0
 varlog          /var/log        tmpfs         rw,size=20m 0 0
 none            /ofw            promfs		  defaults    0 0
