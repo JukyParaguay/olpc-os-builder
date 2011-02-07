@@ -71,6 +71,11 @@ class Stage(object):
 
         env['oob_config_dir'] = os.path.dirname(self.osb.build_config)
 
+        envpath = env['PATH'].split(':')
+        for dir in ('/sbin', '/usr/sbin'):
+            if envpath.count(dir) == 0:
+                env['PATH'] = env['PATH'] + ':' + dir
+
         for section in self.osb.cfg.sections():
             for option in self.osb.cfg.options(section):
                 val = self.osb.cfg.get(section, option)
