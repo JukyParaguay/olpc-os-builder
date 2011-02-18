@@ -14,3 +14,7 @@ if [ -n "$server" ]; then
 	echo "echo '$server' > /etc/oats-server"
 fi
 
+if [ -n "$stream" ]; then
+	echo "echo '$stream' > /etc/update-stream"
+fi
+

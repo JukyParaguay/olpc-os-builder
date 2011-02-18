@@ -1,7 +1,7 @@
 This module allows you to configure an OATS server used by olpc-update,
 overriding the default of antitheft.laptop.org
 
-It has 2 options:
+Options:
 
 server: the address of an OATS server to use
 
@@ -11,9 +11,12 @@ to override this behaviour, the school server will not be tried. Useful in
 deployments with good connectivity where antitheft is controlled in a central
 location (as opposed to the specific school).
 
+stream: the update stream - this is helpful when deploying different OS images
+that query the same update server.
 
 Example configuration:
 [oats_cfg]
 server=my-oats-server.mydeployment.com
 ignore_xs=1
+stream=xo15hs
 
