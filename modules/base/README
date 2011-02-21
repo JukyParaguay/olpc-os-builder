@@ -35,3 +35,8 @@ generated instead of pyc.
 When set to 2, the effects will be the same as 1 except docstrings will
 be discarded when generating pyc files.
 
+- timezone (default GMT)
+Set the default timezone for the build. This can be later overridden by the
+user in the Sugar control panel. The value should be an entry from
+/usr/share/zoneinfo e.g. America/Managua
+

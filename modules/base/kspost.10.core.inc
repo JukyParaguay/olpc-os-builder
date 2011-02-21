@@ -162,3 +162,9 @@ chmod -x /etc/cron.weekly/99-raid-check
 # seconds (#9964)
 echo "AUTOCREATE_SERVER_KEYS=RSAONLY" >> /etc/sysconfig/sshd
 
+# Fedora's initscripts packages writes /etc/adjtime without a 3rd line,
+# which makes hwclock assume that the hardware clock has local time.
+# this will be fixed in util-linux-2.20, where it will default to UTC.
+# this hack can be removed when util-linux-2.20 is included. (#10605)
+echo UTC >> /etc/adjtime
+

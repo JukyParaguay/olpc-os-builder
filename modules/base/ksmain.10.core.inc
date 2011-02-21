@@ -1,6 +1,5 @@
 lang en_US.UTF-8
 keyboard us
-timezone --utc GMT
 auth --useshadow --enablemd5
 selinux --disabled
 firewall --disabled
