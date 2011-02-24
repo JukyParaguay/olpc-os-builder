@@ -10,17 +10,17 @@ list, requesting the development of a specific module to meet your needs.
 
 
 
-Your scripts will run in the regular environment of the system, with root
-privileges. The environment variable $INSTALL_ROOT will be pre-set, allowing
-you to locate and make any changes to the actual build through reading this
-variable.
+Your scripts will run under bash in the regular environment of the system,
+with root privileges. The environment variable $INSTALL_ROOT will be pre-set,
+allowing you to locate and make any changes to the actual build through
+reading this variable.
 
 Your scripts should return 0 on success, a non-zero exit code will cause the
 whole build process to fail.
 
-Your scripts should have appropriate executable permissions and start with
-the appropriate shebang pointing to an interpreter, for example: #!/bin/bash
-
+You can execute binaries and programs instead of scripts, just make sure that
+the file is market executable and that the appropriate binary identification
+byte or shebang (e.g. #!/usr/bin/python) is present.
 
 Example configuration:
 
