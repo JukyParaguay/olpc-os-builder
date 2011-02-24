@@ -134,9 +134,10 @@ class Stage(object):
         # find all parts to execute for this stage
         partlist = []
         for mod in self.osb.modules:
-            matches = glob('%s/%s/%s.[0-9][0-9].*' \
-                           % (self.osb.moddir, mod, self.name))
-            partlist.extend(matches)
+            for ext in ('py', 'sh', 'inc'):
+                matches = glob('%s/%s/%s.[0-9][0-9].*.%s' \
+                               % (self.osb.moddir, mod, self.name, ext))
+                partlist.extend(matches)
 
         # sort them
         parts = {}
