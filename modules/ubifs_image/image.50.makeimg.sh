@@ -86,7 +86,7 @@ echo "Generating partition script..."
 cat > $output_script_path <<EOF
 data:  $output_img
 erase-all
-partitions:  boot 100  system -1
+partitions:  boot c0  system -1
 set-partition: boot
 mark-pending: 0
 EOF

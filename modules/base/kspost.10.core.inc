@@ -168,3 +168,6 @@ echo "AUTOCREATE_SERVER_KEYS=RSAONLY" >> /etc/sysconfig/sshd
 # this hack can be removed when util-linux-2.20 is included. (#10605)
 echo UTC >> /etc/adjtime
 
+# not used, takes up a little space
+rm -rf /boot/grub
+
