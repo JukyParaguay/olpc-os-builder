@@ -33,6 +33,9 @@ olpc-library
 # for Tuxmath activity
 SDL_Pango
 
+# for text-to-speech in Read
+gstreamer-plugins-espeak
+
 # explicitly specify dependencies on GNOME's implementation of certain
 # components, otherwise the KDE ones will be brought in by default
 PolicyKit-gnome
