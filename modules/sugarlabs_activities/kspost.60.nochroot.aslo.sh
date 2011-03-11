@@ -4,6 +4,7 @@
 . $OOB__shlib
 
 sugarver=$(read_config sugarlabs_activities sugar_version)
+experimental=$(read_config sugarlabs_activities experimental)
 activities=$(read_config sugarlabs_activities activities)
 cache=$cachedir/activities
 mkdir -p $cache
@@ -13,6 +14,7 @@ IFS=$'\n\t, '
 for id in $activities; do
 	qurl="http://activities.sugarlabs.org/services/update-aslo.php?id=$id"
 	[ -n "$sugarver" ] && qurl="${qurl}&appVersion=${sugarver}"
+	[ "$experimental" = "1" ] && qurl="${qurl}&experimental=1"
 
 	echo "Examining $qurl ..." >&2
 	aurl=$(wget --inet4-only -q -O- "$qurl" | grep updateLink | sed -e 's/[[:space:]]*<[^>]*>//g')
