@@ -289,10 +289,10 @@ class OsBuilder(object):
 
         if self.cfg.has_option('global', 'suggested_oob_version'):
             suggested = self.cfg.get('global','suggested_oob_version')
-            if suggested != VERSION:
+            if self.suggested_mismatch(suggested):
                 print
                 print "WARNING: The build configuration you are using suggests that"
-                print "olpc-os-builder version v%s should be used." % suggested
+                print "olpc-os-builder version v%s.x should be used." % suggested
                 print
                 print "You are using v%s" % VERSION
                 print
@@ -316,6 +316,11 @@ class OsBuilder(object):
         self.modules = list(set(self.modules))
 
         self.read_config()
+
+    def suggested_mismatch(self, suggested_version):
+        # we only compare the first two version components
+        current_version = VERSION.rsplit('.', 1)[0]
+        return current_version != suggested_version
 
     def get_ks_file_path(self):
         return os.path.join(self.intermediatesdir, 'build.ks')

@@ -265,8 +265,8 @@ When releasing an official OLPC OS build, you should do the following:
  - Make and test the build
  (assuming test success...)
  - Bump olpc-os-builder version number
- - Modify config to set suggested_oob_version in [base] to the new version
-   number
+ - Modify config to set suggested_oob_version in [base] to the first two
+   components of the new version number (e.g. 1.3)
  - Delete [base].official setting from config
  - Save config in examples/ directory with appropriate name
  - Tag and release new olpc-os-builder
@@ -282,4 +282,44 @@ order to provide a firm record for the environment under which the build
 was made. If deployments try to replicate the same build but use a different
 oob version with different module code, then they will end up with the
 undesirable result of an OS build that is somewhat different from the official.
+
+
+== VERSION NUMBERS ==
+
+The olpc-os-builder version number has 3 components, e.g. v1.2.3
+
+The first component relates to the version of Fedora the tool works with.
+It must be incremented every time the tool is modified to produce builds based
+on a new version of Fedora.
+
+The second component refers to the minor release of the official OLPC OS
+release that the tool was used to build. It must be incremented when starting
+work on a new minor release. For example, v1.2.0 was used to build
+OLPC OS 10.1.2, this was incremented to v1.3.0 when development started on OLPC
+OS 10.1.3.
+
+The third version component starts at 0 for a given OLPC OS release. The
+official OLPC OS release is always made with 0 as the third component
+(e.g. v1.3.0). If new versions of olpc-os-builder are released that still
+build the same OLPC OS release, this number gets incremented (see below for
+more information).
+
+
+== CODE FREEZES ==
+
+By definition, OLPC OS releases are always made with olpc-os-builder releases
+that have 0 as the 3rd version component (e.g. v1.3.0). As an aim of the tool
+is to allow for exact reconstruction of OLPC OS releases into the future,
+the branch where this olpc-os-builder was made automatically goes into a code
+freeze.
+
+In this frozen state, further commits can be made, but only for small patches
+which undoubtedly do not affect the build output when the standard OLPC OS
+configuration is used. The equivalent functionality or fixes must already be
+present in the master branch. If there is any doubt as to whether the change
+would affect the standard build output, it is not applied.
+
+Examples of commits that are permitted are fixes to bugs that prevented the
+build tool from running at all under certain environments, small changes to
+modules not used by the official OLPC OS configuration, etc.
 
