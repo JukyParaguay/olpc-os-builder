@@ -14,8 +14,8 @@ Firstly, the 'fedora' option:
 fedora=fedora,fedora-updates,fedora-updates-testing
 
 This is a comma-separated list of official Fedora repositories to enable
-for the build. The 3 possible options are fedora, fedora-update and
-fedora-updates-testing.
+for the build. The 4 possible options are fedora, fedora-updates,
+fedora-updates-testing and rawhide.
 
 
 

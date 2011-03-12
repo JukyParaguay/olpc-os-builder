@@ -65,6 +65,8 @@ if fedora is not None:
             repos["fedora-updates"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f%s&arch=i386" % fver)
         elif repo == "fedora-updates-testing":
             repos["fedora-updates-testing"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f%s&arch=i386" % fver)
+        elif repo == "rawhide":
+            repos["rawhide"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=i386")
 
 # generate repo lines including excludes
 excludepkgs = list(excludepkgs)
