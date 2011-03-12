@@ -4,6 +4,7 @@ gnome-desktop
 gnome-panel
 gnome-session
 gnome-terminal
+gnome-settings-daemon
 metacity
 nautilus
 
@@ -36,7 +37,6 @@ gimp
 # audio & video
 audacity
 totem
-totem-gstreamer
 totem-mozplugin
 
 # more desktop stuff

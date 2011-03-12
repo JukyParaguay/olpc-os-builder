@@ -5,7 +5,6 @@ sugar
 libxml2-python
 hulahop
 pyabiword
-gnome-python2-evince
 udisks
 espeak
 etoys
@@ -39,7 +38,7 @@ pybox2d
 gstreamer-plugins-espeak
 
 # using a non-upstream updater temporarily (#10641)
-sugar-update-control
+# sugar-update-control # FIXME f16
 
 # explicitly specify dependencies on GNOME's implementation of certain
 # components, otherwise the KDE ones will be brought in by default

@@ -16,6 +16,7 @@ rpm
 yum
 tree
 nano
+less
 
 # basic debugging
 strace

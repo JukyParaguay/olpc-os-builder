@@ -54,10 +54,10 @@ SYSFONT=sun12x22
 __EOF__
 
 # OLPC custom VT layout and serial console setup (#9517, #10354)
-sed -i -e 's/mingetty/mingetty --loginpause --autologin root --noclear/' \
-	/etc/init/tty.conf
-sed -i -e 's:ACTIVE_CONSOLES=/dev/tty\[1-6\]:ACTIVE_CONSOLES=/dev/tty[1-3]:' \
-	/etc/sysconfig/init
+sed -i -e 's/agetty.*/mingetty --loginpause --autologin root --noclear %I/' \
+	/lib/systemd/system/getty\@.service
+sed -i -e 's:agetty.*:agetty -L -l /bin/bash -w -n %I 115200 vt100:' \
+	/lib/systemd/system/serial-getty\@.service
 
 # Enable tmpfs mounts dictated by rwtab (#9637)
 mkdir -p /security/state
@@ -83,15 +83,26 @@ cat >/etc/statetab.d/olpc <<EOF
 /var/lib/random-seed
 EOF
 
-#prefdm tweaks
-sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
+# systemd stuff that is not interesting for us
+#systemctl disable systemd-readahead-collect.service
+#systemctl disable systemd-readahead-replay.service
+#systemctl disable systemd-readahead-done.service
+systemctl disable fedora-loadmodules.service
+systemctl disable fedora-storage-init-late.service
+systemctl disable fedora-storage-init.service
+systemctl disable fedora-wait-storage.service
+#systemctl disable mdmonitor-takeover.service
+#systemctl disable system-setup-keyboard.service
 
-cat >>/etc/init/prefdm.conf <<EOF
+#prefdm tweaks
+#sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
+
+#cat >>/etc/init/prefdm.conf <<EOF
 # make sure dcon is unfrozen if something goes wrong.
-post-stop script
-  echo 0 > /sys/devices/platform/dcon/freeze
-end script
-EOF
+#post-stop script
+#  echo 0 > /sys/devices/platform/dcon/freeze
+#end script
+#EOF
 
 # OLPC CA certificate (#9624)
 # this is used by wget, but the Web activity uses cert8.db in its own
@@ -156,7 +167,6 @@ rm -f /etc/avahi/etc/localtime
 
 # kill a load of non-interesting anacron tasks (#10247)
 chmod -x /etc/cron.daily/logrotate
-chmod -x /etc/cron.weekly/99-raid-check
 
 # suppress generation of certain SSH host keys in the same way we did
 # it on XO-1 builds, so as to reduce first boot time by several

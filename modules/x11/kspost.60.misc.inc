@@ -88,9 +88,6 @@ if [ -e /usr/lib/xulrunner-*/greprefs/all.js ]; then
 	sed -i -e 's:\(layout.css.dpi",\) -1:\1 96:' /usr/lib/xulrunner-*/greprefs/all.js
 fi
 
-# remove unneccesary package mesa-dri-drivers (#11036)
-rpm -e --nodeps mesa-dri-drivers
-
 # remove gstreamer pulse element so that totem doesn't try to use it (#10158)
 [ -e /usr/lib/gstreamer-0.10/libgstpulse.so ] && rm /usr/lib/gstreamer-0.10/libgstpulse.so
 

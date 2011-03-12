@@ -5,5 +5,5 @@ selinux --disabled
 firewall --disabled
 xconfig --startxonboot
 part / --size 4096 --fstype=ext3
-services --enabled=avahi-daemon,crond,messagebus,NetworkManager --disabled=dnsmasq,ip6tables,iptables,mdmonitor,netfs,network,sshd
+services --enabled=crond --disabled=dnsmasq,ip6tables,iptables,mdmonitor,netfs,network,sshd
 
