@@ -201,7 +201,7 @@ if install_activities:
 
         for name, info in results.items():
             (version, url) = only_best_update(info)
-            print >>sys.stderr, "Examining", name, "v%d" % version
+            print >>sys.stderr, "Examining %s v%d: %s" % (name, version, url)
             fd = urllib2.urlopen(url)
             headers = fd.info()
             if not 'Content-length' in headers:
