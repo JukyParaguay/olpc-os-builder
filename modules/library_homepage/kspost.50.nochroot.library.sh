@@ -16,9 +16,4 @@ if [ ! -d "$path" ]; then
 fi
 
 # synchronize the files within the path, conserving directory structure
-pushd "$path" >/dev/null
-find . -type f -print0 | while read -d $'\0' file; do
-	echo "cp \"$path\"/\"$file\" \$INSTALL_ROOT/usr/share/library-common/\"$file\""
-done
-popd >/dev/null
-
+echo "rsync -rlpt \"$path\"/ \"\$INSTALL_ROOT/usr/share/library-common/\""
