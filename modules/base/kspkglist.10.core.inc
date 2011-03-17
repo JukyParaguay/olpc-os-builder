@@ -25,7 +25,6 @@ strace
 olpc-utils
 olpc-netutils
 olpc-bootanim
-olpc-update
 PolicyKit-olpc
 ds-backup-client
 olpc-powerd
