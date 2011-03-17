@@ -5,6 +5,9 @@ You don't want to exclude it.
 
 - versioned_fs (default 1)
 Set to 0 to disable the "upgradeable" /versions-based filesystem layout.
+Note that Quanta are unable to install software images on the production
+line unless they have use the versioned layout. Disabling this option is
+not recommended.
 
 - prepopulate_run (default 1)
 Only applicable when building a versioned filesystem layout.
