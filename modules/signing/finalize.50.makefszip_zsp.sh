@@ -30,9 +30,9 @@ make_signed_zsp()
 	echo "Generating signed fs.zip for $(basename $1)..."
 	local outfile=$outputdir/$(basename $1).fs.zip
 	pushd $bios_crypto/build
-	rm -rf $bios_crypto/build/fs.zip
-	$bios_crypto/build/sign-zsp.sh $skey $1
-	mv $bios_crypto/build/fs.zip $outfile
+	rm -rf fs.zip
+	./sign-zsp.sh $skey $1
+	mv fs.zip $outfile
 	popd
 }
 

@@ -20,7 +20,7 @@ mv $fwtmp/data.img $intermediatesdir/fw.rom
 outzip=$intermediatesdir/bootfw.zip
 rm -f $outzip
 pushd $bios_crypto/build
-$bios_crypto/build/sign-fw.sh $wkey $intermediatesdir/fw.rom $outzip
+./sign-fw.sh $wkey $intermediatesdir/fw.rom $outzip
 popd
 mv $outzip $fsmount/boot/
 

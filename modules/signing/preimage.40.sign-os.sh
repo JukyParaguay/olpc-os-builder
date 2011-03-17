@@ -11,7 +11,7 @@ bios_crypto=$(read_config signing bios_crypto_path)
 if [ -e "$fsmount/boot/vmlinuz" ]; then
 	echo "Signing kernel..."
 	pushd $bios_crypto/build
-	$bios_crypto/build/sign-os.sh $okey $fsmount/boot/vmlinuz $fsmount/boot/runos.zip
+	./sign-os.sh $okey $fsmount/boot/vmlinuz $fsmount/boot/runos.zip
 	popd
 	[ -e $fsmount/boot/actos.zip ] || ln -s runos.zip $fsmount/boot/actos.zip
 fi
@@ -19,7 +19,7 @@ fi
 if [ -e "$fsmount/boot/initrd.img" ]; then
 	echo "Signing initramfs..."
 	pushd $bios_crypto/build
-	$bios_crypto/build/sign-os.sh $okey $fsmount/boot/initrd.img $fsmount/boot/runrd.zip
+	./sign-os.sh $okey $fsmount/boot/initrd.img $fsmount/boot/runrd.zip
 	popd
 fi
 
