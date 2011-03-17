@@ -4,6 +4,7 @@
 . $OOB__shlib
 compress=$(read_config sd_card_image compress_disk_image)
 keep_img=$(read_config sd_card_image keep_disk_image)
+make_zd=$(read_config sd_card_image make_zd)
 
 oIFS=$IFS
 IFS=$'\n'
@@ -19,13 +20,15 @@ for line in $(env); do
 	diskimg=$intermediatesdir/$output_name.disk.img
 	output=$outputdir/$output_name
 
-	echo "Making ZD image for $output_name..."
-	$bindir/zhashfs 0x20000 sha256 $diskimg $output.zsp $output
+	if [[ "$make_zd" == 1 ]]; then
+		echo "Making ZD image for $output_name..."
+		$bindir/zhashfs 0x20000 sha256 $diskimg $output.zsp $output
 
-	echo "Creating MD5sum of $output_name..."
-	pushd $outputdir >/dev/null
-	md5sum $output_name > $output_name.md5
-	popd >/dev/null
+		echo "Creating MD5sum of $output_name..."
+		pushd $outputdir >/dev/null
+		md5sum $output_name > $output_name.md5
+		popd >/dev/null
+	fi
 
 	if [[ "$keep_img" == "1" ]]; then
 		if [[ "$compress" == "1" ]]; then

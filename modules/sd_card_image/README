@@ -2,7 +2,8 @@ This module creates ext4 SD card images from the build output. These
 images contain partition tables and 2 partitions.
 
 These images are in the "ZD" format, suitable for flashing via OpenFirmware's
-fs-update command. Corresponding .zsp files are produced too.
+fs-update command. Corresponding .zsp files are produced too. To disable
+.zd/.zsp creation, set the make_zd option to 0 (default is 1).
 
 The SD card sizes must be specified, in bytes. This module can create
 filesystems for multiple SD card capacities. Simply provide a list of
