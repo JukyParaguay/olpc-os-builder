@@ -2,6 +2,7 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 import os
+import urllib2
 from xml.etree.ElementTree import ElementTree
 
 libdir = os.environ['OOB__libdir']
@@ -46,3 +47,30 @@ def add_packages_from_xml(fd, pkglist):
                 continue
             pkglist.add(child.text)
 
+def get_repomd(baseurl):
+
+    # default
+    md = {
+        'primary'      : 'repodata/primary.xml.gz',
+        'primary_db'   : 'repodata/primary.sqlite.bz2',
+        'group'        : 'repodata/comps.xml',
+        'group_gz'     : 'repodata/repodata/comps.xml.gz',
+        'filelists'    : 'repodata/filelists.xml.gz',
+        'filelists_db' : 'repodata/filelists.sqlite.bz2',
+        'other'        : 'repodata/other.xml.gz',
+        'other_db'     : 'repodata/other.sqlite.bz2'
+        }
+
+    url = "%s/repodata/repomd.xml" % baseurl
+    try:
+        fd = urllib2.urlopen(url)
+        et = ElementTree(file=fd)
+        root = et.getroot()
+        # iterate over data tags
+        for data in root.findall('{http://linux.duke.edu/metadata/repo}data'):
+            type = data.attrib['type']
+            location = data.find('{http://linux.duke.edu/metadata/repo}location')
+            md[type] = location.attrib['href']
+    except:
+        pass
+    return md

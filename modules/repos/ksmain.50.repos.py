@@ -8,8 +8,12 @@ import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
 
-def add_to_excludes(url, addexcludes):
-    url = "%s/repodata/primary.xml.gz" % url
+def add_to_excludes(baseurl, addexcludes):
+
+    print >>sys.stderr, "Reading repository information for", baseurl
+    repomd = ooblib.get_repomd(baseurl)
+    url = baseurl + '/' + repomd['primary']
+
     print >>sys.stderr, "Reading package information from", url
     fd = urllib2.urlopen(url)
     data = fd.read()
