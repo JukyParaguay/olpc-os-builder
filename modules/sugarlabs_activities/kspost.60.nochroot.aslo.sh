@@ -28,9 +28,9 @@ for id in $activities; do
 
 	outfile=$cache/$(basename "$aurl")
 	if [ "${outfile:(-4)}" == ".xol" ]; then
-        echo "unzip -d \$INSTALL_ROOT/home/olpc/Library -q '$outfile'"
+		echo "unzip -d \$INSTALL_ROOT/home/olpc/Library -q '$outfile'"
 	else
-        echo "unzip -d \$INSTALL_ROOT/home/olpc/Activities -q '$outfile'"
+		echo "unzip -d \$INSTALL_ROOT/home/olpc/Activities -q '$outfile'"
 	fi
 done
 IFS=$oIFS
