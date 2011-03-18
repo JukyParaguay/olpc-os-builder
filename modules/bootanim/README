@@ -1,0 +1,28 @@
+This module replaces the default OLPC boot animation images with your own.
+
+To use...
+
+ - Install netpbm-progs
+
+ - Install the appropriate version of olpc-bootanim-tools from
+   http://xs-dev.laptop.org/~dsd/repos/
+
+ - Download the relevant olpc-bootanim tarball from
+   http://dev.laptop.org/pub/source/olpc-bootanim/
+   -- extract the images from the "images" subdirectory
+
+ - Prepare an images directory with your customized images -- the relevant
+   files are the frame*.png files and ul_warning.png . You must include them
+   all in your custom images directory.
+
+ - Add a section to your ini file:
+
+    [bootanim]
+    imgdir=/path/to/your/images-directory
+
+   for example, if it is a 'bootanim' directory next to your
+   ini file, use
+
+    [bootanim]
+    imgdir=%(oob_config_dir)s/bootanim
+
