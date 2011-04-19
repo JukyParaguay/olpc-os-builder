@@ -5,8 +5,16 @@
 #include <tomcrypt.h>
 #include "zlib.h"
 
+static FILE *outfile;
+static FILE *zfile;
+static int hashid;
+static unsigned char *zbuf;
+static long zbufsize;
+static long zblocksize;
+static char *hashname;
+
 #define DO(x) do { run_cmd((x), __LINE__, __FILE__, #x); } while (0);
-void run_cmd(int res, int line, char *file, char *cmd)
+static void run_cmd(int res, int line, char *file, char *cmd)
 {
    if (res != CRYPT_OK) {
       fprintf(stderr, "%s (%d)\n%s:%d:%s\n", error_to_string(res), res, file, line, cmd);
@@ -16,27 +24,60 @@ void run_cmd(int res, int line, char *file, char *cmd)
    }
 }
 
+static void write_block(long blocknum, unsigned char *buf)
+{
+    unsigned char md[MAXBLOCKSIZE];
+    unsigned long mdlen;
+    uLongf        zlen;
+    int           zresult;
+    int		      j;
+
+    mdlen = sizeof(md);
+    DO(hash_memory(hashid, buf, zblocksize, md, &mdlen));
+
+    zlen = zbufsize;
+    if ((zresult = compress(zbuf, &zlen, buf, zblocksize)) != Z_OK) {
+        fprintf(stderr, "Compress failure at block 0x%lx - %d\n", blocknum, zresult);
+    }
+
+    fprintf(outfile, "zblock: %lx %lx %s ", blocknum, zlen, hashname);
+    for(j=0; j<mdlen; j++)
+        fprintf(outfile,"%02x",md[j]);
+    fprintf(outfile, "\n");
+
+    fprintf(zfile, "zblock: %lx %lx %s ", blocknum, zlen, hashname);
+    for(j=0; j<mdlen; j++)
+        fprintf(zfile,"%02x",md[j]);
+    fprintf(zfile, "\n");
+    fwrite(zbuf, sizeof(char), zlen, zfile);
+    fprintf(zfile, "\n");
+}
+
+static int read_block(unsigned char *buf, FILE *infile, int is_last_block)
+{
+    int readlen = fread(buf, 1, zblocksize, infile);
+    unsigned char *p;
+
+    if (readlen != zblocksize && readlen && is_last_block) {
+        for (p = &buf[readlen]; p < &buf[zblocksize]; p++) {
+            *p = 0xff;
+        }
+        readlen = zblocksize;
+    }
+    return readlen;
+}
+
 int main(int argc, char **argv)
 {
     char          *fname;
-    char          *hashname;
     unsigned char *buf;  // EBLOCKSIZE
-    unsigned char md[MAXBLOCKSIZE], sig[512];
-    unsigned long mdlen;
-    FILE          *infile, *outfile;
+    FILE          *infile;
     long          eblocks = -1;
     long          i;
-    long	  zblocksize, zbufsize;
     off_t         insize;
-    int		  hashid, readlen;
-    int		  j;
+    int		  readlen;
 
     int		  allf;
-    int           zresult;
-    FILE          *zfile;
-    uLongf        zlen;
-    unsigned char *p;
-    unsigned char *zbuf; // ZBUFSIZE
 
     if (argc < 6) { 
         fprintf(stderr, "%s: zblocksize hashname signed_file_name spec_file_name zdata_file_name [ #blocks ]\n", argv[0]);
@@ -75,6 +116,11 @@ int main(int argc, char **argv)
     outfile = fopen(argv[4], "wb");
     LTC_ARGCHK(outfile != NULL);
 
+	LTC_ARGCHK(fputs("[ifndef] #eblocks-written\n", outfile) >= 0);
+	LTC_ARGCHK(fputs(": pdup  ( n -- n' )  dup  last-eblock# max  ;\n", outfile) >= 0);
+	LTC_ARGCHK(fputs("also nand-commands  patch pdup dup zblock:  previous\n", outfile) >= 0);
+	LTC_ARGCHK(fputs("[then]\n", outfile) >= 0);
+
     /* open zdata file */
     zfile = fopen(argv[5], "wb");
     LTC_ARGCHK(zfile != NULL);
@@ -96,20 +142,16 @@ int main(int argc, char **argv)
         ++fname;
 
     fprintf(outfile, "data: %s\n", fname);
-    fprintf(outfile, "zblocks: %x %x\n", zblocksize, eblocks);
-    fprintf(zfile,   "zblocks: %x %x\n", zblocksize, eblocks);
+    fprintf(outfile, "zblocks: %lx %lx\n", zblocksize, eblocks);
+    fprintf(zfile,   "zblocks: %lx %lx\n", zblocksize, eblocks);
 
-    fprintf(stdout, "Total blocks: %d\n", eblocks);
+    fprintf(stdout, "Total blocks: %ld\n", eblocks);
+
+    fseek(infile, zblocksize, SEEK_SET);
 
     /* make a hash of the file */
-    for (i=0; i < eblocks; i++) {
-        readlen = fread(buf, 1, zblocksize, infile);
-        if (readlen != zblocksize && readlen && i == eblocks-1) {
-            for (p = &buf[readlen]; p < &buf[zblocksize]; p++) {
-                *p = 0xff;
-            }
-            readlen = zblocksize;
-        }            
+    for (i=1; i < eblocks; i++) {
+        readlen = read_block(buf, infile, i == eblocks-1);
         LTC_ARGCHK(readlen == zblocksize);
 
 #ifdef notdef
@@ -124,29 +166,17 @@ int main(int argc, char **argv)
         allf = 0;
 #endif
 
-        if (!allf) {
-            mdlen = sizeof(md);
-            DO(hash_memory(hashid, buf, zblocksize, md, &mdlen));
+        if (!allf)
+            write_block(i, buf);
 
-            zlen = zbufsize;
-            if ((zresult = compress(zbuf, &zlen, buf, zblocksize)) != Z_OK) {
-                fprintf(stderr, "Compress failure at block 0x%x - %d\n", i, zresult);
-            }
-
-            fprintf(outfile, "zblock: %x %x %s ", i, zlen, hashname);
-            for(j=0; j<mdlen; j++)
-                fprintf(outfile,"%02x",md[j]);
-            fprintf(outfile, "\n");
-
-            fprintf(zfile, "zblock: %x %x %s ", i, zlen, hashname);
-            for(j=0; j<mdlen; j++)
-                fprintf(zfile,"%02x",md[j]);
-            fprintf(zfile, "\n");
-            fwrite(zbuf, sizeof(char), zlen, zfile);
-            fprintf(zfile, "\n");
-        }
-        fprintf(stdout, "\r%d", i);  fflush(stdout);
+        fprintf(stdout, "\r%ld", i);  fflush(stdout);
     }
+
+    fseek(infile, 0L, SEEK_SET);
+    readlen = read_block(buf, infile, 0 == eblocks-1);
+    LTC_ARGCHK(readlen == zblocksize);
+    write_block(0, buf);
+
     fprintf(outfile, "zblocks-end:\n");
     fprintf(zfile,   "zblocks-end:\n");
 
