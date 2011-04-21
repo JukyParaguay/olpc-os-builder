@@ -23,6 +23,7 @@ for line in $(env); do
 	if [[ "$make_zd" == 1 ]]; then
 		echo "Making ZD image for $output_name..."
 		$bindir/zhashfs 0x20000 sha256 $diskimg $output.zsp $output
+		rm -f $diskimg.fill
 
 		echo "Creating MD5sum of $output_name..."
 		pushd $outputdir >/dev/null
@@ -41,4 +42,3 @@ for line in $(env); do
 	fi
 done
 IFS=$oIFS
-

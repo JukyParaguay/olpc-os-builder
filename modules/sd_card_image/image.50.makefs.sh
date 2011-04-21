@@ -37,7 +37,16 @@ make_image()
 	[ -z "$ext" ] && ext="zd"
 	local img=$intermediatesdir/$(image_name).$ext.disk.img
 
-	dd if=/dev/zero of=$img bs=$BLOCK_SIZE count=0 seek=$(($image_size / $BLOCK_SIZE))
+        dd if=/dev/urandom of=$img.fill bs=4096 count=1 2>/dev/null
+        rm -f $img.fill.2mb
+        for x in $(seq 512); do cat $img.fill >> $img.fill.2mb; done
+        local n=$(($image_size / (1048576 * 2) + 1))
+        rm -f $img
+        dd if=/dev/zero of=$img bs=1M count=1 2>/dev/null
+        for x in $(seq $n); do cat $img.fill.2mb >> $img; done
+        truncate --size=$image_size $img
+        rm -f $img.fill.2mb
+
 	/sbin/sfdisk -S 32 -H 32 --force -uS $img <<EOF
 8192,131072,83,*
 139264,,,
