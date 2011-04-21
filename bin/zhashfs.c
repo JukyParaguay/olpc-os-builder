@@ -13,6 +13,8 @@ static long zbufsize;
 static long zblocksize;
 static char *hashname;
 
+#define PATTERN_SIZE 4096
+
 #define DO(x) do { run_cmd((x), __LINE__, __FILE__, #x); } while (0);
 static void run_cmd(int res, int line, char *file, char *cmd)
 {
@@ -77,7 +79,12 @@ int main(int argc, char **argv)
     off_t         insize;
     int		  readlen;
 
-    int		  allf;
+    int		  skip;
+
+    unsigned char *pbuf;        // fill pattern buffer
+    char          *pname;       // fill pattern file name
+    FILE          *pfile;       // fill pattern file
+    int           patterned, n;
 
     if (argc < 6) { 
         fprintf(stderr, "%s: zblocksize hashname signed_file_name spec_file_name zdata_file_name [ #blocks ]\n", argv[0]);
@@ -111,6 +118,18 @@ int main(int argc, char **argv)
     /* open filesystem image file */
     infile = fopen(argv[3], "rb");
     LTC_ARGCHK(infile != NULL);
+
+    /* open and read an optional fill pattern file */
+    pbuf = NULL;
+    pname = strcat(argv[3], ".fill");
+    pfile = fopen(pname, "rb");
+    if (pfile != NULL) {
+        pbuf = malloc(PATTERN_SIZE);
+        LTC_ARGCHK(pbuf != NULL);
+        n = fread(pbuf, 1, PATTERN_SIZE, pfile);
+        LTC_ARGCHK(n == PATTERN_SIZE);
+        fclose(pfile);
+    }
 
     /* open output file */
     outfile = fopen(argv[4], "wb");
@@ -155,18 +174,38 @@ int main(int argc, char **argv)
         LTC_ARGCHK(readlen == zblocksize);
 
 #ifdef notdef
-        allf = 1;
+        skip = 1;
         for (p = (unsigned char *)buf; p < &buf[zblocksize]; p++) {
             if (*p != 0xff) {
-                allf = 0;
+                skip = 0;
                 break;
             }
         }
 #else
-        allf = 0;
+        skip = 0;
 #endif
 
-        if (!allf)
+        if (pbuf) {
+            /* check if this zblock is fully patterned as unused, and if
+            any parts of the zblock are patterned then zero them, for ease
+            of compression */
+
+            patterned = 1;
+            for (n = 0; n < (zblocksize / PATTERN_SIZE); n++) {
+                if (memcmp(&buf[n*PATTERN_SIZE], pbuf, PATTERN_SIZE)) {
+                    patterned = 0;
+                } else {
+                    memset(&buf[n*PATTERN_SIZE], 0, PATTERN_SIZE);
+                }
+            }
+
+            /* skip any block that is fully patterned, thus relying on the
+            fs-update card erase-blocks */
+
+            if (patterned) skip++;
+        }
+
+        if (!skip)
             write_block(i, buf);
 
         fprintf(stdout, "\r%ld", i);  fflush(stdout);
