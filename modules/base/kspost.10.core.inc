@@ -171,3 +171,6 @@ echo UTC >> /etc/adjtime
 # not used, takes up a little space
 rm -rf /boot/grub
 
+# files with 000 permissions can't be served by updates.laptop.org (#10843)
+find / -xdev -type f -perm 000 -exec chmod 400 {} +
+
