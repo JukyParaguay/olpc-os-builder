@@ -174,3 +174,9 @@ rm -rf /boot/grub
 # files with 000 permissions can't be served by updates.laptop.org (#10843)
 find / -xdev -type f -perm 000 -exec chmod 400 {} +
 
+# yumdb's from_repo_timestamp and from_repo_revision files change on almost
+# every build, even if the packages installed aren't changed. this creates
+# needless olpc-update delta. remove these files, which (according to the yum
+# source code as of time of writing) are not utilised.
+find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -o -name 'from_repo_timestamp' -delete
+
