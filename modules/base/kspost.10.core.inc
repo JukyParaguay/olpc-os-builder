@@ -69,6 +69,8 @@ sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/syscon
 cat >/etc/statetab.d/olpc <<EOF
 /etc/ssh
 /etc/sysconfig/i18n
+/etc/sysconfig/network
+/etc/hosts
 /etc/timezone
 /var/lib/dbus
 /var/lib/random-seed
