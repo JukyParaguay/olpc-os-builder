@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     int		  skip;
 
     unsigned char *pbuf;        // fill pattern buffer
-    char          *pname;       // fill pattern file name
+    char          pname[PATH_MAX];       // fill pattern file name
     FILE          *pfile;       // fill pattern file
     int           patterned, n;
 
@@ -121,7 +121,10 @@ int main(int argc, char **argv)
 
     /* open and read an optional fill pattern file */
     pbuf = NULL;
-    pname = strcat(argv[3], ".fill");
+    strncpy(pname, argv[3], sizeof(pname) - 6);
+    strcat(pname, ".fill");
+    pname[sizeof(pname) - 1] = 0;
+
     pfile = fopen(pname, "rb");
     if (pfile != NULL) {
         pbuf = malloc(PATTERN_SIZE);
