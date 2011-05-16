@@ -233,6 +233,10 @@ Parts can output files here to be used as inputs to other parts (even from
 different modules).
 This directory is cleaned before a build is started, and after completion
 of a successful build.
+A "shared" subdirectory is automatically created and this is bind-mounted
+inside the build root at /build_shared. It is a useful place for sharing
+files inside and outside the build environment. It is available for parts
+with order number 06 to 84 inclusive.
 
 - outputdir
 This is the final directory that is presented to the user. All final
