@@ -14,13 +14,6 @@ from bitfrost.update import microformat
 
 import ooblib
 
-def generate_install_cmd(path):
-    if path.endswith(".xol"):
-        print "unzip -d $INSTALL_ROOT/home/olpc/Library -q '%s'" % path
-    else:
-        print "unzip -d $INSTALL_ROOT/home/olpc/Activities -q '%s'" % path
-
-
 cache = os.path.join(ooblib.cachedir, 'activities')
 if not os.path.exists(cache):
     os.makedirs(cache)
@@ -71,7 +64,7 @@ if install_activities:
                 localsize = os.stat(localpath).st_size
                 if localsize == length:
                     print >>sys.stderr, "Not downloading, already in cache."
-                    generate_install_cmd(localpath)
+                    ooblib.install_sugar_bundle(localpath)
                     continue
 
             print >>sys.stderr, "Downloading (%dkB)..." % (length/1024)
@@ -79,7 +72,7 @@ if install_activities:
             localfd.write(fd.read())
             fd.close()
             localfd.close()
-            generate_install_cmd(localpath)
+            ooblib.install_sugar_bundle(localpath)
 
         # only process the first working URL
         break
@@ -89,6 +82,4 @@ if systemwide:
     print "echo '%s' > $INSTALL_ROOT/etc/olpc-update/activity-groups" % baseurl
 else:
     print "echo '%s' > $INSTALL_ROOT/home/olpc/Activities/.groups" % baseurl
-
-print "chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}"
 

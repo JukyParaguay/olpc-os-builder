@@ -25,15 +25,7 @@ for id in $activities; do
 
 	echo "Downloading from $aurl ..." >&2
 	wget --no-verbose --inet4-only -P $cache -N "$aurl"
-
-	outfile=$cache/$(basename "$aurl")
-	if [ "${outfile:(-4)}" == ".xol" ]; then
-		echo "unzip -d \$INSTALL_ROOT/home/olpc/Library -q '$outfile'"
-	else
-		echo "unzip -d \$INSTALL_ROOT/home/olpc/Activities -q '$outfile'"
-	fi
+	install_sugar_bundle $cache/$(basename "$aurl")
 done
 IFS=$oIFS
-
-echo 'chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}'
 

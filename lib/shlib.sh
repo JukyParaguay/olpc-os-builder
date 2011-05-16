@@ -31,3 +31,21 @@ image_name() {
 	printf $name_tmpl $(read_buildnr)
 }
 
+# hard link a file, but fall-back on copy if a device boundary is being crossed
+ln_or_cp() {
+	local src=$1
+	local dest=$2
+	local src_dev=$(stat -c "%D" "$src")
+	local dest_dev=$(stat -c "%D" "$dest")
+	if [ "$src_dev" = "$dest_dev" ]; then
+		cp -l "$src" "$dest"
+	else
+		cp "$src" "$dest"
+	fi
+}
+
+install_sugar_bundle() {
+	mkdir -p "$intermediatesdir/shared/sugar-bundles"
+	ln_or_cp "$1" "$intermediatesdir/shared/sugar-bundles"
+}
+

@@ -2,6 +2,7 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 import os
+import shutil
 import urllib2
 from xml.etree.ElementTree import ElementTree
 
@@ -74,3 +75,21 @@ def get_repomd(baseurl):
     except:
         pass
     return md
+
+def ln_or_cp(src, dest):
+    src_dev = os.stat(src).st_dev
+    dest_dev = os.stat(dest).st_dev
+
+    if src_dev == dest_dev:
+        if os.path.isdir(dest):
+            dest = os.path.join(dest, os.path.basename(src))
+        os.link(src, dest)
+    else:
+        shutil.copy(src, dest)
+
+def install_sugar_bundle(path):
+    bundlesdir = os.path.join(intermediatesdir, "shared", "sugar-bundles")
+    if not os.path.exists(bundlesdir):
+        os.makedirs(bundlesdir)
+    ln_or_cp(path, bundlesdir)
+

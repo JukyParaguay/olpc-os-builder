@@ -13,26 +13,14 @@ for line in $(env); do
 	echo "Downloading from $aurl ..." >&2
 	wget --no-verbose --inet4-only -P $cache -N "$aurl"
 
-	outfile=$cache/$(basename "$aurl")
-	if [ "${outfile:(-4)}" == ".xol" ]; then
-        echo "unzip -d \$INSTALL_ROOT/home/olpc/Library -q '$outfile'"
-	else
-        echo "unzip -d \$INSTALL_ROOT/home/olpc/Activities -q '$outfile'"
-	fi
+	install_sugar_bundle $cache/$(basename "$aurl")
 done
 IFS=$oIFS
-
 
 actpath=$(read_config sugar_activities_extra local_dir)
 if [ -n "$actpath" -a -d "$actpath" ]; then
 	for i in "$actpath"/*; do
-		if [ "${i:(-4)}" == ".xol" ]; then
-    	    echo "unzip -d \$INSTALL_ROOT/home/olpc/Library -q '$i'"
-		else
-    	    echo "unzip -d \$INSTALL_ROOT/home/olpc/Activities -q '$i'"
-		fi
+		install_sugar_bundle $i
 	done
 fi
-
-echo 'chown -R 500:500 $INSTALL_ROOT/home/olpc/{Activities,Library}'
 
