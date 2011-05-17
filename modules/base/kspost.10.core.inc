@@ -180,5 +180,5 @@ find / -xdev -type f -perm 000 -exec chmod 400 {} +
 # every build, even if the packages installed aren't changed. this creates
 # needless olpc-update delta. remove these files, which (according to the yum
 # source code as of time of writing) are not utilised.
-find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -o -name 'from_repo_timestamp' -delete
+find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -delete -o -name 'from_repo_timestamp' -delete
 
