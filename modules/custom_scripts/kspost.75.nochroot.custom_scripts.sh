@@ -9,6 +9,7 @@ for line in $(env); do
 	[[ "${line:0:34}" == "CFG_custom_scripts__custom_script_" ]] || continue
 	script=${line#*=}
 	echo "echo 'Executing custom script $script'"
+	echo "export oob_config_dir=\"$oob_config_dir\""
 	echo "[ -x \"$script\" ] && \"$script\" || bash \"$script\""
 done
 IFS=$oIFS
