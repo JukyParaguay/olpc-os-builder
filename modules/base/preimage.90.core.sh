@@ -93,7 +93,7 @@ find $fsmount/usr/share -xdev -name "*.py[oc]" -delete
 
 # normalize mtimes of all files
 echo "Normalize file times..."
-find $fsmount -xdev -print0 | xargs -0 touch -c -d "$OLPC_EPOCH" || :
+find $fsmount -xdev -print0 | xargs -0 touch -h -c -d "$OLPC_EPOCH" || :
 
 # fails to compile due to "..."
 rm -f $fsmount/usr/lib/python2.7/lib2to3/tests/data/py3_test_grammar.py*
@@ -130,7 +130,7 @@ fi
 
 # now normalize mtimes again
 echo "Normalize file times..."
-find $fsmount -xdev -print0 | xargs -0 touch -c -d "$OLPC_EPOCH" || :
+find $fsmount -xdev -print0 | xargs -0 touch -h -c -d "$OLPC_EPOCH" || :
 
 # now that we've generated the .contents file, its important that nobody
 # makes any more changes to the files. let's try and be sure of that
