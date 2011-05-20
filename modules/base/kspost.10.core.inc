@@ -152,7 +152,8 @@ EOF
 rm -f /etc/avahi/etc/localtime
 
 # prelink now, and then disable it (#9947)
-/usr/sbin/prelink --all --conserve-memory --random
+# one-time prelink temporarily disabled as its non-deterministic (#10898)
+# /usr/sbin/prelink --all --conserve-memory --random
 chmod -x /etc/cron.daily/prelink
 
 # kill a load of non-interesting anacron tasks (#10247)
