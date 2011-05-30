@@ -14,6 +14,8 @@ def main():
     if not os.path.exists(cache_dir):
         os.mkdir(cache_dir)
 
+    logging.getLogger().setLevel(logging.INFO)
+
     name = ooblib.image_name()
     kspath = os.path.join(ooblib.intermediatesdir, 'build.ks')
     ks = imgcreate.read_kickstart(kspath)
