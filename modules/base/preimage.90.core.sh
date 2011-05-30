@@ -77,6 +77,13 @@ EOF
 # we aren't using selinux...
 rm -rf $fsmount/selinux
 
+# strip all trailing slashes from the targets of symlinks.
+# this is needed for creation of a USB update image (iso file) where the
+# iso format cannot encode a symlink with a trailing slash.
+# this would then cause content manifest verification failure when being
+# installed.
+find $fsmount -type l -lname '*/' -exec bash -c "shopt -s extglob; i=\$(readlink {}); i=\${i%%*(/)}; ln -snf \$i {}" \;
+
 # normalize modification times of all files for faster updates (#4259)
 # note that python needs special consideration here: the mtime is encoded
 # into the pyc file. so we must regenerate all pyc files.
