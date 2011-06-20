@@ -139,8 +139,10 @@ int main(int argc, char **argv)
     LTC_ARGCHK(outfile != NULL);
 
 	LTC_ARGCHK(fputs("[ifndef] #eblocks-written\n", outfile) >= 0);
+	LTC_ARGCHK(fputs("[ifdef] last-eblock#\n", outfile) >= 0);
 	LTC_ARGCHK(fputs(": pdup  ( n -- n' )  dup  last-eblock# max  ;\n", outfile) >= 0);
 	LTC_ARGCHK(fputs("also nand-commands  patch pdup dup zblock:  previous\n", outfile) >= 0);
+	LTC_ARGCHK(fputs("[then]\n", outfile) >= 0);
 	LTC_ARGCHK(fputs("[then]\n", outfile) >= 0);
 
     /* open zdata file */
