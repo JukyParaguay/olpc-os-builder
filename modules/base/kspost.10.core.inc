@@ -47,7 +47,7 @@ rm -f /etc/sysconfig/keyboard
 # early boot, before statetab mounts have been put in place (#11060).
 # So we resort to removing the file from the image and writing it in
 # olpc-configure on first boot.
-rm -f /etc/sysconfig/hostname
+rm -f /etc/sysconfig/network
 
 cat >/etc/sysconfig/i18n <<__EOF__
 # LANG=C considerably speeds up boot (measured 5sec) -- bernie
