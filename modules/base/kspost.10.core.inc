@@ -95,10 +95,6 @@ post-stop script
 end script
 EOF
 
-# prevent NM from setting the hostname and modifying /etc/hosts to reflect this
-# this allows olpc-configure to set a hostname based on the MAC address
-echo "NM_IGNORE_HOSTNAME_LOCALHOST=yes" >> /etc/sysconfig/network
-
 # OLPC CA certificate (#9624)
 # this is used by wget, but the Web activity uses cert8.db in its own
 # installation (which is then copied into user's profile dir)
