@@ -9,3 +9,16 @@ Output files are:
 To install on an XO, pass the onu file to the "update-nand" command at the
 "ok" firmware prompt.
 
+Options:
+ - compression_type (optional; default zlib)
+     Compression scheme to use for -x argument to mkfs.ubifs (e.g. lzo or zlib).
+     See mkfs.ubifs documentation for available options.
+ - reserved (optional; default 4MiB)
+     Amount of disk space to reserve for root when disk is approaching 100%
+     usage. See documentation for mkfs.ubifs -R option.
+
+
+e.g.
+	[ubifs_image]
+	compression_type=lzo
+	reserved=12MiB
