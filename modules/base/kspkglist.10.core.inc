@@ -11,7 +11,6 @@ file
 openssh-server
 openssh-clients
 sudo
-prelink
 vim-minimal
 rpm
 yum
