@@ -52,7 +52,6 @@ generic-logos
 #isomd5sum
 
 # GSM/CDMA USB modem support, #7172
-# FIXME maybe not needed for F14 (udev does it?)
 usb_modeswitch
 usb_modeswitch-data
 
