@@ -18,9 +18,6 @@ notification-daemon
 # battery applet
 batti
 
-# sound mixer/volume control (#10706)
-gmixer
-
 # internet
 xulrunner
 firefox
