@@ -112,3 +112,7 @@ echo "mark-complete: 0" >> $output_script_path
 echo "Create final NAND image..."
 cat $boot_img $root_img > $output_img_path
 
+pushd $outputdir >/dev/null
+md5sum $output_img_path > $output_img_path.md5
+md5sum $output_script_path > $output_script_path.md5
+popd >/dev/null
