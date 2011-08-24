@@ -8,15 +8,19 @@ release repository (and perhaps update) or equivalent is enabled.
 
 Everything is done through the configuration.
 
-Firstly, the 'fedora' option:
+Firstly, the 'fedora' and 'fedora_arch' options:
 
 [repos]
+fedora_arch=i386
 fedora=fedora,fedora-updates,fedora-updates-testing
 
 This is a comma-separated list of official Fedora repositories to enable
 for the build. The 4 possible options are fedora, fedora-updates,
 fedora-updates-testing and rawhide.
 
+If using the fedora option, the fedora_arch option must be specified too.
+This specifies the processor architecture to use for Fedora package selection.
+See http://mirrors.fedoraproject.org/ for the available values.
 
 
 The olpc_frozen_ options:

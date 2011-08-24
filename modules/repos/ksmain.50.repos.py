@@ -25,6 +25,7 @@ excludepkgs = set()
 addexcludes = ooblib.read_config('repos', 'add_excludes_to')
 fedora = ooblib.read_config('repos', 'fedora')
 fver = ooblib.read_config('global', 'fedora_release').strip()
+farch = ooblib.read_config('repos', 'fedora_arch').strip()
 
 # clean up addexcludes list
 if addexcludes is not None:
@@ -64,13 +65,13 @@ if fedora is not None:
     for repo in fedora.split(','):
         repo = repo.strip()
         if repo == "fedora":
-            repos["fedora"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-%s&arch=i386" % fver)
+            repos["fedora"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-%s&arch=%s" % (fver, farch))
         elif repo == "fedora-updates":
-            repos["fedora-updates"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f%s&arch=i386" % fver)
+            repos["fedora-updates"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f%s&arch=%s" % (fver, farch))
         elif repo == "fedora-updates-testing":
-            repos["fedora-updates-testing"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f%s&arch=i386" % fver)
+            repos["fedora-updates-testing"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f%s&arch=%s" % (fver, farch))
         elif repo == "rawhide":
-            repos["rawhide"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=i386")
+            repos["rawhide"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=%s" % farch)
 
 # generate repo lines including excludes
 excludepkgs = list(excludepkgs)
