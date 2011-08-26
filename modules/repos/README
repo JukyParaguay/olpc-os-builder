@@ -46,7 +46,7 @@ The olpc_publicrpms_ options:
 Provide any number of options with unique names that start with
 "olpc_publicrpms_" in order to generate repo lines that correspond to the
 aggregation of OLPC developers public_rpms dropboxes, aggregated at
-http://xs-dev.laptop.org/~dsd/repos
+http://rpmdropbox.laptop.org/
 The format of each value is a number (to determine whether the packages in
 this repository are added to the exclude list), followed by comma, then the
 name of the repository. Example:

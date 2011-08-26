@@ -50,7 +50,7 @@ for key, value in os.environ.iteritems():
     elif key.startswith("CFG_repos__olpc_publicrpms_"):
         for_excludes, name = value.split(',', 1)
         for_excludes = int(for_excludes)
-        url = "http://xs-dev.laptop.org/~dsd/repos/%s" % name
+        url = "http://rpmdropbox.laptop.org/%s" % name
         if for_excludes:
             add_to_excludes(url, excludepkgs)
         repos[name] = ("baseurl", url)
