@@ -1,6 +1,4 @@
-# from the liveuser script
-# and add /ofw
-# and limit tmpfs mounts to 5%
+# limit tmpfs mounts to 5%
 cat >> /etc/fstab <<EOF
 /tmp            /tmp            tmpfs         rw,size=50m 0 0
 vartmp          /var/tmp        tmpfs         rw,size=50m 0 0

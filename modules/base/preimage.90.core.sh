@@ -121,7 +121,7 @@ if [ "$versioned_fs" = "1" ]; then
 	done
 
 	mkdir -p $fsmount/versions/pristine/$buildnr/{versions,home,security}
-	mkdir -p $fsmount/{sys,proc,ofw,dev}
+	mkdir -p $fsmount/{sys,proc,dev}
 
 	echo "Generating contents manifest..."
 	chroot $fsmount/versions/pristine/$buildnr /usr/sbin/olpc-contents-create -f /.xo-files -p /etc/passwd -g /etc/group /
