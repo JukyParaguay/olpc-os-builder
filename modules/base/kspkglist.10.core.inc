@@ -1,6 +1,6 @@
 # basic system packages
 chkconfig
-kernel.i586
+kernel
 tar
 wget
 diffutils
