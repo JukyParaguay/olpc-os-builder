@@ -25,7 +25,6 @@ excludepkgs = set()
 addexcludes = ooblib.read_config('repos', 'add_excludes_to')
 fedora = ooblib.read_config('repos', 'fedora')
 fver = ooblib.read_config('global', 'fedora_release').strip()
-farch = ooblib.read_config('repos', 'fedora_arch').strip()
 
 # clean up addexcludes list
 if addexcludes is not None:
@@ -62,6 +61,7 @@ for key, value in os.environ.iteritems():
         repos[name] = ("baseurl", url)
 
 if fedora is not None:
+    farch = ooblib.read_config('repos', 'fedora_arch').strip()
     for repo in fedora.split(','):
         repo = repo.strip()
         if repo == "fedora":
