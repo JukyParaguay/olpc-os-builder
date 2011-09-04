@@ -8,8 +8,16 @@ import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
 
-def add_to_excludes(baseurl, addexcludes):
+excludepkgs = set()
+addexcludes = ooblib.read_config('repos', 'add_excludes_to')
+fedora = ooblib.read_config('repos', 'fedora')
+fver = ooblib.read_config('global', 'fedora_release').strip()
+farch = ooblib.read_config('repos', 'fedora_arch')
 
+if farch:
+    farch = farch.strip()
+
+def add_to_excludes(baseurl, addexcludes):
     print >>sys.stderr, "Reading repository information for", baseurl
     repomd = ooblib.get_repomd(baseurl)
     url = baseurl + '/' + repomd['primary']
@@ -19,12 +27,7 @@ def add_to_excludes(baseurl, addexcludes):
     data = fd.read()
     fd.close()
     fd = GzipFile(fileobj=StringIO(data))
-    ooblib.add_packages_from_xml(fd, addexcludes)
-
-excludepkgs = set()
-addexcludes = ooblib.read_config('repos', 'add_excludes_to')
-fedora = ooblib.read_config('repos', 'fedora')
-fver = ooblib.read_config('global', 'fedora_release').strip()
+    ooblib.add_packages_from_xml(fd, addexcludes, farch)
 
 # clean up addexcludes list
 if addexcludes is not None:
@@ -61,7 +64,6 @@ for key, value in os.environ.iteritems():
         repos[name] = ("baseurl", url)
 
 if fedora is not None:
-    farch = ooblib.read_config('repos', 'fedora_arch').strip()
     for repo in fedora.split(','):
         repo = repo.strip()
         if repo == "fedora":

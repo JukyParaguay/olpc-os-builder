@@ -15,6 +15,8 @@ outputdir = os.environ['OOB__outputdir']
 statedir = os.environ['OOB__statedir']
 fsmount = os.environ['OOB__fsmount']
 
+METADATA_NS = "http://linux.duke.edu/metadata/common"
+
 def read_config(module, option):
     vname = "CFG_%s__%s" % (module, option)
     if not vname in os.environ:
@@ -37,16 +39,38 @@ def image_name():
     name_tmpl = read_config('global', 'image_name')
     return name_tmpl % int(read_buildnr())
 
-def add_packages_from_xml(fd, pkglist):
+def arch_matches(myarch, arch):
+    # figure out if a package under 'arch' is suitable for 'myarch'
+    # myarch is either 'i386' or 'arm'
+    # but 'arch' can be i386, i586, i686, armv5tel, armv7hl, and so on
+
+    # noarch is always suitable
+    if arch == 'noarch':
+        return True
+
+    if myarch == 'arm':
+        return arch.startswith('arm')
+    elif myarch == 'i386':
+        return arch in ['i386', 'i486', 'i586', 'i686']
+    else:
+        return False
+
+def add_packages_from_xml(fd, pkglist, myarch=None):
     et = ElementTree(file=fd)
     root = et.getroot()
     for i in root.getchildren():
         if not i.tag.endswith("}package"):
             continue
-        for child in i.getchildren():
-            if not child.tag.endswith("}name"):
+        arch = i.find("{%s}arch" % METADATA_NS)
+        name = i.find("{%s}name" % METADATA_NS)
+
+        # Only add packages that are suitable for myarch.
+        if myarch and arch is not None:
+            if not arch_matches(myarch, arch.text):
                 continue
-            pkglist.add(child.text)
+
+        if name is not None:
+            pkglist.add(name.text)
 
 def get_repomd(baseurl):
 
