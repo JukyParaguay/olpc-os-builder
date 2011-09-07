@@ -181,3 +181,7 @@ find / -xdev -type f -perm 000 -exec chmod 400 {} +
 # source code as of time of writing) are not utilised.
 find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -delete -o -name 'from_repo_timestamp' -delete
 
+# enable sysrq by default during development cycle
+# possibly useful for debugging phantom hangs
+sed -i -e 's/kernel.sysrq = 0/kernel.sysrq = 1/' /etc/sysctl.conf
+
