@@ -32,6 +32,8 @@ python-lxml
 olpc-library
 # for Tuxmath activity
 SDL_Pango
+# for Physics
+pybox2d
 
 # for text-to-speech in Read
 gstreamer-plugins-espeak
