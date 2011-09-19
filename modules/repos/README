@@ -12,15 +12,26 @@ Firstly, the 'fedora' and 'fedora_arch' options:
 
 [repos]
 fedora_arch=i386
-fedora=fedora,fedora-updates,fedora-updates-testing
+fedora=fedora,fedora_updates,fedora_updates_testing
 
 This is a comma-separated list of official Fedora repositories to enable
-for the build. The 4 possible options are fedora, fedora-updates,
-fedora-updates-testing and rawhide.
+for the build. The 4 possible options are fedora, fedora_updates,
+fedora_updates_testing and rawhide.
 
 If using the fedora option, the fedora_arch option must be specified too.
 This specifies the processor architecture to use for Fedora package selection.
 See http://mirrors.fedoraproject.org/ for the available values.
+
+A Fedora mirror is normally automatically selected by yum through Fedora's
+mirrorlist mechanism. If you wish to override the mirror selection choice,
+you can either add the repos as custom repos (see below), or you can use
+"url_" override settings, e.g.:
+
+[repos]
+fedora=fedora,fedora_updates
+fedora_arch=i386
+url_fedora_updates=http://www.mirrorservice.org/sites/download.fedora.redhat.com/pub/fedora/linux/updates/16/i386/
+url_fedora=http://www.mirrorservice.org/sites/download.fedora.redhat.com/pub/fedora/linux/development/16/i386/os/
 
 
 The olpc_frozen_ options:

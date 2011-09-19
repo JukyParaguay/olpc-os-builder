@@ -31,7 +31,7 @@ def add_to_excludes(baseurl, addexcludes):
 
 # clean up addexcludes list
 if addexcludes is not None:
-    addexcludes = addexcludes.split(',')
+    addexcludes = addexcludes.replace('-', '_').split(',')
     for idx, excl in enumerate(addexcludes):
         addexcludes[idx] = excl.strip()
 else:
@@ -63,17 +63,31 @@ for key, value in os.environ.iteritems():
             add_to_excludes(url, excludepkgs)
         repos[name] = ("baseurl", url)
 
+FEDORA_URLS = {
+    'fedora' : 'http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-%(version)s&arch=%(arch)s',
+    'fedora_updates' : 'http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f%(version)s&arch=%(arch)s',
+    'fedora_updates_testing' : 'http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f%(version)s&arch=%(arch)s',
+    'rawhide' : 'http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=%(arch)s',
+}
+
+def get_fedora_repo(name, version, arch):
+    override_url = ooblib.read_config('repos', 'url_%s' % name)
+    if override_url is not None:
+        return "baseurl", override_url
+
+    if name not in FEDORA_URLS:
+        return None, None
+
+    return "mirrorlist", FEDORA_URLS[name] % { 'version': version, 'arch': arch }
+
 if fedora is not None:
     for repo in fedora.split(','):
-        repo = repo.strip()
-        if repo == "fedora":
-            repos["fedora"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-%s&arch=%s" % (fver, farch))
-        elif repo == "fedora-updates":
-            repos["fedora-updates"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f%s&arch=%s" % (fver, farch))
-        elif repo == "fedora-updates-testing":
-            repos["fedora-updates-testing"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=updates-testing-f%s&arch=%s" % (fver, farch))
-        elif repo == "rawhide":
-            repos["rawhide"] = ("mirrorlist", "http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=%s" % farch)
+        repo = repo.strip().replace('-', '_')
+        repotype, url = get_fedora_repo(repo, fver, farch)
+        if repotype:
+            repos[repo] = (repotype, url)
+        else:
+            print >>sys.stderr, "Unknown Fedora repo:", repo
 
 # generate repo lines including excludes
 excludepkgs = list(excludepkgs)
