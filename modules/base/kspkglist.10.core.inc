@@ -28,7 +28,6 @@ PolicyKit-olpc
 ds-backup-client
 olpc-powerd
 olpc-powerd-dbus
-bootfw
 
 # graphical base environment
 olpc-kbdshim
