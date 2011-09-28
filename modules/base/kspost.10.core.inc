@@ -66,6 +66,10 @@ sed -i -e 's/TEMPORARY_STATE=no/TEMPORARY_STATE=yes/' \
 # Remove resolv.conf from rwtab so that it can be updated atomically (#2748)
 sed -i -e "/resolv.conf/d" /etc/rwtab
 
+# also remove /var/log and /var/tmp from rwtab, since we put them in fstab
+sed -i -e '/\/var\/tmp/d' /etc/rwtab
+sed -i -e '/\/var\/log/d' /etc/rwtab
+
 # ensure temporary state directory doesn't get too fat (#9636)
 sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/sysconfig/readonly-root
 
