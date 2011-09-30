@@ -17,8 +17,7 @@ PolicyKit-gnome
 notification-daemon
 
 # internet
-xulrunner
-firefox
+epiphany
 empathy
 
 # office
