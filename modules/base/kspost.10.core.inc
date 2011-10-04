@@ -170,11 +170,6 @@ rm -f /etc/avahi/etc/localtime
 # kill a load of non-interesting anacron tasks (#10247)
 chmod -x /etc/cron.daily/logrotate
 
-# suppress generation of certain SSH host keys in the same way we did
-# it on XO-1 builds, so as to reduce first boot time by several
-# seconds (#9964)
-echo "AUTOCREATE_SERVER_KEYS=RSAONLY" >> /etc/sysconfig/sshd
-
 # Fedora's initscripts packages writes /etc/adjtime without a 3rd line,
 # which makes hwclock assume that the hardware clock has local time.
 # this will be fixed in util-linux-2.20, where it will default to UTC.
