@@ -31,9 +31,18 @@ def add_to_excludes(baseurl, addexcludes):
 
 # clean up addexcludes list
 if addexcludes is not None:
-    addexcludes = addexcludes.replace('-', '_').split(',')
+    addexcludes = addexcludes.split(',')
     for idx, excl in enumerate(addexcludes):
-        addexcludes[idx] = excl.strip()
+        excl = excl.strip()
+
+        # Support hyphenated fedora repo notation, as this matches the
+        # default files in /etc/yum.repos.d
+        if excl == 'fedora-updates-testing':
+            excl = 'fedora_updates_testing'
+        elif excl == 'fedora-updates':
+            excl = 'fedora_updates'
+
+        addexcludes[idx] = excl
 else:
     addexcludes = []
 
