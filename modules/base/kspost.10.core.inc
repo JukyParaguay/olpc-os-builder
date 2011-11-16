@@ -76,7 +76,8 @@ sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/syscon
 
 # Things to store separately in persistent storage
 # This means these files can be writable at runtime without breaking the
-# pristine-ness of /versions/pristine
+# pristine-ness of /versions/pristine. It also means they are retained
+# over upgrades.
 cat >/etc/statetab.d/olpc <<EOF
 /etc/ssh
 /etc/sysconfig/i18n
@@ -84,6 +85,7 @@ cat >/etc/statetab.d/olpc <<EOF
 /etc/timezone
 /var/lib/dbus
 /var/lib/random-seed
+/etc/NetworkManager/system-connections
 EOF
 
 # systemd stuff that is not interesting for us
@@ -192,4 +194,11 @@ find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -delete -o -name 'fro
 # enable sysrq by default during development cycle
 # possibly useful for debugging phantom hangs
 sed -i -e 's/kernel.sysrq = 0/kernel.sysrq = 1/' /etc/sysctl.conf
+
+# disable NetworkManager's rh-ifcfg plugin (#9789)
+# this ensures that network configs are stored in
+# /etc/NetworkManager/system-connections, which is a path that we can safely
+# put in statetab. (the rh-ifcfg path in /etc/sysconfig mixes code with data
+# and is hence not appropriate to retain over upgrades)
+sed -i -e '/^plugins=ifcfg-rh$/d' /etc/NetworkManager/NetworkManager.conf
 
