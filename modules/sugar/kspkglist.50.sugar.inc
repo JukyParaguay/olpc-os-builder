@@ -18,19 +18,26 @@ csound-python
 pygame
 python-alsaaudio
 squeak-vm
+
 # Browse
 gnome-python2-gnome
 gnash-plugin
 totem-mozplugin
+# Add surf until we have a new Browse
+sugar-surf
+
 # Terminal
 vte
+
 # dependencies for Epub support in Read
 pywebkitgtk
 python-BeautifulSoup
 python-lxml
 olpc-library
+
 # for Tuxmath activity
 SDL_Pango
+
 # for Physics
 pybox2d
 
