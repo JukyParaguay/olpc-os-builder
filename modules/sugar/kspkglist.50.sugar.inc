@@ -3,7 +3,6 @@ sugar
 
 # additional sugar packages
 libxml2-python
-hulahop
 pyabiword
 udisks
 espeak
