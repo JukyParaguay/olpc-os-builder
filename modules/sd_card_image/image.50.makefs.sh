@@ -1,4 +1,4 @@
-# Copyright (C) 2009 One Laptop Per Child
+# Copyright (C) 2009 One Laptop per Child
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 . $OOB__shlib
@@ -51,21 +51,23 @@ make_image()
 8192,131072,83,*
 139264,,,
 EOF
-	local img_sectors=$(sfdisk -uS -l $img | grep img2 | awk '{print $4}')
-	echo "(1 losetup error is normal here)"
-	losetup -d /dev/loop6 || :
-	losetup -o $((8192 * $BLOCK_SIZE)) --sizelimit $((131072 * $BLOCK_SIZE)) /dev/loop6 $img
-	echo "(1 losetup error is normal here)"
-	losetup -d /dev/loop7 || :
-	losetup -o $(((8192 + 131072) * $BLOCK_SIZE)) --sizelimit $(($img_sectors * $BLOCK_SIZE)) /dev/loop7 $img
+
+	local off=$((8192 * $BLOCK_SIZE))
+	local len=$((131072 * $BLOCK_SIZE))
+	boot_loop=$(losetup --show --find --offset $off --sizelimit $len $img)
+
+	local siz=$(sfdisk -uS -l $img | grep img2 | awk '{print $4}')
+	local off=$(((8192 + 131072) * $BLOCK_SIZE))
+	local len=$(($siz * $BLOCK_SIZE))
+	root_loop=$(losetup --show --find --offset $off --sizelimit $len $img)
 
 	echo "Create filesystems..."
-	mke2fs -O dir_index,^resize_inode -L Boot -F /dev/loop6
-	mount /dev/loop6 $BOOT
+	mke2fs -O dir_index,^resize_inode -L Boot -F $boot_loop
+	mount $boot_loop $BOOT
 
-	mkfs.ext4 -O dir_index,^huge_file -E resize=8G -m1 -L OLPCRoot /dev/loop7
-	tune2fs -o journal_data_ordered /dev/loop7
-	mount /dev/loop7 $ROOT
+	mkfs.ext4 -O dir_index,^huge_file -E resize=8G -m1 -L OLPCRoot $root_loop
+	tune2fs -o journal_data_ordered $root_loop
+	mount $root_loop $ROOT
 
 	echo "Copy in root filesystem..."
 	cp -a $fsmount/* $ROOT
@@ -98,8 +100,8 @@ EOF
 
 	umount $ROOT
 	umount $BOOT
-	losetup -d /dev/loop6 || :
-	losetup -d /dev/loop7 || :
+	losetup -d $boot_loop || :
+	losetup -d $root_loop || :
 
 	# FIXME: any value to running e2fsck now? maybe with -D ?
 }
