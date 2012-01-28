@@ -7,6 +7,7 @@ sugar-toolkit-gtk3
 # additional sugar packages
 libxml2-python
 pyabiword
+webkitgtk3
 udisks
 espeak
 etoys
@@ -30,7 +31,6 @@ totem-mozplugin
 vte
 
 # dependencies for Epub support in Read
-pywebkitgtk
 python-BeautifulSoup
 python-lxml
 olpc-library
