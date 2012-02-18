@@ -1,5 +1,8 @@
 # sugar desktop
 sugar
+sugar-base
+sugar-toolkit
+sugar-toolkit-gtk3
 
 # additional sugar packages
 libxml2-python
@@ -19,11 +22,9 @@ python-alsaaudio
 squeak-vm
 
 # Browse
-gnome-python2-gnome
+webkitgtk3
 gnash-plugin
 totem-mozplugin
-# Add surf until we have a new Browse
-sugar-surf
 
 # Terminal
 vte
