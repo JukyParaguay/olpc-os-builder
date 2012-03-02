@@ -69,7 +69,7 @@ class Stage(object):
         env['OOB__statedir'] = self.osb.statedir
         env['OOB__fsmount'] = self.osb.fsmount
 
-        env['oob_config_dir'] = os.path.dirname(self.osb.build_config)
+        env['oob_config_dir'] = os.path.dirname(self.osb.build_configs[0])
 
         envpath = env['PATH'].split(':')
         for dir in ('/sbin', '/usr/sbin'):
@@ -254,9 +254,10 @@ class OsBuilderException(Exception):
     pass
 
 class OsBuilder(object):
-    def __init__(self, build_config, additional_defaults):
-        self.build_config = os.path.abspath(build_config)
-        self.additional_defaults = additional_defaults
+    def __init__(self, build_configs):
+        self.build_configs = []
+        for cfg in build_configs:
+            self.build_configs.append(os.path.abspath(cfg))
 
         print " * OLPC OS builder v%s" % VERSION
         if INSTALLED:
@@ -280,12 +281,9 @@ class OsBuilder(object):
         # load config to find module list
         # and set interpolation default for oob_config_dir
         self.cfg = SafeConfigParser({'oob_config_dir':
-                                     os.path.dirname(self.build_config)})
-        self.cfg.read(self.build_config)
-
-        # read in defaults specified on the command line
-        if self.additional_defaults is not None:
-            self.cfg.read(self.additional_defaults)
+                                     os.path.dirname(self.build_configs[0])})
+        for cfg in self.build_configs:
+            self.cfg.read(cfg)
 
         if self.cfg.has_option('global', 'suggested_oob_version'):
             suggested = self.cfg.get('global','suggested_oob_version')
@@ -329,7 +327,7 @@ class OsBuilder(object):
         """Read and validate config (including module defaults)"""
         # reset config since we want to load the module defaults first
         self.cfg = SafeConfigParser({'oob_config_dir':
-                                     os.path.dirname(self.build_config)})
+                                     os.path.dirname(self.build_configs[0])})
 
         for mod in self.modules:
             m = re.match(r"[A-Za-z_][A-Za-z0-9_]*$", mod)
@@ -344,12 +342,9 @@ class OsBuilder(object):
             # read in defaults
             self.cfg.read(os.path.join(modpath, 'defaults.ini'))
 
-        # read in defaults specified on the command line
-        if self.additional_defaults is not None:
-            self.cfg.read(self.additional_defaults)
-
         # now load the users config, overriding other settings where specified
-        self.cfg.read(self.build_config)
+        for cfg in self.build_configs:
+            self.cfg.read(cfg)
 
         for section in self.cfg.sections():
             m = re.match(r"[A-Za-z_][A-Za-z0-9_]*$", section)
@@ -414,23 +409,20 @@ class OsBuilder(object):
         print " * Output is in", self.outputdir
 
 def main():
-    op = OptionParser(usage="%prog [options] buildconfig", version=VERSION)
+    op = OptionParser(usage="%prog [options] buildconfig [buildconfig2...]", version=VERSION)
     op.add_option('--no-clean-output', dest="clean_output",
                   action="store_false", default=True,
                   help="Don't clean output directory on startup")
     op.add_option('--no-clean-intermediates', dest="clean_intermediates",
                   action="store_false", default=True,
                   help="Don't clean intermediates directory on startup or exit")
-    op.add_option('--additional-defaults', dest="additional_defaults",
-                  action="store", default=None,
-                  help="Additional config file with default settings")
     (options, args) = op.parse_args()
 
-    if len(args) != 1:
+    if len(args) < 1:
         op.error("incorrect number of arguments")
 
     try:
-        osb = OsBuilder(args[0], options.additional_defaults)
+        osb = OsBuilder(args)
         osb.build(clean_output=options.clean_output,
                   clean_intermediates=options.clean_intermediates)
     except OsBuilderException, e:

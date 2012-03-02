@@ -54,7 +54,7 @@ release was made.
 
 
 Usage:
-	olpc-os-builder <path to build config>
+	olpc-os-builder <path to build config> [path to build config...]
 
 
 Configuration:
@@ -81,6 +81,10 @@ the first one are indented, e.g.:
 		but lines 2 through 4 must be indented
 	option2=foo
 
+Multiple configuration files can be specified. They will be parsed in the
+order provided (i.e. later config files can override values from earlier
+ones).
+
 Interpolation (basic assignment and use of variables) can be used, according
 to Python's SafeConfigParser documentation.
 
@@ -88,7 +92,7 @@ Default variables automatically provided:
 
 oob_config_dir
 
-	The directory where the currently selected config file resides
+	The directory where the first specified config file resides
 
 In general, each section that can exist in the configuration file
 corresponds to a specific module.  The section name is the same as the
