@@ -300,18 +300,9 @@ class OsBuilder(object):
                 print "Press Ctrl+C to abort. Continuing in 15 seconds."
                 time.sleep(15)
 
-        self.modules = []
-        for option in self.cfg.options('global'):
-            if not option.startswith('modules_') and option != "modules":
-                continue
-            self.modules.extend(self.cfg.get('global', option).split(','))
-
-        # clean up
-        for idx, mod in enumerate(self.modules):
-            self.modules[idx] = mod.strip()
-
-        # remove duplicates
-        self.modules = list(set(self.modules))
+        self.modules = self.cfg.sections()
+        if 'global' in self.modules:
+            self.modules.remove('global')
 
         self.read_config()
 

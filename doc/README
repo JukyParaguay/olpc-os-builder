@@ -63,23 +63,32 @@ Various build configurations can be found in the examples directory
 included with the distribution, including configurations used to build
 OLPC OS releases.
 
-Build configuration files have a series of sections, each section
-title is enclosed in square brackets.  Inside each section, there are
-options.  For example, "mysection" below has one option, named
+Build configuration files specify a series of modules, each module
+title being enclosed by square brackets.  Inside each module, there are
+options.  For example, "mymodule" below has one option, named
 "option1" with value "myvalue":
 
-	[mysection]
+	[mymodule]
 	option1=myvalue
 
 Options can reside on multiple lines, provided that all lines beyond
 the first one are indented, e.g.:
 
-	[mysection]
+	[mymodule]
 	option1=this is
 		an option
 		that spans 4 lines
 		but lines 2 through 4 must be indented
 	option2=foo
+
+The modules selected by your build configuration file correspond to modules
+shipped by olpc-os-builder. A module is loaded simply by specifying it in
+the build configuration. You do not have to specify any options in the cases
+when the default settings meet your needs, or when the module has no options,
+e.g.:
+
+	[sugar]
+	[gnome]
 
 Multiple configuration files can be specified. They will be parsed in the
 order provided (i.e. later config files can override values from earlier
@@ -152,15 +161,6 @@ target_platform
 langs
 
     A set of languages to support in the resultant OS image.
-
-modules
-
-    A comma-separated selection of modules to include in the build.
-
-modules_<ANYTHING>
-
-    Additional modules to include (allowing you to append to the list of
-    modules in an additional configuration file)
 
 
 In general, options need to be set with care.  Aim to stick with the
