@@ -1,5 +1,8 @@
 // Handle partitions
 #include <stdio.h>
+#include <stdint.h>
+#include <linux/fiemap.h>
+#include <linux/fs.h>
 
 #define TFM_DESC
 #include <tomcrypt.h>
@@ -12,6 +15,14 @@ static unsigned char *zbuf;
 static long zbufsize;
 static long zblocksize;
 static char *hashname;
+
+static long eblocks = -1;
+
+/*
+ * A bitmap detailing which eblocks are used, and which are empty.
+ * (actually a char array, one byte per eblock, because I'm lazy)
+ */
+static unsigned char *eblocks_used;
 
 #define PATTERN_SIZE 4096
 
@@ -69,22 +80,94 @@ static int read_block(unsigned char *buf, FILE *infile, int is_last_block)
     return readlen;
 }
 
+struct fiemap *read_fiemap(int fd)
+{
+	struct fiemap *fiemap;
+	int extents_size;
+
+	if ((fiemap = (struct fiemap*)malloc(sizeof(struct fiemap))) == NULL) {
+		fprintf(stderr, "Out of memory allocating fiemap\n");
+		return NULL;
+	}
+	memset(fiemap, 0, sizeof(struct fiemap));
+
+	fiemap->fm_start = 0;
+	fiemap->fm_length = ~0;
+	fiemap->fm_flags = 0;
+	fiemap->fm_extent_count = 0;
+	fiemap->fm_mapped_extents = 0;
+
+	/* Find out how many extents there are */
+	if (ioctl(fd, FS_IOC_FIEMAP, fiemap) < 0) {
+		fprintf(stderr, "fiemap ioctl() failed\n");
+		return NULL;
+	}
+
+	/* Read in the extents */
+	extents_size = sizeof(struct fiemap_extent) *  (fiemap->fm_mapped_extents);
+
+	/* Resize fiemap to allow us to read in the extents */
+	if ((fiemap = (struct fiemap*)realloc(fiemap, sizeof(struct fiemap) +
+                                         extents_size)) == NULL) {
+		fprintf(stderr, "Out of memory allocating fiemap\n");
+		return NULL;
+	}
+
+	memset(fiemap->fm_extents, 0, extents_size);
+	fiemap->fm_extent_count = fiemap->fm_mapped_extents;
+	fiemap->fm_mapped_extents = 0;
+
+	if (ioctl(fd, FS_IOC_FIEMAP, fiemap) < 0) {
+		fprintf(stderr, "fiemap ioctl() failed\n");
+		return NULL;
+	}
+
+	return fiemap;
+}
+
+/* Given a file extent, determine which eblocks in the output file need to
+ * represent that extent, and mark them as used in the eblocks_used map. */
+static void process_extent(struct fiemap_extent *ex)
+{
+	long i;
+	uint64_t last_byte = ex->fe_logical + ex->fe_length - 1;
+	long first_eblock = ex->fe_logical / zblocksize;
+	long last_eblock = last_byte / zblocksize;
+
+	printf("Extent(%lld, %lld) occupies eblocks %d to %d\n", ex->fe_logical, ex->fe_length, first_eblock, last_eblock);
+	for (i = first_eblock; i <= last_eblock; i++)
+		eblocks_used[i] = 1;
+}
+
+/*
+ * Use FIEMAP to determine the extents that make up a file.
+ * Allocate eblocks_used array based on length of file, and then mark
+ * the set of eblocks that contain data based on the extents.
+ */
+static void read_extents(FILE *infile)
+{
+    int i;
+    struct fiemap *fiemap = read_fiemap(fileno(infile));
+    LTC_ARGCHK(fiemap != NULL);
+
+    eblocks_used = malloc(eblocks);
+    LTC_ARGCHK(eblocks_used != 0);
+    memset(eblocks_used, 0, eblocks);
+
+	for (i=0; i < fiemap->fm_mapped_extents; i++)
+		process_extent(&fiemap->fm_extents[i]);
+}
+
 int main(int argc, char **argv)
 {
     char          *fname;
     unsigned char *buf;  // EBLOCKSIZE
     FILE          *infile;
-    long          eblocks = -1;
     long          i;
     off_t         insize;
     int		  readlen;
 
     int		  skip;
-
-    unsigned char *pbuf;        // fill pattern buffer
-    char          pname[PATH_MAX];       // fill pattern file name
-    FILE          *pfile;       // fill pattern file
-    int           patterned, n;
 
     if (argc < 6) { 
         fprintf(stderr, "%s: zblocksize hashname signed_file_name spec_file_name zdata_file_name [ #blocks ]\n", argv[0]);
@@ -119,21 +202,6 @@ int main(int argc, char **argv)
     infile = fopen(argv[3], "rb");
     LTC_ARGCHK(infile != NULL);
 
-    /* open and read an optional fill pattern file */
-    pbuf = NULL;
-    strncpy(pname, argv[3], sizeof(pname) - 6);
-    strcat(pname, ".fill");
-    pname[sizeof(pname) - 1] = 0;
-
-    pfile = fopen(pname, "rb");
-    if (pfile != NULL) {
-        pbuf = malloc(PATTERN_SIZE);
-        LTC_ARGCHK(pbuf != NULL);
-        n = fread(pbuf, 1, PATTERN_SIZE, pfile);
-        LTC_ARGCHK(n == PATTERN_SIZE);
-        fclose(pfile);
-    }
-
     /* open output file */
     outfile = fopen(argv[4], "wb");
     LTC_ARGCHK(outfile != NULL);
@@ -158,6 +226,8 @@ int main(int argc, char **argv)
 //    LTC_ARGCHK((eblocks * zblocksize) == insize);
     }
 
+    read_extents(infile);
+
     /* Remove possible path prefix */
     fname = strrchr(argv[5], '/');
     if (fname == NULL)
@@ -171,48 +241,16 @@ int main(int argc, char **argv)
 
     fprintf(stdout, "Total blocks: %ld\n", eblocks);
 
-    fseek(infile, zblocksize, SEEK_SET);
-
     /* make a hash of the file */
     for (i=1; i < eblocks; i++) {
+        if (!eblocks_used[i])
+            continue;
+
+        fseeko(infile, (uint64_t) i * zblocksize, SEEK_SET);
         readlen = read_block(buf, infile, i == eblocks-1);
         LTC_ARGCHK(readlen == zblocksize);
 
-#ifdef notdef
-        skip = 1;
-        for (p = (unsigned char *)buf; p < &buf[zblocksize]; p++) {
-            if (*p != 0xff) {
-                skip = 0;
-                break;
-            }
-        }
-#else
-        skip = 0;
-#endif
-
-        if (pbuf) {
-            /* check if this zblock is fully patterned as unused, and if
-            any parts of the zblock are patterned then zero them, for ease
-            of compression */
-
-            patterned = 1;
-            for (n = 0; n < (zblocksize / PATTERN_SIZE); n++) {
-                if (memcmp(&buf[n*PATTERN_SIZE], pbuf, PATTERN_SIZE)) {
-                    patterned = 0;
-                } else {
-                    memset(&buf[n*PATTERN_SIZE], 0, PATTERN_SIZE);
-                }
-            }
-
-            /* skip any block that is fully patterned, thus relying on the
-            fs-update card erase-blocks */
-
-            if (patterned) skip++;
-        }
-
-        if (!skip)
-            write_block(i, buf);
-
+        write_block(i, buf);
         fprintf(stdout, "\r%ld", i);  fflush(stdout);
     }
 
