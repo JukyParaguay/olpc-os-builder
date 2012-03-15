@@ -4,6 +4,6 @@ auth --useshadow --enablemd5
 selinux --disabled
 firewall --disabled
 xconfig --startxonboot
-part / --size 4096 --fstype=ext3
+part / --size 4096 --fstype=ext4
 services --enabled=crond --disabled=dnsmasq,ip6tables,iptables,mdmonitor,netfs,network,sshd
 
