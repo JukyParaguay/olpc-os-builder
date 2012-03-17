@@ -32,7 +32,6 @@ make_image()
 	local num_blocks=$(($disk_size / $BLOCK_SIZE))
 	local num_cylinders=$(($num_blocks / $NUM_HEADS / $NUM_SECTORS_PER_TRACK))
 	local image_size=$(($num_cylinders * $NUM_HEADS * $NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
-	local os_part1_begin=$(($NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
 
 	[ -z "$ext" ] && ext="zd"
 	local img=$intermediatesdir/$(image_name).$ext.disk.img
@@ -44,14 +43,9 @@ make_image()
 139264,,,
 EOF
 
-	local off=$((8192 * $BLOCK_SIZE))
-	local len=$((131072 * $BLOCK_SIZE))
-	boot_loop=$(losetup --show --find --offset $off --sizelimit $len $img)
-
-	local siz=$(sfdisk -uS -l $img | grep img2 | awk '{print $4}')
-	local off=$(((8192 + 131072) * $BLOCK_SIZE))
-	local len=$(($siz * $BLOCK_SIZE))
-	root_loop=$(losetup --show --find --offset $off --sizelimit $len $img)
+	disk_loop=$(losetup --show --find --partscan $img)
+	boot_loop="${disk_loop}p1"
+	root_loop="${disk_loop}p2"
 
 	echo "Create filesystems..."
 	mke2fs -O dir_index,^resize_inode -L Boot -F $boot_loop
@@ -92,8 +86,7 @@ EOF
 
 	umount $ROOT
 	umount $BOOT
-	losetup -d $boot_loop || :
-	losetup -d $root_loop || :
+	losetup -d $disk_loop || :
 
 	# FIXME: any value to running e2fsck now? maybe with -D ?
 }
