@@ -202,3 +202,19 @@ sed -i -e 's/kernel.sysrq = 0/kernel.sysrq = 1/' /etc/sysctl.conf
 # and is hence not appropriate to retain over upgrades)
 sed -i -e '/^plugins=ifcfg-rh$/d' /etc/NetworkManager/NetworkManager.conf
 
+# set default plymouth theme
+# we do this with plymouthd.defaults so that plymouth-set-default-theme
+# could be run by the user at another point in the build process, ensuring
+# that the user preference (if specified) sticks.
+sed -i -e 's/Theme=.*/Theme=olpc/g' /usr/share/plymouth/plymouthd.defaults
+
+# disable plymouth-start service: we start plymouthd from the initramfs
+# with some special settings
+ln -s /dev/null /etc/systemd/system/plymouth-start.service
+
+# apply some special settings in the other plymouth service files until
+# we have a better solution.
+# https://bugs.freedesktop.org/show_bug.cgi?id=22239
+sed -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-poweroff.service
+sed -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-halt.service
+sed -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-reboot.service

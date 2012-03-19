@@ -24,7 +24,7 @@ strace
 # OLPC technologies and customization packages
 olpc-utils
 olpc-netutils
-olpc-bootanim
+plymouth-theme-olpc
 PolicyKit-olpc
 ds-backup-client
 olpc-powerd
