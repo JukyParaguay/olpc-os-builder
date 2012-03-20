@@ -89,14 +89,11 @@ cat >/etc/statetab.d/olpc <<EOF
 EOF
 
 # systemd stuff that is not interesting for us
-systemctl disable systemd-readahead-collect.service
-systemctl disable systemd-readahead-done.timer
-systemctl disable fedora-loadmodules.service
-systemctl disable mdmonitor-takeover.service
-#systemctl disable system-setup-keyboard.service
-ln -s /dev/null /etc/systemd/system/fedora-wait-storage.service
-ln -s /dev/null /etc/systemd/system/fedora-storage-init.service
-ln -s /dev/null /etc/systemd/system/fedora-storage-init-late.service
+for i in fedora-loadmoules mdmonitor-takeover systemd-readahead-collect \
+		fedora-wait-storage fedora-storage-init fedora-storage-init-late \
+		fedora-autorelabel-mark; do
+	ln -s /dev/null /etc/systemd/system/$i.service
+done
 
 #prefdm tweaks
 #sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
