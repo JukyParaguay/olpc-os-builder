@@ -35,9 +35,20 @@ def read_buildnr():
         return "0"
     return open(buildnr_path, "r").readline().strip()
 
+def read_laptop_model_number():
+    path = os.path.join(intermediatesdir, 'laptop_model_number')
+    if not os.path.isfile(path):
+        return "0"
+    return open(path, "r").readline().strip()
+
 def image_name():
-    name_tmpl = read_config('global', 'image_name')
-    return name_tmpl % int(read_buildnr())
+    major_ver = read_config('global', 'olpc_version_major')
+    minor_ver = read_config('global', 'olpc_version_minor')
+    cust_tag = read_config('global', 'customization_tag')
+    buildnr = int(read_buildnr())
+    modelnr = read_laptop_model_number()
+
+    return "%s%s%03d%s%s" % (major_ver, minor_ver, buildnr, cust_tag, modelnr)
 
 def arch_matches(myarch, arch):
     # figure out if a package under 'arch' is suitable for 'myarch'

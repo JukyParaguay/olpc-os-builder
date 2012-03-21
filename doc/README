@@ -135,23 +135,27 @@ olpc_version_release
     in the OS image.  For example, in the OLPC OS 10.1.0 release, this
     would be 0.
 
-image_name
-
-    The naming scheme to use for the output files. The value of this field
-    must include "%%d", this will be replaced with the build number.
-    For example, a value of "per%%d-6" would result the output being called
-    "per703-6" for build number 703. The default value is "os%%d".
-    The reason that 2 percentage signs are needed is because RawConfigParser
-    is in use; a % therefore triggers the INI interpolation feature, unless
-    presented in the escaped form %%.
-
 customization_info
+
+    This identifier will be displayed in the Sugar control panel and
+    in other places on the system, to indicate the source of the OS
+    build.
 
     Please set this to a string that indicates your identity, to make
     clear that the resultant build is a modified version of OLPC's
     official release.  For example, you could use something like
     "customized for Paraguay" when producing an OS build for OLPC's
     Paraguayan deployment.
+
+customization_tag
+
+    This tag will be included in the names of the output files, as a quick
+    way of identifying origin. The default value is "xx".
+
+    Please set this to a tag (one or two characters) representing your
+    identity. Your two-letter country code may be a good choice here.
+    For example, for the OLPC Paraguay project, "py" would be a sensible
+    choice. "o" is used by OLPC.
 
 target_platform
 
@@ -169,6 +173,17 @@ to exclude the "base" module from the build then you will get strange
 results.  Also, you cannot arbitrarily change fedora_release without
 adapting all of the module code to work with the ever-changing
 components of each official Fedora release.
+
+
+Output:
+
+At the end of the process, a series of filenames are saved in an output
+directory. The path to this directory is printed at the end of the process.
+Files within this directory are named according to a version scheme
+encompassing the major and minor version number, the build numer, the target
+laptop model, and the customisation tag. See
+http://wiki.laptop.org/go/Release_Process#Version_numbering for more details
+on this scheme.
 
 
 Design goals:
