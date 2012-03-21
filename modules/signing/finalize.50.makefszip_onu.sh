@@ -14,7 +14,8 @@ skey=$(read_config signing skey)
 shopt -s nullglob
 for i in $outputdir/*.onu; do
 	bname=$(basename $i)
-	outfile=$outputdir/$bname.fs.zip
+	fszip=fs$(read_laptop_model_number).zip
+	outfile=$outputdir/$bname.$fszip
 	zipfiles="$intermediatesdir/version.txt $intermediatesdir/data.img"
 
 	cp "$i" "$intermediatesdir"/data.img

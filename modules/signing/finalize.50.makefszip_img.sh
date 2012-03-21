@@ -31,7 +31,8 @@ make_unsigned_img()
 make_signed_img()
 {
 	echo "Generating signed fs.zip for $(basename $1)..."
-	local outfile=$outputdir/$(basename $1).fs.zip
+	local fszip=fs$(read_laptop_model_number).zip
+	local outfile=$outputdir/$(basename $1).$fszip
 	pushd $bios_crypto/build
 	./make-fs.sh --signingkey $skey $1
 	mv fs.zip $outfile

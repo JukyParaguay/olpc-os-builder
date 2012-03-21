@@ -134,7 +134,8 @@ file for every outputted .zsp file:
 	[signing]
 	make_zsp_fs_zip=1
 
-A file named os31.2gb.zsp will result in os31.2gb.fs.zip being generated.
+A file named os31.2gb.zsp will result in os31.2gb.fs1.zip being generated
+(the '1' in 'fs1' indicates XO-1.5).
 
 
 For XO-1, bios-crypto is required. JFFS2 images (.img) are signed as follows:
@@ -142,14 +143,14 @@ For XO-1, bios-crypto is required. JFFS2 images (.img) are signed as follows:
 	bios_crypto_path=/home/myuser/bios-crypto
 	make_img_fs_zip=1
 
-All output jffs2 .img files will be signed into (e.g.) os52.fs.zip.
+All output jffs2 .img files will be signed into (e.g.) os52.fs0.zip.
 
 And XO-1 UBIFS images (.onu alongside .uim) are signed as follows:
 	[signing]
 	bios_crypto_path=/home/myuser/bios-crypto
 	make_onu_fs_zip=1
 
-All output ubifs .onu files will be signed into (e.g.) os52.onu.fs.zip.
+All output ubifs .onu files will be signed into (e.g.) os52.onu.fs0.zip.
 
 
 In all cases, these fs.zip output files are unsigned and must be externally

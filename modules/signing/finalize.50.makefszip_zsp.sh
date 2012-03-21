@@ -14,13 +14,14 @@ make_unsigned_zsp()
 {
 	local bname=$(basename $1)
 	local bname_noext=$(basename $1 .zsp)
+	local fszip=fs$(read_laptop_model_number).zip
 
 	echo "Generating unsigned fs.zip for $bname..."
 
 	echo "$bname_noext" > $intermediatesdir/version.txt
 	cp $i $intermediatesdir/data.img
 
-	zip -j -n .img:.txt $outputdir/$bname.fs.zip \
+	zip -j -n .img:.txt $outputdir/$bname.$fszip \
 		$intermediatesdir/data.img $intermediatesdir/version.txt
 	rm -f $intermediatesdir/{data.img,version.txt}
 }
@@ -28,7 +29,8 @@ make_unsigned_zsp()
 make_signed_zsp()
 {
 	echo "Generating signed fs.zip for $(basename $1)..."
-	local outfile=$outputdir/$(basename $1).fs.zip
+	local fszip=fs$(read_laptop_model_number).zip
+	local outfile=$outputdir/$(basename $1).$fszip
 	pushd $bios_crypto/build
 	rm -rf fs.zip
 	./sign-zsp.sh $skey $1
