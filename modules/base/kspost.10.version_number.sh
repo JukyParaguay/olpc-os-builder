@@ -21,6 +21,8 @@ if [[ "$official" != "1" ]]; then
 	custbstr="$custinfo"
 fi
 
+buildstr="$majver.$minver.$relver for ${platform}${custstr} (build $buildnr)"
+
 cat <<EOF
 # needed for spin debranding
 echo "OLPC release $majver (based on Fedora $fver)" > /etc/fedora-release
@@ -28,9 +30,9 @@ echo "OLPC release $majver (based on Fedora $fver)" > /etc/fedora-release
 # this is used by the activity updater
 echo "$majver.$minver.$relver" > /etc/olpc-release
 
-sed -i -e "1s/.*/OLPC OS $majver.$minver.$relver for ${platform}${custstr} (build $buildnr)/" /etc/issue
+sed -i -e "1s/.*/OLPC OS $buildstr/" /etc/issue
 cp /etc/issue /etc/issue.net
 
-echo "${buildnr}${custbstr}" > /boot/olpc_build
+echo "${buildstr}" > /boot/olpc_build
 EOF
 
