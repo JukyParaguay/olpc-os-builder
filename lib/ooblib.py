@@ -52,14 +52,14 @@ def image_name():
 
 def arch_matches(myarch, arch):
     # figure out if a package under 'arch' is suitable for 'myarch'
-    # myarch is either 'i386' or 'arm'
+    # myarch is either 'i386', 'arm' or 'armhfp'
     # but 'arch' can be i386, i586, i686, armv5tel, armv7hl, and so on
 
     # noarch is always suitable
     if arch == 'noarch':
         return True
 
-    if myarch == 'arm':
+    if myarch.startswith('arm'):
         return arch.startswith('arm')
     elif myarch == 'i386':
         return arch in ['i386', 'i486', 'i586', 'i686']
