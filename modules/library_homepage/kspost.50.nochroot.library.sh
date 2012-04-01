@@ -17,3 +17,4 @@ fi
 
 # synchronize the files within the path, conserving directory structure
 echo "rsync -rlpt \"$path\"/ \"\$INSTALL_ROOT/usr/share/library-common/\""
+echo "chmod ugo+rx \"\$INSTALL_ROOT/usr/share/library-common/\""
