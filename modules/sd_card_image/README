@@ -5,13 +5,22 @@ These images are in the "ZD" format, suitable for flashing via OpenFirmware's
 fs-update command. Corresponding .zsp files are produced too. To disable
 .zd/.zsp creation, set the make_zd option to 0 (default is 1).
 
-The SD card sizes must be specified, in bytes. This module can create
-filesystems for multiple SD card capacities. Simply provide a list of
-uniquely-named options that start with "size_", one for each SD card size.
+By default, a single disk image is produced, with it's size automatically
+calculated based on the size of the data included in the image, plus a small
+amount of free space. The system will resize the partition and filesystem to
+fill the media during first boot. Therefore, other than loading the module,
+no configuration is usually necessary.
 
-The value for each of these options is the disk size (in bytes), optionally
-followed by a comma and a custom extension. There can only be one un-named
-entry, which will default to the extension "zd".
+If you wish to create multiple images, or if you wish to specify a size,
+you can specify some uniquely-named options starting with "size_". (This
+will disable the default creation of an automatic-sized image as described
+above.)
+
+The value for each of these options is the disk size, optionally followed by
+a comma and a custom extension. There can only be one un-named entry, which
+will default to the extension "zd". The disk size is specified in bytes,
+but the special size "auto" will result in the disk size being calculated
+automatically as described above.
 
 For example:
 [sd_card_image]
@@ -51,4 +60,3 @@ The raw image file is archived in tar (in sparse mode) and then compressed with
 gzip. Tar preserves the sparseness of the file (the fact that some part of the
 image is made up of unallocated disk blocks). To disable this
 archiving/compression, set the compress_disk_image option to 0 (default is 1).
-
