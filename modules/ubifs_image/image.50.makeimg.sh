@@ -80,7 +80,6 @@ cat > $ubinize_cfg <<EOF
 mode=ubi
 image=$root_tmp_img
 vol_id=0
-vol_size=973312KiB
 vol_type=dynamic
 vol_name=rootfs
 vol_flags=autoresize

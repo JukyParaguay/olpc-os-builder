@@ -5,6 +5,7 @@
 versioned_fs=$(read_config base versioned_fs)
 buildnr=$(read_buildnr)
 BLOCK_SIZE=512
+ROOT_PARTITION_START_BLOCK=139264
 NUM_HEADS=16
 NUM_SECTORS_PER_TRACK=62
 
@@ -18,13 +19,49 @@ umount $ROOT &>/dev/null || :
 mkdir -p $BOOT
 mkdir -p $ROOT
 
+# Automatically determine a size for the output disk image (including root
+# and boot partitions).
+#
+# This is calculated by examining how much space was used in the intermediate
+# filesystem image, and by adding a small amount of free space for safety.
+auto_size()
+{
+	local rawfs=$intermediatesdir/rawfs.img
+	local edump=$(dumpe2fs "$rawfs")
+	local bsize=$(echo "$edump" | grep "^Block size:")
+	local bcount=$(echo "$edump" | grep "^Block count:")
+	local freeblocks=$(echo "$edump" | grep "^Free blocks:")
+
+	# Remove textual labels, we just want the numbers
+	bsize="${bsize##* }"
+	bcount="${bcount##* }"
+	freeblocks="${freeblocks##* }"
+
+	local usedblocks=$(( bcount - freeblocks ))
+	local usedsize=$(( usedblocks * bsize ))
+
+	# In my testing, the new image has about 100mb free even when we try
+	# to match the size exactly. So we use the exact size; if we find that
+	# we need to add some 'safety' space later, we can add it.
+	#local newsize=$(( usedsize + (20*1024*1024) ))
+	local newsize=$usedsize
+
+	# Increase by size of boot partition
+	(( newsize += $ROOT_PARTITION_START_BLOCK * $BLOCK_SIZE ))
+
+	echo $newsize
+}
 
 make_image()
 {
-	local vals=$1
-	local disk_size=${vals%,*}
-	local ext=
-	expr index "$vals" ',' &>/dev/null && ext=${vals#*,}
+	local disk_size=$1
+	local ext=$2
+	[ -z "$ext" ] && ext="zd"
+
+	if [ "$disk_size" = "auto" ]; then
+		disk_size=$(auto_size)
+	fi
+
 	echo "Making image of size $disk_size"
 
 	echo "Create disk and partitions..."
@@ -33,14 +70,13 @@ make_image()
 	local num_cylinders=$(($num_blocks / $NUM_HEADS / $NUM_SECTORS_PER_TRACK))
 	local image_size=$(($num_cylinders * $NUM_HEADS * $NUM_SECTORS_PER_TRACK * $BLOCK_SIZE))
 
-	[ -z "$ext" ] && ext="zd"
 	local img=$intermediatesdir/$(image_name).$ext.disk.img
 
 	dd if=/dev/zero of=$img bs=$BLOCK_SIZE count=0 seek=$(($image_size / $BLOCK_SIZE))
 
 	/sbin/sfdisk -S 32 -H 32 --force -uS $img <<EOF
 8192,131072,83,*
-139264,,,
+$ROOT_PARTITION_START_BLOCK,,,
 EOF
 
 	disk_loop=$(losetup --show --find --partscan $img)
@@ -92,12 +128,20 @@ EOF
 }
 
 
+found_val=0
 oIFS=$IFS
 IFS=$'\n'
 for line in $(env); do
 	[[ "${line:0:24}" == "CFG_sd_card_image__size_" ]] || continue
 	val=${line#*=}
-	make_image $val
+	disk_size=${val%,*}
+	ext=
+	expr index "$vals" ',' &>/dev/null && ext=${vals#*,}
+
+	make_image $disk_size $ext
+	found_val=1
 done
 IFS=$oIFS
 
+# If no sizes were specified, create an image with automatic size.
+[ "$found_val" = "1" ] || make_image auto
