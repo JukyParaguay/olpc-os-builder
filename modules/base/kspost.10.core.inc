@@ -89,9 +89,9 @@ cat >/etc/statetab.d/olpc <<EOF
 EOF
 
 # systemd stuff that is not interesting for us
-for i in fedora-loadmoules mdmonitor-takeover systemd-readahead-collect \
+for i in fedora-loadmodules mdmonitor-takeover systemd-readahead-collect \
 		fedora-wait-storage fedora-storage-init fedora-storage-init-late \
-		fedora-autorelabel-mark; do
+		fedora-autorelabel fedora-autorelabel-mark; do
 	ln -s /dev/null /etc/systemd/system/$i.service
 done
 
