@@ -241,6 +241,10 @@ int main(int argc, char **argv)
 
     fprintf(stdout, "Total blocks: %ld\n", eblocks);
 
+    /* wipe the partition table first in case of partial completion */
+    memset(buf, 0, zblocksize);
+    write_block(0, buf);
+
     /* make a hash of the file */
     for (i=1; i < eblocks; i++) {
         if (!eblocks_used[i])
