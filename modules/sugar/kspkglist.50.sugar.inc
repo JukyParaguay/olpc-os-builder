@@ -23,7 +23,6 @@ python-alsaaudio
 squeak-vm
 
 # Browse
-webkitgtk3
 gnash-plugin
 totem-mozplugin
 
@@ -32,7 +31,6 @@ vte
 
 # dependencies for Epub support in Read
 python-BeautifulSoup
-python-lxml
 olpc-library
 
 # for Tuxmath activity
