@@ -214,3 +214,8 @@ ln -s /dev/null /etc/systemd/system/plymouth-start.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-poweroff.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-halt.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-reboot.service
+
+# call olpc-logrotate when log file hits 1mb (#10075)
+sed -i -e 's,/var/log/messages,:omfile:$messages,' \
+	-e '/$messages/ i$outchannel messages,/var/log/messages,1048576,/usr/sbin/olpc-logrotate' \
+	/etc/rsyslog.conf
