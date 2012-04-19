@@ -8,7 +8,6 @@ sugar-toolkit-gtk3
 libxml2-python
 pyabiword
 webkitgtk3
-udisks
 espeak
 etoys
 evince-djvu
