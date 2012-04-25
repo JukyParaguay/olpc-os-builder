@@ -71,6 +71,9 @@ sed -i -e '/\t\/tmp/d' /etc/rwtab
 sed -i -e '/\t\/var\/tmp/d' /etc/rwtab
 sed -i -e '/\t\/var\/log/d' /etc/rwtab
 
+# remove random-seed from rwtab because we put it in statetab below
+sed -i -e '/\t\/var\/lib\/random-seed/d' /etc/rwtab
+
 # ensure temporary state directory doesn't get too fat (#9636)
 sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/sysconfig/readonly-root
 
@@ -88,10 +91,18 @@ cat >/etc/statetab.d/olpc <<EOF
 /etc/NetworkManager/system-connections
 EOF
 
+# make sure statetab is set up before recording a random seed during boot
+# https://bugzilla.redhat.com/show_bug.cgi?id=808907
+sed -i -e '/Before=/ s/$/ systemd-random-seed-load.service/' /lib/systemd/system/fedora-readonly.service
+
 # systemd stuff that is not interesting for us
+# random-seed-save: we are interested in saving a random seed, but
+# systemd actually does that during boot at systemd-random-seed-load time.
+# that is sufficient for our needs, and works around the shutdown issue
+# described at https://bugzilla.redhat.com/show_bug.cgi?id=808907#c7
 for i in fedora-loadmodules mdmonitor-takeover systemd-readahead-collect \
 		fedora-wait-storage fedora-storage-init fedora-storage-init-late \
-		fedora-autorelabel fedora-autorelabel-mark; do
+		fedora-autorelabel fedora-autorelabel-mark systemd-random-seed-save; do
 	ln -s /dev/null /etc/systemd/system/$i.service
 done
 
