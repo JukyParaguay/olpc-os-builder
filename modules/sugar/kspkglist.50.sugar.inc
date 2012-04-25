@@ -8,7 +8,6 @@ sugar-toolkit-gtk3
 libxml2-python
 pyabiword
 webkitgtk3
-udisks
 espeak
 etoys
 evince-djvu
@@ -23,7 +22,6 @@ python-alsaaudio
 squeak-vm
 
 # Browse
-webkitgtk3
 gnash-plugin
 totem-mozplugin
 
@@ -32,7 +30,6 @@ vte
 
 # dependencies for Epub support in Read
 python-BeautifulSoup
-python-lxml
 olpc-library
 
 # for Tuxmath activity

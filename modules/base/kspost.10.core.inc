@@ -89,9 +89,9 @@ cat >/etc/statetab.d/olpc <<EOF
 EOF
 
 # systemd stuff that is not interesting for us
-for i in fedora-loadmoules mdmonitor-takeover systemd-readahead-collect \
+for i in fedora-loadmodules mdmonitor-takeover systemd-readahead-collect \
 		fedora-wait-storage fedora-storage-init fedora-storage-init-late \
-		fedora-autorelabel-mark; do
+		fedora-autorelabel fedora-autorelabel-mark; do
 	ln -s /dev/null /etc/systemd/system/$i.service
 done
 
@@ -214,3 +214,8 @@ ln -s /dev/null /etc/systemd/system/plymouth-start.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-poweroff.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-halt.service
 sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line=rhgb/g' /lib/systemd/system/plymouth-reboot.service
+
+# call olpc-logrotate when log file hits 1mb (#10075)
+sed -i -e 's,/var/log/messages,:omfile:$messages,' \
+	-e '/$messages/ i$outchannel messages,/var/log/messages,1048576,/usr/sbin/olpc-logrotate' \
+	/etc/rsyslog.conf
