@@ -235,3 +235,11 @@ sed -i -e 's,/var/log/messages,:omfile:$messages,' \
 sed -i -e 's/EnableWattsUpPro=true/EnableWattsUpPro=false/' \
 	-e 's/IgnoreLid=false/IgnoreLid=true/' \
 	/etc/UPower/UPower.conf
+
+# work around systemd bug preventing / being safely handled on shutdown (#11766)
+# https://bugs.freedesktop.org/show_bug.cgi?id=49447
+cat >> /lib/systemd/system-shutdown/olpc_shutdown.sh <<EOF
+#!/bin/sh
+/usr/bin/mount -o remount,ro /
+EOF
+chmod a+x /lib/systemd/system-shutdown/olpc_shutdown.sh
