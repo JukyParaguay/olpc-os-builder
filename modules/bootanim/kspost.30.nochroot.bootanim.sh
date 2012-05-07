@@ -3,12 +3,13 @@
 
 . $OOB__shlib
 
-cache=$cachedir/bootanim
+custom_image=$(read_config bootanim custom_image)
+theme=$(read_config bootanim theme)
 
-STATIC_IMAGES="frame00.565 ul_warning.565"
-FILES="$STATIC_IMAGES deltas"
+if [ -n "$custom_image" ]; then
+	echo "cp $custom_image \$INSTALL_ROOT/usr/share/plymouth/themes/olpc/custom.png"
+fi
 
-for f in $FILES; do
-	echo "cp $cache/$f \$INSTALL_ROOT/usr/share/boot-anim/"
-done
-echo 'chmod 644 $INSTALL_ROOT/usr/share/boot-anim/*'
+if [ -n "$theme" ]; then
+	echo "/usr/sbin/plymouth-set-default-theme $theme"
+fi

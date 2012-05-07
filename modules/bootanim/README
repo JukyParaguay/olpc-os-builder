@@ -1,28 +1,28 @@
-This module replaces the default OLPC boot animation images with your own.
+This module allows customization of the OLPC boot animation.
+There are two modes of customization available.
 
-To use...
+Firstly, you can add your own PNG image to the boot animation display. It
+will be displayed at the bottom of the screen, center-aligned. Simply specify
+the path to the file in the following manner:
 
- - Install netpbm-progs
+[bootanim]
+custom_image=/path/to/custom/image
 
- - Install the appropriate version of olpc-bootanim-tools from
-   http://xs-dev.laptop.org/~dsd/repos/
 
- - Download the relevant olpc-bootanim tarball from
-   http://dev.laptop.org/pub/source/olpc-bootanim/
-   -- extract the images from the "images" subdirectory
 
- - Prepare an images directory with your customized images -- the relevant
-   files are the frame*.png files and ul_warning.png . You must include them
-   all in your custom images directory.
+Alternatively, if you wish to perform deeper customizations, you can include
+your own plymouth theme and use it instead of the OLPC default. Plymouth is the
+platform which the boot animation is built upon. It allows creation of boot
+themes through a simple scripting language.
+See the Plymouth theming guide (http://brej.org/blog/?p=158) for how to get
+started.
 
- - Add a section to your ini file:
+If going down this route, you will first need to get your theme included
+in the build image. You could package it in RPM format and use the
+custom_packages module to include it.
 
-    [bootanim]
-    imgdir=/path/to/your/images-directory
+Then, simply specify the name of the theme in the configuration of this
+module:
 
-   for example, if it is a 'bootanim' directory next to your
-   ini file, use
-
-    [bootanim]
-    imgdir=%(oob_config_dir)s/bootanim
-
+[bootanim]
+theme=mytheme
