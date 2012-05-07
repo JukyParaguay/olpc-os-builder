@@ -15,12 +15,16 @@ for line in $(env); do
 
 	install_sugar_bundle $cache/$(basename "$aurl")
 done
-IFS=$oIFS
 
-actpath=$(read_config sugar_activities_extra local_dir)
-if [ -n "$actpath" -a -d "$actpath" ]; then
+for line in $(env); do
+	[[ "${line:0:38}" == "CFG_sugar_activities_extra__local_dir=" || "${line:0:38}" == "CFG_sugar_activities_extra__local_dir_" ]] || continue
+	actpath=${line#*=}
+	[ -n "$actpath" -a -d "$actpath" ] || continue
+
+	IFS=$oIFS
 	for i in "$actpath"/*; do
 		install_sugar_bundle $i
 	done
-fi
-
+	IFS=$'\n'
+done
+IFS=$oIFS

@@ -1,9 +1,11 @@
 This module installs sugar activities (.xo) and content bundles (.xol) from
-a local directory. You must configure this directory.
+zero or more local directories. You must configure these directories with
+uniquely named options as follows:
 
 Example:
 [sugar_activities_extra]
-local_dir=/path/to/my/activity/collection
+local_dir_1=/path/to/my/activity/collection
+local_dir_2=/path/to/another/activity/collection
 
 
 It can install activities from remote URLs too, with uniquely named options
@@ -12,4 +14,3 @@ beginning with "url_", e.g.:
 [sugar_activities_extra]
 url_1=http://foo.com/MyActivity-1.xo
 url_2=http://foo.com/MyContent-3.xol
-
