@@ -236,6 +236,11 @@ sed -i -e 's/EnableWattsUpPro=true/EnableWattsUpPro=false/' \
 	-e 's/IgnoreLid=false/IgnoreLid=true/' \
 	/etc/UPower/UPower.conf
 
+# Tracker has snuck in and is autostarted by default.
+# I don't think we want this.
+# https://bugzilla.redhat.com/show_bug.cgi?id=821952
+rm -f /etc/xdg/autostart/tracker*.desktop 2>/dev/null
+
 # work around systemd bug preventing / being safely handled on shutdown (#11766)
 # https://bugs.freedesktop.org/show_bug.cgi?id=49447
 cat >> /lib/systemd/system-shutdown/olpc_shutdown.sh <<EOF
