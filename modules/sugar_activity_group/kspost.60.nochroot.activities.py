@@ -9,6 +9,7 @@ import os.path
 import urllib
 import urllib2
 import urlparse
+import time
 
 from bitfrost.update import microformat
 
@@ -51,7 +52,24 @@ if install_activities:
         for name, info in results.items():
             (version, url) = microformat.only_best_update(info)
             print >>sys.stderr, "Examining %s v%s: %s" % (name, version, url)
-            fd = urllib2.urlopen(url)
+
+            fd = None
+            for attempts in range(5):
+                if attempts > 0:
+                    print >>sys.stderr, 'Retrying.'
+                    time.sleep(1)
+                try:
+                    fd = urllib2.urlopen(url)
+                    break
+                except urllib2.HTTPError, e:
+                    print >>sys.stderr, 'HTTP error: ', e.code
+                except urllib2.URLError, e:
+                    print >>sys.stderr, 'Network or server error: ', e.reason
+
+            if not fd:
+                print >>sys.stderr, 'Could not reach ', url
+                sys.exit(1)
+
             headers = fd.info()
             if not 'Content-length' in headers:
                 raise Exception("No content length for %s" % url)
