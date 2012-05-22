@@ -1,0 +1,38 @@
+This module is EXPERIMENTAL and usage may change.
+
+This module allows you auto-start an activity or other program in the
+first Sugar startup -- before the user enters a name and picks icon colors.
+
+By default it will use the Welcome activity -- you MUST have it installed
+for this to work.
+
+It can also
+
+ - Customize the images displayed by the welcome activity.
+
+ - Start a _different_ activity or program.
+
+Take care - this module will also let you break the Welcome activity.
+
+Basic configuration -- just put an empty section(ensure you
+are including the Welcome activity!):
+
+  [sugar_welcome_activity]
+  # nothing here, magic defaults
+
+Advanced configurations:
+
+  Changing welcome images
+
+   [sugar_welcome_activity]
+   images_path=/home/myuser/welcome-images
+
+  Using a different activity
+
+   [sugar_welcome_activity]
+   welcome_screen_cmd=python /home/olpc/Activities/MyCustomWelcome.activity/activity.py
+
+  Using a different program
+
+   [sugar_welcome_activity]
+   welcome_screen_cmd=/usr/bin/someprogram --option parameter
