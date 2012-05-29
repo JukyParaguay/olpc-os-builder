@@ -15,10 +15,10 @@ You can request such permission on the Adobe website.
 While Flash is available as a standard Fedora RPM distributed by Adobe, it
 breaks the rules of packaging and conditionally installs files based on the
 package set present on the system at time of installation -- it only installs
-the Mozilla plugin if Mozilla is installed prior to the installation of Flash.
+the plugin if the web browser is installed prior to the installation of Flash.
 
 For this reason, if you simply add the Flash package as an extra package in
-the build, it is possible (and likely?) to be installed before Mozilla,
+the build, it is possible (and likely?) to be installed before the browser,
 meaning that Flash doesn't actually work in your resultant image, even
 though the RPM was included.
 

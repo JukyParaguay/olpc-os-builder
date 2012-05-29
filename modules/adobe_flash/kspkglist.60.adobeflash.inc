@@ -2,3 +2,4 @@
 -gnash-plugin
 
 flash-plugin
+nspluginwrapper
