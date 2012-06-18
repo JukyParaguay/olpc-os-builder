@@ -18,7 +18,6 @@ notification-daemon
 
 # internet
 epiphany
-empathy
 
 # office
 abiword
