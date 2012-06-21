@@ -251,3 +251,8 @@ cat >> /lib/systemd/system-shutdown/olpc_shutdown.sh <<EOF
 /usr/bin/mount -o remount,ro /
 EOF
 chmod a+x /lib/systemd/system-shutdown/olpc_shutdown.sh
+
+# wtmp updating is racy on shutdown (#11952)
+# Disable it, it's not interesting for us
+rm -f /var/log/wtmp
+ln -s /dev/null /etc/systemd/system/systemd-update-utmp-shutdown.service
