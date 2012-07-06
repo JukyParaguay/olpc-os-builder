@@ -71,8 +71,9 @@ sed -i -e '/\t\/tmp/d' /etc/rwtab
 sed -i -e '/\t\/var\/tmp/d' /etc/rwtab
 sed -i -e '/\t\/var\/log/d' /etc/rwtab
 
-# remove random-seed from rwtab because we put it in statetab below
+# remove entries from rwtab that we put it in statetab below
 sed -i -e '/\t\/var\/lib\/random-seed/d' /etc/rwtab
+sed -i -e '/\t\/var\/lib\/dbus/d' /etc/rwtab
 
 # ensure temporary state directory doesn't get too fat (#9636)
 sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/sysconfig/readonly-root
