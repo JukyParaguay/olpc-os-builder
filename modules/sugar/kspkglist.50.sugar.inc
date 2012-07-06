@@ -30,6 +30,7 @@ python-cjson
 
 # Browse
 gnash-plugin
+totem-mozplugin
 
 # Terminal
 vte
