@@ -79,11 +79,5 @@ EOF
 
 chown -R olpc:olpc /home/olpc/.scim
 
-# remove gstreamer pulse element so that totem doesn't try to use it (#10158)
-[ -e /usr/lib/gstreamer-0.10/libgstpulse.so ] && rm /usr/lib/gstreamer-0.10/libgstpulse.so
-
-# if totem is installed, set default volume to 100% (#10158)
-gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --dir-exists /apps/totem && gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type int --set /apps/totem/volume 100
-
 exit 0
 

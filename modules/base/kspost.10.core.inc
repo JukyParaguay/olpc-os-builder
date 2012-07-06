@@ -244,14 +244,6 @@ sed -i -e 's/EnableWattsUpPro=true/EnableWattsUpPro=false/' \
 # https://bugzilla.redhat.com/show_bug.cgi?id=821952
 rm -f /etc/xdg/autostart/tracker*.desktop 2>/dev/null
 
-# work around systemd bug preventing / being safely handled on shutdown (#11766)
-# https://bugs.freedesktop.org/show_bug.cgi?id=49447
-cat >> /lib/systemd/system-shutdown/olpc_shutdown.sh <<EOF
-#!/bin/sh
-/usr/bin/mount -o remount,ro /
-EOF
-chmod a+x /lib/systemd/system-shutdown/olpc_shutdown.sh
-
 # wtmp updating is racy on shutdown (#11952)
 # Disable it, it's not interesting for us
 rm -f /var/log/wtmp
