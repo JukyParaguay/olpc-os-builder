@@ -199,9 +199,8 @@ find / -xdev -type f -perm 000 -exec chmod 400 {} +
 # source code as of time of writing) are not utilised.
 find /var/lib/yum/yumdb -type f -name 'from_repo_revision' -delete -o -name 'from_repo_timestamp' -delete
 
-# enable sysrq by default during development cycle
-# possibly useful for debugging phantom hangs
-sed -i -e 's/kernel.sysrq = 0/kernel.sysrq = 1/' /etc/sysctl.conf
+# enable sysrq by default, possibly useful for debugging phantom hangs
+echo "kernel.sysrq = 1" > /usr/lib/sysctl.d/10-olpc.conf
 
 # disable NetworkManager's rh-ifcfg plugin (#9789)
 # this ensures that network configs are stored in
