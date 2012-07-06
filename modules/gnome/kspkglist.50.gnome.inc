@@ -36,6 +36,7 @@ audacity
 file-roller
 gedit
 gnash-plugin
-NetworkManager-gnome
+network-manager-applet
+nm-connection-editor
 xdg-user-dirs-gtk
 
