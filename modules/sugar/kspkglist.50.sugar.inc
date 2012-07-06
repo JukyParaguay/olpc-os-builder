@@ -23,7 +23,6 @@ squeak-vm
 
 # Browse
 gnash-plugin
-totem-mozplugin
 
 # Terminal
 vte

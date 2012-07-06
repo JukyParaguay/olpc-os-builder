@@ -31,8 +31,6 @@ gimp
 
 # audio & video
 audacity
-totem
-totem-mozplugin
 
 # more desktop stuff
 file-roller
