@@ -1,9 +1,15 @@
 This module allows you to specify a comma-separated list of packages to add
-to the build, from the repositories already configured (usually through the
-repos module).
+or remove from the build, from the repositories already configured (usually
+through the repos module).
+
+Options must be named "add_packages" or "del_packages", or you may also
+use option names prefixed with "add_packages_" and "del_packages_".
+
 
 Example:
 
 [custom_packages]
-add_packages=tomboy,gnucash,pidgin
+add_packages=tomboy,gnucash
+add_packages_extras=pidgin
+del_packages=totem
 
