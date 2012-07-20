@@ -54,7 +54,31 @@ release was made.
 
 
 Usage:
-	olpc-os-builder <path to build config> [path to build config...]
+	olpc-os-builder [options] <path to build config> [path to build config...]
+
+
+Offline use:
+
+olpc-os-builder naturally involves a fair amount of downloading in its work.
+These downloads are cached, meaning that while the first run will do a lot
+of downloading, subsequent runs will reuse the locally cached content.
+
+However, those subsequent runs will still go online in order to check that
+cached content is up-to-date. This can be time consuming, especially
+on slow connections.
+
+If you want olpc-os-builder to trust its local caches, and not even go
+online to check that they are current, you can provide the --cache-only
+command-line option.
+
+For obvious reasons, cache-only mode requires you to have previously run
+the same build configuration in "normal" mode beforehand (i.e. without
+--cache-only specified), so that caches are populated.
+
+Be aware that less cache validation is performed during --cache-only runs.
+This means that corrupt caches or truncated files could be treated as good
+in cache-only mode, whereas such problems are generally detected and
+corrected when connectivity is used.
 
 
 Configuration:

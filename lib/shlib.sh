@@ -7,6 +7,7 @@ libdir=$OOB__libdir
 bindir=$OOB__bindir
 builddir=$OOB__builddir
 cachedir=$OOB__cachedir
+cacheonly=$OOB__cacheonly
 intermediatesdir=$OOB__intermediatesdir
 outputdir=$OOB__outputdir
 statedir=$OOB__statedir
@@ -78,4 +79,3 @@ install_sugar_bundle() {
 	mkdir -p "$intermediatesdir/shared/sugar-bundles"
 	ln_or_cp "$1" "$intermediatesdir/shared/sugar-bundles"
 }
-

@@ -71,6 +71,9 @@ class Stage(object):
 
         env['oob_config_dir'] = os.path.dirname(self.osb.build_configs[0])
 
+        if self.osb.cacheonly:
+            env['OOB__cacheonly'] = 'True'
+
         envpath = env['PATH'].split(':')
         for dir in ('/sbin', '/usr/sbin'):
             if envpath.count(dir) == 0:
@@ -278,6 +281,9 @@ class OsBuilder(object):
         self.statedir = os.path.join(self.builddir, 'state')
         self.fsmount = os.path.join(self.builddir, 'mnt-fs')
 
+        # gets set in build()
+        self.cacheonly = False
+
         # load config to find module list
         # and set interpolation default for oob_config_dir
         self.cfg = SafeConfigParser({'oob_config_dir':
@@ -363,12 +369,16 @@ class OsBuilder(object):
         # cleanup stage not listed here as its a bit of a special case
     )
 
-    def build(self, clean_output=True, clean_intermediates=True):
+    def build(self, clean_output=True, clean_intermediates=True, cacheonly=False):
         # cleanup from previous runs
         if clean_intermediates and os.path.exists(self.intermediatesdir):
             shutil.rmtree(self.intermediatesdir)
         if clean_output and os.path.exists(self.outputdir):
             shutil.rmtree(self.outputdir)
+
+        self.cacheonly = cacheonly
+        if cacheonly and not os.path.exists(self.cachedir):
+            raise OsBuilderException("Missing cache, cannot use --cache-only")
 
         for dir in (self.builddir, self.cachedir, self.intermediatesdir,
                     self.outputdir, self.statedir, self.fsmount):
@@ -407,6 +417,10 @@ def main():
     op.add_option('--no-clean-intermediates', dest="clean_intermediates",
                   action="store_false", default=True,
                   help="Don't clean intermediates directory on startup or exit")
+    op.add_option('--cache-only', dest="cacheonly",
+                  action="store_true", default=False,
+                  help="Run entirely from cache")
+
     (options, args) = op.parse_args()
 
     if len(args) < 1:
@@ -415,7 +429,8 @@ def main():
     try:
         osb = OsBuilder(args)
         osb.build(clean_output=options.clean_output,
-                  clean_intermediates=options.clean_intermediates)
+                  clean_intermediates=options.clean_intermediates,
+                  cacheonly=options.cacheonly)
     except OsBuilderException, e:
         print >>sys.stderr, "ERROR:", e
         sys.exit(1)

@@ -17,6 +17,8 @@ fsmount = os.environ['OOB__fsmount']
 
 METADATA_NS = "http://linux.duke.edu/metadata/common"
 
+cacheonly = 'OOB__cacheonly' in os.environ
+
 def read_config(module, option):
     vname = "CFG_%s__%s" % (module, option)
     if not vname in os.environ:
