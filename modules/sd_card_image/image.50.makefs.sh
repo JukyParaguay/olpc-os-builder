@@ -128,20 +128,13 @@ EOF
 }
 
 
-found_val=0
-oIFS=$IFS
-IFS=$'\n'
-for line in $(env); do
-	[[ "${line:0:24}" == "CFG_sd_card_image__size_" ]] || continue
-	val=${line#*=}
+find_option_values sizes sd_card_image size
+for val in "${sizes[@]}"; do
 	disk_size=${val%,*}
 	ext=
 	expr index "$vals" ',' &>/dev/null && ext=${vals#*,}
-
 	make_image $disk_size $ext
-	found_val=1
 done
-IFS=$oIFS
 
 # If no sizes were specified, create an image with automatic size.
-[ "$found_val" = "1" ] || make_image auto
+[[ ${#sizes[@]} == 0 ]] && make_image auto

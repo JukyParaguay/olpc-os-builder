@@ -3,24 +3,22 @@
 
 . $OOB__shlib
 
-while IFS= read -r -d '' line; do
-	[[ "${line:0:34}" == "CFG_custom_packages__add_packages_" || "${line:0:34}" == "CFG_custom_packages__add_packages=" ]] || continue
-	pkgs=${line#*=}
+find_option_values pkgs_add custom_packages add_packages
+for pkgs in "${pkgs_add[@]}"; do
 	oIFS=$IFS
 	IFS=$'\n\t, '
 	for pkg in $pkgs; do
 		echo "$pkg"
 	done
 	IFS=$oIFS
-done < <(env --null)
+done
 
-while IFS= read -r -d '' line; do
-	[[ "${line:0:34}" == "CFG_custom_packages__del_packages_" || "${line:0:34}" == "CFG_custom_packages__del_packages=" ]] || continue
-	pkgs=${line#*=}
+find_option_values pkgs_del custom_packages del_packages
+for pkgs in "${pkgs_del[@]}"; do
 	oIFS=$IFS
 	IFS=$'\n\t, '
 	for pkg in $pkgs; do
 		echo "-$pkg"
 	done
 	IFS=$oIFS
-done < <(env --null)
+done

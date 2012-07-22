@@ -37,19 +37,13 @@ function make_zd() {
 
 }
 
-found=0
-oIFS=$IFS
-IFS=$'\n'
-for line in $(env); do
-	[[ "${line:0:24}" == "CFG_sd_card_image__size_" ]] || continue
-	vals=${line#*=}
+find_option_values sizes sd_card_image size
+for vals in "${sizes[@]}"; do
 	disk_size=${vals%,*}
 	ext=
 	expr index "$vals" ',' &>/dev/null && ext=${vals#*,}
 	make_zd $ext
-	found=1
 done
-IFS=$oIFS
 
 # When no size options were specified, we make a default image.
-[ "$found" = "1" ] || make_zd
+[[ ${#sizes[@]} == 0 ]] && make_zd

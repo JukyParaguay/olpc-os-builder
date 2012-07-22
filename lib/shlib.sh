@@ -17,6 +17,20 @@ read_config() {
 	echo ${!vname}
 }
 
+find_option_values() {
+	local out=$1
+	local module=$2
+	local option=$3
+	local prefix=CFG_${module}__${option}
+
+	while IFS= read -r -d '' line; do
+		local name=${line%%=*}
+		local value=${line#*=}
+		[[ $name == $prefix || $name == ${prefix}_* ]] || continue
+		eval "$out+=('$value')"
+	done < <(env --null)
+}
+
 read_buildnr() {
 	local buildnr_path=$intermediatesdir/buildnr
 	if [[ -e $buildnr_path ]]; then

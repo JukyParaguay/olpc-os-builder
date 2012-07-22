@@ -3,14 +3,9 @@
 
 . $OOB__shlib
 
-oIFS=$IFS
-IFS=$'\n'
-for line in $(env); do
-	[[ "${line:0:34}" == "CFG_custom_scripts__custom_script_" ]] || continue
-	script=${line#*=}
+find_option_values scripts custom_scripts custom_script
+for script in "${scripts[@]}"; do
 	echo "echo 'Executing custom script $script'"
 	echo "export oob_config_dir=\"$oob_config_dir\""
 	echo "[ -x \"$script\" ] && \"$script\" || bash \"$script\""
 done
-IFS=$oIFS
-
