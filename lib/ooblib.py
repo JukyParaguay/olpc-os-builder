@@ -2,7 +2,9 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 import os
+import sys
 import shutil
+import hashlib
 import urllib2
 from xml.etree.ElementTree import ElementTree
 
@@ -101,7 +103,7 @@ def get_repomd(baseurl):
 
     url = "%s/repodata/repomd.xml" % baseurl
     try:
-        fd = urllib2.urlopen(url)
+        fd = cachedurlopen(url)
         et = ElementTree(file=fd)
         root = et.getroot()
         # iterate over data tags
@@ -109,7 +111,7 @@ def get_repomd(baseurl):
             type = data.attrib['type']
             location = data.find('{http://linux.duke.edu/metadata/repo}location')
             md[type] = location.attrib['href']
-    except:
+    except urllib2.HTTPError:
         pass
     return md
 
@@ -130,3 +132,31 @@ def install_sugar_bundle(path):
         os.makedirs(bundlesdir)
     ln_or_cp(path, bundlesdir)
 
+""" A wrapper around urllib2.urlopen() that stores responses in
+    cache. When cacheonly=True, it works offline, never hitting
+    the network.
+"""
+def cachedurlopen(url):
+    class CachedURLException(Exception):
+        def __init__(self, value):
+            self.value=value
+
+    cachedfpath = os.path.join(cachedir, 'simplecache', hashlib.sha1(url).hexdigest())
+    if cacheonly:
+        if os.path.exists(cachedfpath):
+            return open(cachedfpath)
+        else:
+            print >>sys.stderr, "ERROR: No cached file for %s" % url
+            raise CachedURLException("No cached file for %s" % url)
+
+    ourcachedir=os.path.join(cachedir, 'simplecache')
+    if not os.path.exists(ourcachedir):
+        os.makedirs(ourcachedir)
+
+    urlfd = urllib2.urlopen(url)
+    fd = open(cachedfpath, 'w')
+    fd.write(urlfd.read())
+    urlfd.close()
+    fd.close()
+
+    return open(cachedfpath, 'r')
