@@ -3,7 +3,6 @@
 
 import os
 import sys
-import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
 
@@ -25,7 +24,7 @@ for var in os.environ:
 for for_excludes, name, url in addrepos:
     if not for_excludes:
         continue
-    fd = urllib2.urlopen(url + "/repodata/primary.xml.gz")
+    fd = ooblib.cachedurlopen(url + "/repodata/primary.xml.gz")
     data = fd.read()
     fd.close()
     fd = GzipFile(fileobj=StringIO(data))

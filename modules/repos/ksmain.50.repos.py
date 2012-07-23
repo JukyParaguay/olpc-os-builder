@@ -4,7 +4,6 @@
 import os
 import sys
 import ooblib
-import urllib2
 from gzip import GzipFile
 from StringIO import StringIO
 
@@ -23,7 +22,7 @@ def add_to_excludes(baseurl, addexcludes):
     url = baseurl + '/' + repomd['primary']
 
     print >>sys.stderr, "Reading package information from", url
-    fd = urllib2.urlopen(url)
+    fd = ooblib.cachedurlopen(url)
     data = fd.read()
     fd.close()
     fd = GzipFile(fileobj=StringIO(data))
