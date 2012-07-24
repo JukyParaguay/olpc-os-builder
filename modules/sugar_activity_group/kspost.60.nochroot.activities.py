@@ -62,64 +62,68 @@ if install_activities:
             print >>sys.stderr, "Found activity group:", name
             pickle.dump([name, desc, results], open(grpurlcache, 'w'))
 
-        for name, info in results.items():
-            (version, url) = microformat.only_best_update(info)
-            print >>sys.stderr, "Examining %s v%s: %s" % (name, version, url)
+        if results:
+            break #process only the first URL (or cached file)
 
-            if ooblib.cacheonly:
-                path = urlparse.urlsplit(url)[2]
-                path = os.path.basename(path)
+    if not results:
+        print >>sys.stderr, "No Activity Group URL found"
+        sys.exit(1)
 
-                localpath = os.path.join(cache, path)
-                if os.path.exists(localpath):
-                    print >>sys.stderr, "Using: ", localpath
-                    ooblib.install_sugar_bundle(localpath)
-                    continue
-                else:
-                    print >>sys.stderr, "Cannot find cache for ", url
-                    sys.exit(1)
+    for name, info in results.items():
+        (version, url) = microformat.only_best_update(info)
+        print >>sys.stderr, "Examining %s v%s: %s" % (name, version, url)
 
-            fd = None
-            for attempts in range(5):
-                if attempts > 0:
-                    print >>sys.stderr, 'Retrying.'
-                    time.sleep(1)
-                try:
-                    fd = urllib2.urlopen(url)
-                    break
-                except urllib2.HTTPError, e:
-                    print >>sys.stderr, 'HTTP error: ', e.code
-                except urllib2.URLError, e:
-                    print >>sys.stderr, 'Network or server error: ', e.reason
-
-            if not fd:
-                print >>sys.stderr, 'Could not reach ', url
-                sys.exit(1)
-
-            headers = fd.info()
-            if not 'Content-length' in headers:
-                raise Exception("No content length for %s" % url)
-            length = int(headers['Content-length'])
-            path = urlparse.urlsplit(fd.geturl())[2]
+        if ooblib.cacheonly:
+            path = urlparse.urlsplit(url)[2]
             path = os.path.basename(path)
 
             localpath = os.path.join(cache, path)
             if os.path.exists(localpath):
-                localsize = os.stat(localpath).st_size
-                if localsize == length:
-                    print >>sys.stderr, "Not downloading, already in cache."
-                    ooblib.install_sugar_bundle(localpath)
-                    continue
+                print >>sys.stderr, "Using: ", localpath
+                ooblib.install_sugar_bundle(localpath)
+                continue
+            else:
+                print >>sys.stderr, "Cannot find cache for ", url
+                sys.exit(1)
 
-            print >>sys.stderr, "Downloading (%dkB)..." % (length/1024)
-            localfd = open(localpath, 'w')
-            localfd.write(fd.read())
-            fd.close()
-            localfd.close()
-            ooblib.install_sugar_bundle(localpath)
+        fd = None
+        for attempts in range(5):
+            if attempts > 0:
+                print >>sys.stderr, 'Retrying.'
+                time.sleep(1)
+            try:
+                fd = urllib2.urlopen(url)
+                break
+            except urllib2.HTTPError, e:
+                print >>sys.stderr, 'HTTP error: ', e.code
+            except urllib2.URLError, e:
+                print >>sys.stderr, 'Network or server error: ', e.reason
 
-        # only process the first working URL
-        break
+        if not fd:
+            print >>sys.stderr, 'Could not reach ', url
+            sys.exit(1)
+
+        headers = fd.info()
+        if not 'Content-length' in headers:
+            raise Exception("No content length for %s" % url)
+        length = int(headers['Content-length'])
+        path = urlparse.urlsplit(fd.geturl())[2]
+        path = os.path.basename(path)
+
+        localpath = os.path.join(cache, path)
+        if os.path.exists(localpath):
+            localsize = os.stat(localpath).st_size
+            if localsize == length:
+                print >>sys.stderr, "Not downloading, already in cache."
+                ooblib.install_sugar_bundle(localpath)
+                continue
+
+        print >>sys.stderr, "Downloading (%dkB)..." % (length/1024)
+        localfd = open(localpath, 'w')
+        localfd.write(fd.read())
+        fd.close()
+        localfd.close()
+        ooblib.install_sugar_bundle(localpath)
 
 if systemwide:
     print "mkdir -p $INSTALL_ROOT/etc/olpc-update"
