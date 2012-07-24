@@ -16,15 +16,28 @@ for id in $activities; do
 	[ -n "$sugarver" ] && qurl="${qurl}&appVersion=${sugarver}"
 	[ "$experimental" = "1" ] && qurl="${qurl}&experimental=1"
 
-	echo "Examining $qurl ..." >&2
-	aurl=$(wget --inet4-only -q -O- "$qurl" | grep updateLink | sed -e 's/[[:space:]]*<[^>]*>//g')
-	if [ -z "$aurl" ]; then
-		echo "ERROR: Could not find download URL for $id" >&2
-		exit 1
+	qurlcache="${cache}/${id}"
+	[ -n "$sugarver" ] && qurlcache="${qurlcache}-s${sugarver}"
+	[ "$experimental" = "1" ] && qurlcache="${qurlcache}-experimental"
+	qurlcache="${qurlcache}.url"
+
+	if [ -n "$OOB__cacheonly" ]; then
+		echo "Using cache for ${id}" >&2
+		aurl=$(<$qurlcache)
+	else
+		echo "Examining $qurl ..." >&2
+		aurl=$(wget --inet4-only -q -O- "$qurl" | grep updateLink | sed -e 's/[[:space:]]*<[^>]*>//g')
+		if [ -z "$aurl" ]; then
+			echo "ERROR: Could not find download URL for $id" >&2
+			exit 1
+		fi
+		echo "${aurl}" > "${qurlcache}"
 	fi
 
-	echo "Downloading from $aurl ..." >&2
-	wget --no-verbose --inet4-only -P $cache -N "$aurl"
+	if [ -z "$OOB__cacheonly" ]; then
+		echo "Downloading from $aurl ..." >&2
+		wget --no-verbose --inet4-only -P $cache -N "$aurl"
+	fi
 	install_sugar_bundle $cache/$(basename "$aurl")
 done
 IFS=$oIFS
