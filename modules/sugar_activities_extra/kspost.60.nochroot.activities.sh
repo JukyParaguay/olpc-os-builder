@@ -8,7 +8,8 @@ cache=$cachedir/activities
 find_option_values urls sugar_activities_extra url
 for aurl in "${urls[@]}"; do
 	echo "Downloading from $aurl ..." >&2
-	wget --no-verbose --inet4-only -P $cache -N "$aurl"
+	[ -z "${OOB__cacheonly}" ] && \
+		wget --no-verbose --inet4-only -P $cache -N "$aurl"
 	install_sugar_bundle $cache/$(basename "$aurl")
 done
 
