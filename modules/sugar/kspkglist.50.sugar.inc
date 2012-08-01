@@ -41,7 +41,7 @@ pybox2d
 gstreamer-plugins-espeak
 
 # using a non-upstream updater temporarily (#10641)
-sugar-update-control
+# sugar-update-control FIXME f18
 
 # explicitly specify dependencies on GNOME's implementation of certain
 # components, otherwise the KDE ones will be brought in by default
