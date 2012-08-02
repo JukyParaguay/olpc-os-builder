@@ -52,7 +52,7 @@ SYSFONT=sun12x22
 __EOF__
 
 # OLPC custom VT layout and serial console setup (#9517, #10354)
-sed -i -e 's:/sbin/agetty.*:/sbin/mingetty --loginpause --autologin root --noclear %I:' \
+sed -i -e 's:/sbin/agetty.*:/sbin/agetty --login-pause --autologin root --noclear %I:' \
 	/lib/systemd/system/getty\@.service
 sed -i -e 's:/sbin/agetty.*:/sbin/agetty -L -l /bin/bash -w -n %I 115200 vt100:' \
 	/lib/systemd/system/serial-getty\@.service
