@@ -207,7 +207,7 @@ echo "kernel.sysrq = 1" > /usr/lib/sysctl.d/10-olpc.conf
 # /etc/NetworkManager/system-connections, which is a path that we can safely
 # put in statetab. (the rh-ifcfg path in /etc/sysconfig mixes code with data
 # and is hence not appropriate to retain over upgrades)
-sed -i -e '/^plugins=ifcfg-rh$/d' /etc/NetworkManager/NetworkManager.conf
+sed -i -e 's/^plugins=ifcfg-rh$/plugins=keyfile/g' /etc/NetworkManager/NetworkManager.conf
 
 # set default plymouth theme
 # we do this with plymouthd.defaults so that plymouth-set-default-theme
