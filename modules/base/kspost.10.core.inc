@@ -10,7 +10,7 @@ mkdir /bootpart
 
 # create olpc user
 # Provide access to ttyUSB nodes (#8434)
-/usr/sbin/useradd -m -c "olpc user" -G audio,wheel,uucp,video,dialout olpc
+/usr/sbin/useradd -m -c "olpc user" -G audio,wheel,uucp,video,dialout,lock olpc
 /usr/bin/passwd -d olpc
 
 # make sure to own home directory and relax permissions a little
