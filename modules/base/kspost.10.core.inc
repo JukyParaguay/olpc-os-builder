@@ -222,9 +222,9 @@ ln -s /dev/null /etc/systemd/system/plymouth-start.service
 # apply some special settings in the other plymouth service files until
 # we have a better solution.
 # https://bugs.freedesktop.org/show_bug.cgi?id=22239
-sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line="rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-poweroff.service
-sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line="rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-halt.service
-sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown --kernel-command-line="rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-reboot.service
+sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown "--kernel-command-line=rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-poweroff.service
+sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown "--kernel-command-line=rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-halt.service
+sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown "--kernel-command-line=rhgb plymouth.ignore-serial-consoles"/g' /lib/systemd/system/plymouth-reboot.service
 
 # remove the boot-duration file since it gets changed during boot (#11862)
 rm -f /var/lib/plymouth/boot-duration
