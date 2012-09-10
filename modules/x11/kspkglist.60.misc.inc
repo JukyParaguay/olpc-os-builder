@@ -1,8 +1,8 @@
 #fonts
 sil-abyssinica-fonts
-dejavu-lgc-sans-fonts
-dejavu-lgc-sans-mono-fonts
-dejavu-lgc-serif-fonts
+dejavu-sans-fonts
+dejavu-sans-mono-fonts
+dejavu-serif-fonts
 khmeros-base-fonts
 lohit-devanagari-fonts
 nafees-web-naskh-fonts
