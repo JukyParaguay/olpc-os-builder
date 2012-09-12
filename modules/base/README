@@ -43,3 +43,26 @@ Set the default timezone for the build. This can be later overridden by the
 user in the Sugar control panel. The value should be an entry from
 /usr/share/zoneinfo e.g. America/Managua
 
+- default_language (default unset)
+Override the default language used in the build. Normally, the language
+is automatically detected from the manufacturing data of the laptop on first
+boot. Only set this if you know of a good reason that you want to override
+the factory-programmed default.
+
+- default_kbd_model (default unset)
+Override the default XKB keyboard model used in the build. Normally, keyboard
+settings are automatically detected from the manufacturing data of the laptop
+on first boot. Only set this if you know of a good reason that you want to
+override the factory-programmed default.
+
+- default_kbd_layout (default unset)
+Override the default XKB keyboard layout used in the build. Normally, keyboard
+settings are automatically detected from the manufacturing data of the laptop
+on first boot. Only set this if you know of a good reason that you want to
+override the factory-programmed default.
+
+- default_kbd_variant (default unset)
+Override the default XKB keyboard variant used in the build. Normally, keyboard
+settings are automatically detected from the manufacturing data of the laptop
+on first boot. Only set this if you know of a good reason that you want to
+override the factory-programmed default.
