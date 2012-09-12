@@ -11,6 +11,11 @@ to override this behaviour, the school server will not be tried. Useful in
 deployments with good connectivity where antitheft is controlled in a central
 location (as opposed to the specific school).
 
+ignore_signature: by default, the OATS client will expect the server's response to be signed, and it will verify the signature. Set this to 1 to ignore all
+signatures (and also accept messages with no signature). Useful for
+deployments that have not implemented OLPC's security system, but still wish
+to take advantage of other OATS features.
+
 stream: the update stream - this is helpful when deploying different OS images
 that query the same update server.
 
@@ -18,5 +23,6 @@ Example configuration:
 [oats_cfg]
 server=my-oats-server.mydeployment.com
 ignore_xs=1
+ignore_signature=1
 stream=xo15hs
 
