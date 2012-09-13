@@ -14,20 +14,31 @@ mkdir -p $tgt
 
 found=0
 echo "Extracting content for signing..."
-
-copy_out_file() {
-	local name=$1
-	local path="$fsmount"/boot/${1}.zip
-	[ -f "$path"] || return
-	cp $path $tgt
+if [ -e "$fsmount/boot/bootfw.zip" ]; then
+	cp $fsmount/boot/bootfw.zip $tgt
 	found=1
-}
+fi
 
-copy_out bootfw
-copy_out runos
-copy_out runrd
-copy_out actos
-copy_out actrd
+if [ -e "$fsmount/boot/vmlinuz" ]; then
+	cp $fsmount/boot/vmlinuz $tgt/data.img
+	zip -j -n .img $tgt/runos.zip $tgt/data.img
+	rm -f $tgt/data.img
+	found=1
+fi
+
+if [ -e "$fsmount/boot/initrd.img" ]; then
+	cp $fsmount/boot/initrd.img $tgt/data.img
+	zip -j -n .img $tgt/runrd.zip $tgt/data.img
+	rm -f $tgt/data.img
+	found=1
+elif [ -e "$fsmount/boot/olpcrd.img" ]; then
+	cp $fsmount/boot/olpcrd.img $tgt/data.img
+	zip -j -n .img $tgt/runrd.zip $tgt/data.img
+	rm -f $tgt/data.img
+	found=1
+fi
+
 [ "$found" == "1" ] || exit 0
 
 zip -j $outzip $tgt/*
+
