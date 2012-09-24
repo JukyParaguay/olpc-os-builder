@@ -20,6 +20,7 @@ csound-python
 pygame
 python-alsaaudio
 squeak-vm
+python-cjson
 
 # Browse
 gnash-plugin
