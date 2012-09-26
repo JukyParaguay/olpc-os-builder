@@ -1,0 +1,3 @@
+This module applies various build tweaks required for the XO-4 platform.
+If you are building for XO-4, include this module. Do not include it
+otherwise.
