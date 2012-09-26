@@ -1,4 +1,5 @@
 olpc-firmware
+libertas-sd8686-firmware
 
 xorg-x11-drv-chrome
 
