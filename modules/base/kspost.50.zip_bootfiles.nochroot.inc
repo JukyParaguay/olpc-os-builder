@@ -35,9 +35,9 @@ remove_original() {
 	rm -f $name
 }
 
-remove_original vmlinuz
-remove_original actrd.img
-remove_original initrd.img
+#remove_original vmlinuz
+#remove_original actrd.img
+#remove_original initrd.img
 
 # symlink actXX to runXX (or the other way) if any of them are missing
 [ -e $INSTALL_ROOT/boot/actos.zip ] || ln -s runos.zip $INSTALL_ROOT/boot/actos.zip
