@@ -2,4 +2,4 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 . $OOB__shlib
-echo 2 > $intermediatesdir/laptop_model_number
+set_laptop_model_number 2

@@ -14,6 +14,8 @@ outputdir=$OOB__outputdir
 statedir=$OOB__statedir
 fsmount=$OOB__fsmount
 
+LAPTOP_MODEL_NUMBER=$shareddir/laptop_model_number
+
 read_config() {
 	local vname="CFG_$1__$2"
 	echo ${!vname}
@@ -42,11 +44,15 @@ read_buildnr() {
 	fi
 }
 
+set_laptop_model_number()
+{
+	echo $1 > $LAPTOP_MODEL_NUMBER
+}
+
 read_laptop_model_number()
 {
-	local path=$intermediatesdir/laptop_model_number
-	if [[ -e $path ]]; then
-		echo "$(<$path)"
+	if [[ -e $LAPTOP_MODEL_NUMBER ]]; then
+		echo "$(<$LAPTOP_MODEL_NUMBER)"
 	else
 		echo "0"
 	fi
