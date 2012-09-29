@@ -9,6 +9,7 @@ builddir=$OOB__builddir
 cachedir=$OOB__cachedir
 cacheonly=$OOB__cacheonly
 intermediatesdir=$OOB__intermediatesdir
+shareddir=$OOB__shareddir
 outputdir=$OOB__outputdir
 statedir=$OOB__statedir
 fsmount=$OOB__fsmount

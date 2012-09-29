@@ -3,9 +3,7 @@
 
 . $OOB__shlib
 
-# create a "shared" intermediates directory which is also available at
-# /build_shared from inside the image
-mkdir -p $intermediatesdir/shared
+# share the intermediates/shared directory at /build_shared inside the
+# image build environment.
 echo "mkdir -p \$INSTALL_ROOT/build_shared"
-echo "mount --bind $intermediatesdir/shared \$INSTALL_ROOT/build_shared"
-
+echo "mount --bind $shareddir \$INSTALL_ROOT/build_shared"

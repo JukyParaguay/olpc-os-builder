@@ -65,6 +65,7 @@ class Stage(object):
         env['OOB__builddir'] = self.osb.builddir
         env['OOB__cachedir'] = self.osb.cachedir
         env['OOB__intermediatesdir'] = self.osb.intermediatesdir
+        env['OOB__shareddir'] = self.osb.shareddir
         env['OOB__outputdir'] = self.osb.outputdir
         env['OOB__statedir'] = self.osb.statedir
         env['OOB__fsmount'] = self.osb.fsmount
@@ -277,6 +278,7 @@ class OsBuilder(object):
             self.cachedir = os.path.join(self.builddir, 'cache')
 
         self.intermediatesdir = os.path.join(self.builddir, 'intermediates')
+        self.shareddir = os.path.join(self.intermediatesdir, 'shared')
         self.outputdir = os.path.join(self.builddir, 'output')
         self.statedir = os.path.join(self.builddir, 'state')
         self.fsmount = os.path.join(self.builddir, 'mnt-fs')
@@ -381,7 +383,8 @@ class OsBuilder(object):
             raise OsBuilderException("Missing cache, cannot use --cache-only")
 
         for dir in (self.builddir, self.cachedir, self.intermediatesdir,
-                    self.outputdir, self.statedir, self.fsmount):
+                    self.outputdir, self.statedir, self.fsmount,
+                    self.shareddir):
             if not os.path.exists(dir):
                 os.makedirs(dir)
 
