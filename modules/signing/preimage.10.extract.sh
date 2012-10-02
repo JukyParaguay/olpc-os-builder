@@ -4,6 +4,8 @@
 # this must be run before the base module creates versioned fs layout
 
 . $OOB__shlib
+shopt -s nullglob
+
 enabled=$(read_config signing extract)
 [[ "$enabled" == "1" ]] || exit 0
 
@@ -17,10 +19,11 @@ echo "Extracting content for signing..."
 
 copy_out_file() {
 	local name=$1
-	local path="$fsmount"/boot/${1}.zip
-	[ -f "$path"] || return
-	cp $path $tgt
-	found=1
+	for path in "$fsmount"/boot/${name}*.zip; do
+		[ -f "$path" ] || continue
+		cp $path $tgt
+		found=1
+	done
 }
 
 copy_out bootfw

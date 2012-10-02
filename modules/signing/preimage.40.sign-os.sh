@@ -9,8 +9,8 @@ bios_crypto=$(read_config signing bios_crypto_path)
 [ -n "$bios_crypto" -a -d "$bios_crypto" ] || exit 0
 
 sign_os() {
-	local path="$fsmount"/boot/$1.zip
-	[ -f "$path" ] || return
+	local path=$(find ${fsmount}/boot -type f -name "${1}*.zip" -print -quit)
+	[ -z "$path" ] && return
 
 	pushd $bios_crypto/build
 	unzip "$path"

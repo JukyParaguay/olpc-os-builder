@@ -2,6 +2,7 @@
 # Licensed under the terms of the GNU GPL v2 or later; see COPYING for details.
 
 . $OOB__shlib
+shopt -s nullglob
 content=$(read_config signing add_signed_content)
 [ -n "$content" ] || exit 0
 
@@ -11,8 +12,11 @@ signdir=$intermediatesdir/signed-content
 rm -rf $signdir
 mkdir -p $signdir
 unzip $content -d $signdir
-for sfile in bootfw.zip runos.zip runrd.zip actos.zip actrd.zip; do
-	[ -e $signdir/$sfile ] && cp --remove-destination $signdir/$sfile $fsmount/boot/$sfile
+
+pushd $signdir
+for sfile in bootfw*.zip runos*.zip runrd*.zip actos*.zip actrd*.zip; do
+	cp --remove-destination $sfile $fsmount/boot/$sfile
 done
+popd
 
 rm -rf $signdir

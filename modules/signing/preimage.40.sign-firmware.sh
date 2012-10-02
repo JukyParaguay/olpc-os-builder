@@ -8,13 +8,14 @@ wkey=$(read_config signing wkey)
 bios_crypto=$(read_config signing bios_crypto_path)
 [ -n "$bios_crypto" -a -d "$bios_crypto" ] || exit 0
 
-[ -e $fsmount/boot/bootfw.zip ] || exit 0
+bootfw=$(find $fsmount/boot -type f -name 'bootfw*.zip' -print -quit)
+[ -n "$bootfw" ] || exit 0
 
 echo "Signing firmware..."
 
 fwtmp=$intermediatesdir/fw-for-signing
 mkdir -p $fwtmp
-unzip -d $fwtmp $fsmount/boot/bootfw.zip
+unzip -d $fwtmp $bootfw
 mv $fwtmp/data.img $intermediatesdir/fw.rom
 
 outzip=$intermediatesdir/bootfw.zip
@@ -22,5 +23,4 @@ rm -f $outzip
 pushd $bios_crypto/build
 ./sign-fw.sh $wkey $intermediatesdir/fw.rom $outzip
 popd
-mv $outzip $fsmount/boot/
-
+mv $outzip $bootfw
