@@ -70,7 +70,7 @@ def arch_matches(myarch, arch):
     else:
         return False
 
-def add_packages_from_xml(fd, pkglist, myarch=None):
+def add_packages_from_xml(fd, pkglist, myarch):
     et = ElementTree(file=fd)
     root = et.getroot()
     for i in root.getchildren():

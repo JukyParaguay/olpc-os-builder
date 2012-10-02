@@ -141,6 +141,11 @@ fedora_release
     The numeric release number of the Fedora operating system to base
     the OLPC OS build on.  For example, 11 for Fedora 11.
 
+fedora_arch
+
+    The processor architecture to use for Fedora package selection.
+    See http://mirrors.fedoraproject.org/ for the available values.
+
 olpc_version_major
 
     The major version component of the OLPC version tag to include in

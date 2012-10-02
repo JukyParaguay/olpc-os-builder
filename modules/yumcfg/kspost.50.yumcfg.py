@@ -11,6 +11,8 @@ import ooblib
 addrepos = []
 excludes = set()
 
+farch = ooblib.read_config('global', 'fedora_arch').strip()
+
 # read in repos
 for var in os.environ:
     if not var.startswith("CFG_yumcfg__addrepo"):
@@ -28,7 +30,7 @@ for for_excludes, name, url in addrepos:
     data = fd.read()
     fd.close()
     fd = GzipFile(fileobj=StringIO(data))
-    ooblib.add_packages_from_xml(fd, excludes)
+    ooblib.add_packages_from_xml(fd, excludes, farch)
 
 # write shell code to generate yum repo files
 for for_excludes, name, url in addrepos:

@@ -8,19 +8,14 @@ release repository (and perhaps update) or equivalent is enabled.
 
 Everything is done through the configuration.
 
-Firstly, the 'fedora' and 'fedora_arch' options:
+Firstly, the 'fedora' option:
 
 [repos]
-fedora_arch=i386
 fedora=fedora,fedora_updates,fedora_updates_testing
 
 This is a comma-separated list of official Fedora repositories to enable
 for the build. The 4 possible options are fedora, fedora_updates,
 fedora_updates_testing and rawhide.
-
-If using the fedora option, the fedora_arch option must be specified too.
-This specifies the processor architecture to use for Fedora package selection.
-See http://mirrors.fedoraproject.org/ for the available values.
 
 A Fedora mirror is normally automatically selected by yum through Fedora's
 mirrorlist mechanism. If you wish to override the mirror selection choice,
@@ -29,7 +24,6 @@ you can either add the repos as custom repos (see below), or you can use
 
 [repos]
 fedora=fedora,fedora_updates
-fedora_arch=i386
 url_fedora_updates=http://www.mirrorservice.org/sites/download.fedora.redhat.com/pub/fedora/linux/updates/16/i386/
 url_fedora=http://www.mirrorservice.org/sites/download.fedora.redhat.com/pub/fedora/linux/development/16/i386/os/
 
@@ -96,11 +90,11 @@ For example, this is useful to specify that packages in OLPC's "override"
 repos take precedence over the official Fedora repos, even if the Fedora
 repo contains a newer version of a particular package.
 
-If the fedora_arch option was present, the exclude list is generated in a
-manner that takes arch considerations into account. For example,
-if fedora_arch=i386 but there is an ARM package in a repository that
-conributes to the exclude list, the package will *not* be added to the list
-(since it is not suitable for your architecture).
+The exclude list is generated in a manner that takes arch considerations into
+account. For example, if the global fedora_arch setting is 'i386' but there is
+an ARM package in a repository that contributes to the exclude list,
+the package will *not* be added to the list (since it is not suitable for your
+architecture).
 
 The add_excludes_to option value is a comma-separated list of repository
 names where the exclude list should be applied. The names are the same

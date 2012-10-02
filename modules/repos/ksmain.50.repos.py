@@ -11,10 +11,7 @@ excludepkgs = set()
 addexcludes = ooblib.read_config('repos', 'add_excludes_to')
 fedora = ooblib.read_config('repos', 'fedora')
 fver = ooblib.read_config('global', 'fedora_release').strip()
-farch = ooblib.read_config('repos', 'fedora_arch')
-
-if farch:
-    farch = farch.strip()
+farch = ooblib.read_config('global', 'fedora_arch').strip()
 
 def add_to_excludes(baseurl, addexcludes):
     print >>sys.stderr, "Reading repository information for", baseurl
