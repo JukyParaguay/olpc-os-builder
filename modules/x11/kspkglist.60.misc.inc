@@ -18,6 +18,6 @@ scim-pinyin
 
 # sound backend
 alsa-utils
-gstreamer-plugins-good
-
-
+gstreamer1-plugins-good
+# Needed for Jukebox
+gstreamer1-plugins-good-extras
