@@ -5,10 +5,12 @@ sugar-toolkit
 sugar-toolkit-gtk3
 
 # sugar control panels
-# The first pulls all in, the commented out ones will remove the ones we don't shit in final
-sugar-cp-all
-#-sugar-cp-keyboard
-#-sugar-cp-updater
+sugar-cp-datetime
+sugar-cp-frame
+sugar-cp-language
+sugar-cp-modemconfiguration
+sugar-cp-network
+sugar-cp-power
 
 # additional sugar packages
 libxml2-python
