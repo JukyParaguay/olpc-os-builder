@@ -14,7 +14,6 @@ sugar-cp-power
 
 # additional sugar packages
 libxml2-python
-pyabiword
 webkitgtk3
 espeak
 etoys
