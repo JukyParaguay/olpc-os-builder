@@ -1,1 +1,9 @@
 Include this module in your build if you want to enable the on-screen keyboard.
+
+The keyboard language can be changed with a horizontal swipe on the
+touchscreen. By default, this scrolls through a long list of languages.
+If you wish to configure this list to just cycle through a few keyboard
+of relevance to your deployment, use the 'languages' option, e.g.:
+
+[osk]
+languages=en_gb,de,es
