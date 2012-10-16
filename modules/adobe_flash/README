@@ -1,6 +1,4 @@
 This module installs Adobe Flash in the build.
-There is no configuration, simply include this module in your configuration.
-
 
 ***** WARNING *****
 
@@ -11,11 +9,26 @@ unless you have received special permission from Adobe.
 You can request such permission on the Adobe website.
 
 
+For platforms where Adobe provides a Flash RPM package (x86, at the time of
+writing), there is no configuration, simply include this module in your
+configuration.
 
-While Flash is available as a standard Fedora RPM distributed by Adobe, it
-breaks the rules of packaging and conditionally installs files based on the
-package set present on the system at time of installation -- it only installs
-the plugin if the web browser is installed prior to the installation of Flash.
+For other platforms (e.g. ARM), you must specify the local filesystem path
+to libflashplayer.so which you have obtained for your platform (ask OLPC for
+info), as follows:
+
+[adobe_flash]
+plugin_path=/path/to/libflashplayer.so
+
+
+
+
+== Notes on the Adobe Flash RPM ==
+
+The standard Fedora RPM distributed by Adobe breaks the rules of packaging and
+conditionally installs files based on the package set present on the system at
+time of installation -- it only installs the plugin if the web browser is
+installed prior to the installation of Flash.
 
 For this reason, if you simply add the Flash package as an extra package in
 the build, it is possible (and likely?) to be installed before the browser,
@@ -26,4 +39,3 @@ The workaround is to use this module, which adds the Adobe repository to the
 build and yum repository configuration, includes the package in the build,
 and includes a small amount of hackery to make sure that the plugin
 installation is performed after installation of all other packages.
-

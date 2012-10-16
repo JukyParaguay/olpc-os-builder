@@ -1,6 +1,6 @@
 # Run Adobe install script (basically the point of this module)
 # see README for an explanation of why this is necessary
-/usr/lib/flash-plugin/setup 32
+[ -e /usr/lib/flash-plugin/setup ] && /usr/lib/flash-plugin/setup 32
 
 # nspluginwrapper is needed at this time, because libflashplayer links
 # against GTK2 but our browser (Browse/Epiphany) is GTK3.
