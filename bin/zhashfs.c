@@ -165,8 +165,6 @@ int main(int argc, char **argv)
     FILE          *infile;
     long          i;
     off_t         insize;
-    off_t         outsizepos, zsizepos, lastpos;
-    char          *sizefmt;
     int		  readlen;
 
     int		  skip;
@@ -238,11 +236,6 @@ int main(int argc, char **argv)
         ++fname;
 
     fprintf(outfile, "data: %s\n", fname);
-    outsizepos = ftello(outfile);
-    zsizepos = ftello(zfile);
-    sizefmt = "[ifdef] size: size: %12.12lx [then]\n";
-    fprintf(outfile, sizefmt, 0);
-    fprintf(zfile,   sizefmt, 0);
     fprintf(outfile, "zblocks: %lx %lx\n", zblocksize, eblocks);
     fprintf(zfile,   "zblocks: %lx %lx\n", zblocksize, eblocks);
 
@@ -273,20 +266,9 @@ int main(int argc, char **argv)
     fprintf(outfile, "zblocks-end:\n");
     fprintf(zfile,   "zblocks-end:\n");
 
-    lastpos = ftello(zfile);
-
-    /* go back and rewrite zdata size line, now that it is known */
-    (void)fseeko(outfile, outsizepos, SEEK_SET);
-    fprintf(outfile, sizefmt, lastpos);
-    (void)fseeko(outfile, lastpos, SEEK_SET);
-
-    (void)fseeko(zfile, zsizepos, SEEK_SET);
-    fprintf(zfile, sizefmt, lastpos);
-    (void)fseeko(zfile, lastpos, SEEK_SET);
-
     fclose(infile);
     fclose(outfile);
 
-    putchar('\n');
+	putchar('\n');
     return EXIT_SUCCESS;
 }
