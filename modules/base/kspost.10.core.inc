@@ -35,21 +35,8 @@ sed -i -e '1,6s/^#auth/auth/' /etc/pam.d/su
 # solution: don't ship this file in the image, then it won't get checked
 rm -f /etc/sysconfig/keyboard
 
-# A similarly sticky situation is encountered with /etc/sysconfig/network
-# We must program our hostname in this file to keep NetworkManager happy
-# (#10852), but modifying this file which is ordinarily shipped with the image
-# would break pristine-ness. We cannot put this file in statetab for storage
-# in the persistent overlay, because /etc/rc.d/rc.sysinit reads this file in
-# early boot, before statetab mounts have been put in place (#11060).
-# So we resort to removing the file from the image and writing it in
-# olpc-configure on first boot.
-rm -f /etc/sysconfig/network
-
-cat >/etc/sysconfig/i18n <<__EOF__
-# LANG=C considerably speeds up boot (measured 5sec) -- bernie
-LANG=C
-SYSFONT=sun12x22
-__EOF__
+# Considerably speeds up boot (measured 5sec) -- bernie
+echo "LANG=C" > /etc/locale.conf
 
 # OLPC custom VT layout and serial console setup (#9517, #10354)
 sed -i -e 's:/sbin/agetty.*:/sbin/agetty --login-pause --autologin root --noclear %I:' \
@@ -84,7 +71,6 @@ sed -i -e 's/RW_OPTIONS=/RW_OPTIONS="-o size=1M -o nr_inodes=1024"/' /etc/syscon
 # over upgrades.
 cat >/etc/statetab.d/olpc <<EOF
 /etc/ssh
-/etc/sysconfig/i18n
 /etc/hosts
 /etc/timezone
 /var/lib/dbus
