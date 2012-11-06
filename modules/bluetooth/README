@@ -1,0 +1,5 @@
+This module aims to add bluetooth support to the software build.
+
+At the time of writing, this functionality is limited and only really aimed
+to satisfy production requirements (being able to do a basic bluetooth test
+from the command line) at the XO factory.
