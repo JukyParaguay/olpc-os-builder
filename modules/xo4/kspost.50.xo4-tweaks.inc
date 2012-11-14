@@ -6,3 +6,6 @@ ln -sf /lib/systemd/system/serial-getty@.service \
 mkdir -p /etc/systemd/system/runin.target.wants
 ln -sf /lib/systemd/system/serial-getty@.service \
 	/etc/systemd/system/runin.target.wants/serial-getty@ttyS2.service
+
+# FIXME: remove this once #12285 diagnosis is complete
+sed -i -e 's/- 200/- 400/g' /runin/runin-memory
