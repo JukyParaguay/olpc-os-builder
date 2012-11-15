@@ -9,3 +9,6 @@ ln -sf /lib/systemd/system/serial-getty@.service \
 
 # FIXME: remove this once #12285 diagnosis is complete
 sed -i -e 's/- 200/- 400/g' /runin/runin-memory
+
+# FIXME: remove this once XO-4 suspend works better
+touch /runin/no-suspend
