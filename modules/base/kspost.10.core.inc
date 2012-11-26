@@ -220,6 +220,11 @@ sed -i -e 's,/var/log/messages,:omfile:$messages,' \
 	-e '/$messages/ i$outchannel messages,/var/log/messages,1048576,/usr/sbin/olpc-logrotate' \
 	/etc/rsyslog.conf
 
+# limit journal memory usage (#12286)
+sed -i -e 's/#RuntimeMaxUse=$/RuntimeMaxUse=2M/' \
+	-e 's/#RuntimeMaxFileSize=$/RuntimeMaxFileSize=1M/' \
+	/etc/systemd/journald.conf
+
 # tweak upower behaviour, mostly to ignore lid events (#11815)
 sed -i -e 's/EnableWattsUpPro=true/EnableWattsUpPro=false/' \
 	-e 's/IgnoreLid=false/IgnoreLid=true/' \
