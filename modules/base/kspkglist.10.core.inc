@@ -53,5 +53,5 @@ ModemManager
 usb_modeswitch
 usb_modeswitch-data
 
-# provides lokkit, needed for disabling SELinux
-system-config-firewall-base
+# provides firewall-offline-cmd, needed for kickstart
+firewalld
