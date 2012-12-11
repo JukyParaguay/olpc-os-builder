@@ -1,4 +1,6 @@
-lang en_US.UTF-8
+# LANG=C considerably speeds up boot (measured 5sec) -- bernie
+lang C
+
 keyboard us
 auth --useshadow --enablemd5
 selinux --disabled

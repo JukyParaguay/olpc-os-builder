@@ -35,9 +35,6 @@ sed -i -e '1,6s/^#auth/auth/' /etc/pam.d/su
 # solution: don't ship this file in the image, then it won't get checked
 rm -f /etc/sysconfig/keyboard
 
-# Considerably speeds up boot (measured 5sec) -- bernie
-echo "LANG=C" > /etc/locale.conf
-
 # OLPC custom VT layout and serial console setup (#9517, #10354)
 sed -i -e 's:/sbin/agetty.*:/sbin/agetty --login-pause --autologin root --noclear %I:' \
 	/lib/systemd/system/getty\@.service
