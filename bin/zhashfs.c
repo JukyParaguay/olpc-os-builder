@@ -127,7 +127,7 @@ struct fiemap *read_fiemap(int fd)
 
 /* Given a file extent, determine which eblocks in the output file need to
  * represent that extent, and mark them as used in the eblocks_used map. */
-static void process_extent(struct fiemap_extent *ex)
+static long process_extent(struct fiemap_extent *ex)
 {
 	long i;
 	uint64_t last_byte = ex->fe_logical + ex->fe_length - 1;
@@ -137,17 +137,22 @@ static void process_extent(struct fiemap_extent *ex)
 	printf("Extent(%lld, %lld) occupies eblocks %d to %d\n", ex->fe_logical, ex->fe_length, first_eblock, last_eblock);
 	for (i = first_eblock; i <= last_eblock; i++)
 		eblocks_used[i] = 1;
+
+	return last_eblock;
 }
 
 /*
  * Use FIEMAP to determine the extents that make up a file.
  * Allocate eblocks_used array based on length of file, and then mark
  * the set of eblocks that contain data based on the extents.
+ * Returns the index of the last occupied eblock.
  */
-static void read_extents(FILE *infile)
+static long read_extents(FILE *infile)
 {
     int i;
     struct fiemap *fiemap = read_fiemap(fileno(infile));
+    long ret;
+
     LTC_ARGCHK(fiemap != NULL);
 
     eblocks_used = malloc(eblocks);
@@ -155,7 +160,9 @@ static void read_extents(FILE *infile)
     memset(eblocks_used, 0, eblocks);
 
 	for (i=0; i < fiemap->fm_mapped_extents; i++)
-		process_extent(&fiemap->fm_extents[i]);
+		ret = process_extent(&fiemap->fm_extents[i]);
+
+    return ret;
 }
 
 int main(int argc, char **argv)
@@ -226,7 +233,7 @@ int main(int argc, char **argv)
 //    LTC_ARGCHK((eblocks * zblocksize) == insize);
     }
 
-    read_extents(infile);
+    eblocks = read_extents(infile) + 1;
 
     /* Remove possible path prefix */
     fname = strrchr(argv[5], '/');
