@@ -151,7 +151,7 @@ static long read_extents(FILE *infile)
 {
     int i;
     struct fiemap *fiemap = read_fiemap(fileno(infile));
-    long ret;
+    long ret = 0;
 
     LTC_ARGCHK(fiemap != NULL);
 
