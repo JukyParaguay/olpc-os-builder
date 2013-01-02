@@ -86,7 +86,8 @@ sed -i -e '/Before=/ s/$/ systemd-random-seed-load.service/' /lib/systemd/system
 # described at https://bugzilla.redhat.com/show_bug.cgi?id=808907#c7
 for i in fedora-loadmodules mdmonitor-takeover systemd-readahead-collect \
 		fedora-wait-storage fedora-storage-init fedora-storage-init-late \
-		fedora-autorelabel fedora-autorelabel-mark systemd-random-seed-save; do
+		fedora-autorelabel fedora-autorelabel-mark systemd-random-seed-save \
+		firewalld; do
 	ln -s /dev/null /etc/systemd/system/$i.service
 done
 
