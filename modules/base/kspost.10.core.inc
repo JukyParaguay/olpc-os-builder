@@ -228,6 +228,14 @@ sed -i -e 's/EnableWattsUpPro=true/EnableWattsUpPro=false/' \
 	-e 's/IgnoreLid=false/IgnoreLid=true/' \
 	/etc/UPower/UPower.conf
 
+# ignore lid events in logind too (#12504)
+sed -i \
+	-e "s/#HandleSuspendKey=.*/HandleSuspendKey=ignore/" \
+	-e "s/#HandlePowerKey=.*/HandlePowerKey=ignore/" \
+	-e "s/#HandleHibernateKey=.*/HandleHibernateKey=ignore/" \
+	-e "s/#HandleLidSwitch=.*/HandleLidSwitch=ignore/" \
+	/etc/systemd/logind.conf
+
 # Tracker has snuck in and is autostarted by default.
 # I don't think we want this.
 # https://bugzilla.redhat.com/show_bug.cgi?id=821952
