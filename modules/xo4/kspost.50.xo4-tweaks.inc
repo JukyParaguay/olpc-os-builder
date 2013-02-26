@@ -10,7 +10,3 @@ ln -sf /lib/systemd/system/serial-getty@.service \
 # FIXME: remove this once XO-4 bluetooth works better
 touch /runin/no-bluetooth
 echo "blacklist btmrvl_sdio" > /etc/modprobe.d/btmrvl.conf
-
-# fix wifi suspend/resume failure (#12560)
-# FIXME: remove once firmware Q7B19 is released
-sed -i -e '2ih# 140 d# 35 af!' /boot/olpc.fth
