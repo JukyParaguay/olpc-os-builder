@@ -10,6 +10,3 @@ ln -sf /lib/systemd/system/serial-getty@.service \
 # FIXME: remove this once XO-4 bluetooth works better
 touch /runin/no-bluetooth
 echo "blacklist btmrvl_sdio" > /etc/modprobe.d/btmrvl.conf
-
-# FIXME: remove this once XO-4 wol works better (#12490)
-echo "config_WAKE_ON_WLAN=no" >> /etc/powerd/powerd.conf
