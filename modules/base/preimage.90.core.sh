@@ -17,7 +17,8 @@ fi
 # due to popular demand
 # FIXME: ship in olpc-utils?
 cat >$fsmount/boot/README <<EOF
-The following documentation is for developers only.
+The following documentation is for developers only. As kernel RPMs will
+auto-install to the right places, you usually do not have to care about this.
 
 
 === PARTITIONED LAYOUT ===
@@ -38,11 +39,6 @@ duplicate the boot contents in 2 places:
 
 In other words, if you want to use a different kernel or initramfs then you
 want to put the files in /bootpart/boot.
-
-Installing a kernel RPM will put the new kernel and initramfs in /boot, so
-this will not take effect on reboot. You need to synchronize those new files
-into the real boot partition, e.g.:
-	# rsync --delete-before -av /boot/ /bootpart/boot/
 
 This duplication is a consequence of the olpc-update design, where updates
 can currently only be presented as a single filesystem tree described by a
@@ -65,11 +61,6 @@ OFW boots from the real /boot, which is an indirect symlink to the real
 real /versions/run/x/boot. Therefore any files you put in /boot will not
 be available to OFW at boot-time, and if you break the hard links of existing
 files then your changes will also not take effect.
-
-Installing a kernel RPM will put the new kernel and initramfs in /boot, so
-this will not take effect on reboot. You need to synchronize those new files
-into the real boot area, e.g.:
-	# cp -a /boot/* /versions/boot/current/boot/
 EOF
 
 # image-creator seems to conditionally create and populate this directory
