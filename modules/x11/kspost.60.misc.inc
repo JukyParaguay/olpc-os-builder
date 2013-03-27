@@ -1,6 +1,3 @@
-# Workaround an unknown bug where TamTam sound is crackly on XO-1.5 (#9414)
-sed -i -e 's/dmix.rate 48000/dmix.rate 44100/' /usr/share/alsa/alsa.conf
-
 # Don't try and autospawn pulseaudio (#9470)
 sed -i -e 's/; autospawn = yes/autospawn = no/' /etc/pulse/client.conf
 
