@@ -91,6 +91,9 @@ for i in fedora-loadmodules mdmonitor-takeover systemd-readahead-collect \
 	ln -s /dev/null /etc/systemd/system/$i.service
 done
 
+# enable certain systemd units
+systemctl enable ds-backup.timer
+
 #prefdm tweaks
 #sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
 
