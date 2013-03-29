@@ -245,3 +245,9 @@ rm -f /etc/xdg/autostart/tracker*.desktop 2>/dev/null
 # Disable it, it's not interesting for us
 rm -f /var/log/wtmp
 ln -s /dev/null /etc/systemd/system/systemd-update-utmp-shutdown.service
+
+# ping requires CAP_NET_RAW and now ships with file capabilities to make
+# this happen. however, we do not support file capabilities in our update
+# system. as this is a useful network diagnosis tool, and used by ds-backup,
+# make it available to non-root users again (#12427)
+chmod u+s /usr/bin/ping
