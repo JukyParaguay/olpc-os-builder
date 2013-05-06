@@ -93,6 +93,7 @@ done
 
 # enable certain systemd units
 systemctl enable ds-backup.timer
+systemctl enable olpc-update-query.timer
 
 #prefdm tweaks
 #sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
@@ -164,9 +165,6 @@ EOF
 # this copy can probably be removed too, see
 # https://bugzilla.redhat.com/show_bug.cgi?id=546215
 rm -f /etc/avahi/etc/localtime
-
-# kill a load of non-interesting anacron tasks (#10247)
-chmod -x /etc/cron.daily/logrotate
 
 # Fedora's initscripts packages writes /etc/adjtime without a 3rd line,
 # which makes hwclock assume that the hardware clock has local time.
