@@ -7,10 +7,6 @@ mkdir -p /etc/systemd/system/runin.target.wants
 ln -sf /lib/systemd/system/serial-getty@.service \
 	/etc/systemd/system/runin.target.wants/serial-getty@ttyS2.service
 
-# FIXME: remove this once XO-4 bluetooth works better
-touch /runin/no-bluetooth
-echo "blacklist btmrvl_sdio" > /etc/modprobe.d/btmrvl.conf
-
 # enable dmix and dsnoop software sound mixing (#12487, #12606)
 # FIXME: this should be upstreamed (perhaps in a different form)
 cat <<'EOF' > /usr/share/alsa/cards/OLPC_XO-1_75.conf
