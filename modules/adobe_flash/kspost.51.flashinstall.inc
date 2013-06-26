@@ -16,3 +16,8 @@ rm -f /usr/lib/mozilla/plugins-wrapped/nswrapper*.so
 /usr/lib/nspluginwrapper/npconfig -n -p nswrapper_32_32 \
 	-d /usr/lib/mozilla/plugins-wrapped \
 	-i /usr/lib/mozilla/plugins/libflashplayer.so
+
+# epiphany runs this on startup, and it has root power (thanks to suid)
+# as it doesn't think that flash player needs wrapping (its 32 bit, and
+# so is the CPU), it effectively undoes the above. stop this from happening.
+chmod a-x /usr/bin/mozilla-plugin-config
