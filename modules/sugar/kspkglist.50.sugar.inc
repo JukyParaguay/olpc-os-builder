@@ -1,7 +1,5 @@
 # sugar desktop
 sugar
-sugar-base
-sugar-toolkit
 sugar-toolkit-gtk3
 
 # sugar control panels
@@ -18,7 +16,6 @@ webkitgtk3
 espeak
 etoys
 evince-djvu
-gtksourceview2
 gvfs
 libffi
 numpy
@@ -27,11 +24,6 @@ csound-python
 pygame
 python-alsaaudio
 squeak-vm
-python-cjson
-
-# Browse
-gnash-plugin
-totem-mozplugin
 
 # Terminal
 vte3
@@ -53,6 +45,3 @@ gstreamer-plugins-espeak
 # components, otherwise the KDE ones will be brought in by default
 PolicyKit-gnome
 notification-daemon
-
-# standard part of of PyGTK, used by some activities (#11053)
-pygtk2-libglade

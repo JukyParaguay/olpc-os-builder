@@ -13,5 +13,4 @@ kacst-fonts
 
 # sound backend
 alsa-utils
-gstreamer-plugins-good
 gstreamer1-plugins-good

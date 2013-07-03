@@ -3,9 +3,9 @@ ln -sf /lib/systemd/system/serial-getty@.service \
 	/etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service
 
 # enable serial console for runin too
-mkdir -p /etc/systemd/system/runin.target.wants
-ln -sf /lib/systemd/system/serial-getty@.service \
-	/etc/systemd/system/runin.target.wants/serial-getty@ttyS0.service
+# mkdir -p /etc/systemd/system/runin.target.wants
+# ln -sf /lib/systemd/system/serial-getty@.service \
+#	/etc/systemd/system/runin.target.wants/serial-getty@ttyS0.service
 
 # enable openchrome driver
 cat > /usr/share/olpc-utils/xorg.conf.d/xo1.5.conf << 'EOF'
