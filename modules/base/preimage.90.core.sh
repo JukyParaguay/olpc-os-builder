@@ -95,6 +95,8 @@ find $fsmount -xdev -print0 | xargs -0 touch -h -c -d "$OLPC_EPOCH" || :
 
 # fails to compile due to "..."
 rm -f $fsmount/usr/lib/python2.7/lib2to3/tests/data/py3_test_grammar.py*
+# not a python file (rh#980971)
+rm -f $fsmount/usr/share/bash-completion/completions/yummain.py
 
 # now regenerate the .pyc files
 # (add -OO to generate .pyo files instead when we tackle dlo trac #8431)
