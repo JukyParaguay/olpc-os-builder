@@ -214,11 +214,6 @@ sed -i -e 's/plymouthd --mode=shutdown/plymouthd --mode=shutdown "--kernel-comma
 # remove the boot-duration file since it gets changed during boot (#11862)
 rm -f /var/lib/plymouth/boot-duration
 
-# call olpc-logrotate when log file hits 1mb (#10075)
-sed -i -e 's,/var/log/messages,:omfile:$messages,' \
-	-e '/$messages/ i$outchannel messages,/var/log/messages,1048576,/usr/sbin/olpc-logrotate' \
-	/etc/rsyslog.conf
-
 # limit journal memory usage (#12286)
 sed -i -e 's/#RuntimeMaxUse=$/RuntimeMaxUse=2M/' \
 	-e 's/#RuntimeMaxFileSize=$/RuntimeMaxFileSize=1M/' \

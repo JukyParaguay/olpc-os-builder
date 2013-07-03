@@ -17,7 +17,6 @@ yum
 tree
 nano
 less
-rsyslog
 
 # basic debugging
 strace
