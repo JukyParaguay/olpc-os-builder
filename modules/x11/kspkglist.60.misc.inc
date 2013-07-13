@@ -11,11 +11,6 @@ google-droid-sans-mono-fonts
 google-droid-serif-fonts
 kacst-fonts
 
-# Input for Chinese
-scim
-scim-gtk
-scim-pinyin
-
 # sound backend
 alsa-utils
 gstreamer-plugins-good
