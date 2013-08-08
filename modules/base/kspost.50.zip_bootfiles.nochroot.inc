@@ -68,9 +68,10 @@ create_compat() {
 # Some old, released firmware versions for XO-1 and XO-1.5 don't support the
 # new "versioned" zip file naming scheme. Create symlinks to the old names
 # for backwards compatibility.
-if [ "$suffix" -lt 3 ]; then
+if [ "$suffix" -lt 2 ]; then
 	create_compat actos
 	create_compat actrd
 	create_compat runos
 	create_compat runrd
+	create_compat bootfw
 fi
