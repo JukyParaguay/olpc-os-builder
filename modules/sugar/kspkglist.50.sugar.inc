@@ -28,6 +28,7 @@ pygame
 python-alsaaudio
 squeak-vm
 python-cjson
+libabiword
 
 # Browse
 gnash-plugin
@@ -35,6 +36,7 @@ totem-mozplugin
 
 # Terminal
 vte
+vte3
 
 # dependencies for Epub support in Read
 python-BeautifulSoup
