@@ -93,7 +93,6 @@ done
 
 # enable certain systemd units
 systemctl enable ds-backup.timer
-systemctl enable olpc-update-query.timer
 
 #prefdm tweaks
 #sed -i -e 's/respawn limit 10/respawn limit 3/' /etc/init/prefdm.conf
