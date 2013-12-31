@@ -54,3 +54,6 @@ usb_modeswitch-data
 
 # provides firewall-offline-cmd, needed for kickstart
 firewalld
+
+# local network service discovery, #12730
+nss-mdns
