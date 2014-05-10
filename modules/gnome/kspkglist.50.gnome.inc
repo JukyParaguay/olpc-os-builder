@@ -1,7 +1,6 @@
 # gnome desktop
 gnome-python2-gconf
 gnome-desktop
-gnome-panel
 gnome-session
 gnome-terminal
 gnome-settings-daemon
