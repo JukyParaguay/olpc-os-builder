@@ -101,7 +101,8 @@ rm -f $fsmount/usr/share/bash-completion/completions/yummain.py
 # now regenerate the .pyc files
 # (add -OO to generate .pyo files instead when we tackle dlo trac #8431)
 echo "Compiling python bytecode..."
-chroot $fsmount python -m compileall /usr/lib /usr/share > /dev/null
+chroot $fsmount python -m compileall /usr/lib/python2.7 /usr/share/sugar \
+    /usr/share/sugar-presence-service
 # now we have to normalize the mtimes of the new pyc/pyo files, but we'll do 
 # that after we've finished making other fs changes below
 
