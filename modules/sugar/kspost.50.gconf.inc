@@ -16,3 +16,5 @@ default-nick='disabled'
 EOF
 /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas
 
+# set font size in gconf for gtk2 activities
+gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type float --set /desktop/sugar/font/default_size 7
