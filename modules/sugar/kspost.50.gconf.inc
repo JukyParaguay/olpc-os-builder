@@ -1,14 +1,18 @@
-# Sugar font
-gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type float --set /desktop/sugar/font/default_size 7
+cat >/usr/share/glib-2.0/schemas/sugar.oob.gschema.override <<EOF
+[org.sugarlabs]
+show-logout=false
 
-# disable logout button in Sugar
-gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults -s -t bool /desktop/sugar/show_logout false
+[org.sugarlabs.font]
+default-size=7
 
-# set sugar power management on
-gconftool-2 --direct --config-source=xml:readwrite:/etc/gconf/gconf.xml.defaults -s -t bool /desktop/sugar/power/automatic true
+[org.sugarlabs.power]
+automatic=true
 
-# set empty jabber server so that no gabble connection is attempted by default
-gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /desktop/sugar/collaboration/jabber_server ''
+[org.sugarlabs.collaboration]
+jabber-server=''
 
-# Ask for the nick name when starting Sugar the first time
-gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type string --set /desktop/sugar/user/default_nick 'disabled'
+[org.sugarlabs.user]
+default-nick='disabled'
+EOF
+/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas
+

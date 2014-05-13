@@ -1,5 +1,9 @@
 # do not show the Sugar default ad-hoc networks on the XO-1
-gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults --type bool --set /desktop/sugar/network/adhoc false
+cat >/usr/share/glib-2.0/schemas/sugar.oob.xo1.gschema.override <<EOF
+[org.sugarlabs.network]
+adhoc=false
+EOF
+/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas
 
 # enable serial console on ttyS0
 ln -sf /lib/systemd/system/serial-getty@.service \
