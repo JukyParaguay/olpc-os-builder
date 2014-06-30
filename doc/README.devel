@@ -265,20 +265,21 @@ files differently. (e.g. osXX.img for jffs2, and osXX.disk.img for SD)
 == RELEASING AN OLPC OS BUILD ==
 
 When releasing an official OLPC OS build, you should do the following:
- - Modify the config so that [base].official=1
+ - Add global.official=1 to config
  - Make and test the build
  (assuming test success...)
  - Bump olpc-os-builder version number
  - Modify config to set suggested_oob_version in [base] to the first two
    components of the new version number (e.g. 1.3)
- - Delete [base].official setting from config
+ - Delete global.official=1 setting from config
  - Save config in examples/ directory with appropriate name
  - Tag and release new olpc-os-builder
 
-The base.official option basically requires that the user supplies a
-base.customization_info setting. If they don't, "unofficial" will be used.
-However, if base.official is 1, customization_info can be left empty and
-no "unofficial" tag will be appended. This will allow us to easily distinguish
+The global.official option basically requires that the user supplies a
+global.customization_info setting. If they don't, "customized" will be used.
+
+However, if global.official is 1, customization_info can be left empty and
+no "customized" tag will be appended. This will allow us to easily distinguish
 between official OLPC releases, and releases that are made by third parties.
 
 Bumping the version and noting that version in the config is important in
