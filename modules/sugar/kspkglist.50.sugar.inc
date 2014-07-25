@@ -17,6 +17,8 @@ sugar-cp-updater
 sugar-cp-webaccount
 
 # additional sugar packages
+dconf
+gstreamer-python
 libxml2-python
 webkitgtk3
 espeak
