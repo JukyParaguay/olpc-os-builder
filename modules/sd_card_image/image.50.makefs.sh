@@ -79,17 +79,23 @@ make_image()
 $ROOT_PARTITION_START_BLOCK,,,
 EOF
 
+	disk_loop=$(losetup --show --find --partscan $img)
+	boot_loop="${disk_loop}p1"
+	root_loop="${disk_loop}p2"
+
+	# Work around occasional failure for loop partitions to appear
+	# http://marc.info/?l=linux-kernel&m=134271282127702&w=2
+	local i=0
+	while ! [ -e "$boot_loop" ]; do
+		partx -a -v $disk_loop
+		sleep 1
+		(( ++i ))
+		[ $i -ge 10 ] && break
+	done
+
 	echo "Create filesystems..."
-
-	boot_loop=$(losetup --show --find $img -o 4194304 --sizelimit 62914560)
-
 	mke2fs -O dir_index,^resize_inode -L Boot -F $boot_loop
 	mount $boot_loop $BOOT
-
-	local root_start=$(($ROOT_PARTITION_START_BLOCK * $BLOCK_SIZE))
-	local root_size=$(($image_size - $root_start))
-
-	root_loop=$(losetup --show --find $img -o $root_start --sizelimit $root_size
 
 	mkfs.ext4 -O dir_index,^huge_file -E resize=8G -m1 -L OLPCRoot $root_loop
 	tune2fs -o journal_data_ordered $root_loop
@@ -126,8 +132,7 @@ EOF
 
 	umount $ROOT
 	umount $BOOT
-	losetup -d $boot_loop || :
-	losetup -d $root_loop || :
+	losetup -d $disk_loop || :
 
 	# FIXME: any value to running e2fsck now? maybe with -D ?
 }
