@@ -9,9 +9,10 @@ sugar-cp-frame
 sugar-cp-language
 sugar-cp-modemconfiguration
 sugar-cp-network
-sugar-cp-webservices
 sugar-cp-power
 sugar-cp-updater
+sugar-cp-background
+sugar-cp-webaccount
 
 # additional sugar packages
 webkitgtk3
