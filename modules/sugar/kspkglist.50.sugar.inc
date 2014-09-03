@@ -37,7 +37,6 @@ totem-mozplugin
 
 # Record, Measure, and Jukebox
 gstreamer-python
-gstreamer-plugins-good
 
 # Terminal
 vte3
