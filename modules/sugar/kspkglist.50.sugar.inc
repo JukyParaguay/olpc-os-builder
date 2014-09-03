@@ -26,6 +26,8 @@ csound-python
 pygame
 python-alsaaudio
 squeak-vm
+gstreamer-python
+gstreamer-plugins-good
 
 # Terminal
 vte3
