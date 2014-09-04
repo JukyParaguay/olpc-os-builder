@@ -40,7 +40,7 @@ gstreamer-python
 
 # Terminal
 vte3
-python-cjson
+python-simplejson
 
 # dependencies for Epub support in Read
 python-BeautifulSoup
