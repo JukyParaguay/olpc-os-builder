@@ -32,6 +32,7 @@ if install_activities:
     vrel = int(ooblib.read_config('global', 'olpc_version_release'))
 
     suffixes = ["%d.%d.%d" % (vmaj, vmin, vrel), "%d.%d" % (vmaj, vmin), ""]
+    results = None
 
     for suffix in suffixes:
         if len(suffix) > 0:
