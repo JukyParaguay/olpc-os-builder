@@ -256,7 +256,8 @@ class OsBuilder(object):
         # and set interpolation default for oob_config_dir
         self.cfg = SafeConfigParser({'oob_config_dir':
                                      os.path.dirname(self.build_configs[0])})
-        for cfg in self.build_configs:
+        self.cfg.readfp(open(self.build_configs[0]))
+        for cfg in self.build_configs[1:]:
             self.cfg.read(cfg)
 
         if self.cfg.has_option('global', 'suggested_oob_version'):
