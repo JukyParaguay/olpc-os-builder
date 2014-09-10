@@ -225,7 +225,7 @@ class OsBuilderException(Exception):
     pass
 
 class OsBuilder(object):
-    def __init__(self, build_configs):
+    def __init__(self, build_configs, cacheonly):
         self.build_configs = []
         for cfg in build_configs:
             self.build_configs.append(os.path.abspath(cfg))
@@ -250,8 +250,7 @@ class OsBuilder(object):
         self.statedir = os.path.join(self.builddir, 'state')
         self.fsmount = os.path.join(self.builddir, 'mnt-fs')
 
-        # gets set in build()
-        self.cacheonly = False
+        self.cacheonly = cacheonly
 
         # load config to find module list
         # and set interpolation default for oob_config_dir
@@ -383,15 +382,14 @@ class OsBuilder(object):
         # cleanup stage not listed here as its a bit of a special case
     )
 
-    def build(self, clean_output=True, clean_intermediates=True, cacheonly=False):
+    def build(self, clean_output=True, clean_intermediates=True):
         # cleanup from previous runs
         if clean_intermediates and os.path.exists(self.intermediatesdir):
             shutil.rmtree(self.intermediatesdir)
         if clean_output and os.path.exists(self.outputdir):
             shutil.rmtree(self.outputdir)
 
-        self.cacheonly = cacheonly
-        if cacheonly and not os.path.exists(self.cachedir):
+        if self.cacheonly and not os.path.exists(self.cachedir):
             raise OsBuilderException("Missing cache, cannot use --cache-only")
 
         for dir in (self.builddir, self.cachedir, self.intermediatesdir,
@@ -444,10 +442,9 @@ def main():
         op.error("incorrect number of arguments")
 
     try:
-        osb = OsBuilder(args)
+        osb = OsBuilder(args, options.cacheonly)
         osb.build(clean_output=options.clean_output,
-                  clean_intermediates=options.clean_intermediates,
-                  cacheonly=options.cacheonly)
+                  clean_intermediates=options.clean_intermediates)
     except OsBuilderException, e:
         print >>sys.stderr, "ERROR:", e
         sys.exit(1)
