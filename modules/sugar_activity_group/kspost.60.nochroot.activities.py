@@ -57,7 +57,7 @@ if install_activities:
                 if e.code == 404:
                     continue
                 raise e
-            if len(results) == 0 or (name is None and desc is None):
+            if len(results) == 0:
                 continue
             print >>sys.stderr, "Found activity group:", name
             pickle.dump([name, desc, results], open(grpurlcache, 'w'))
