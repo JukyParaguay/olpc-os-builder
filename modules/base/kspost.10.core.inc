@@ -246,3 +246,9 @@ ln -s /dev/null /etc/systemd/system/systemd-update-utmp-shutdown.service
 # system. as this is a useful network diagnosis tool, and used by ds-backup,
 # make it available to non-root users again (#12427)
 chmod u+s /usr/bin/ping
+
+# while our kernel lacks SO_REUSEPORT (3.9), configure avahi daemon to
+# avoid depending on it, otherwise it doesn't start.
+sed -i \
+    -e 's/#disallow-other-stacks=no/disallow-other-stacks=yes/' \
+    /etc/avahi/avahi-daemon.conf
