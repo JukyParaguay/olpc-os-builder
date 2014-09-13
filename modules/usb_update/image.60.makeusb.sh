@@ -7,6 +7,11 @@ minver=$(read_config global olpc_version_minor)
 relver=$(read_config global olpc_version_release)
 versioned_fs=$(read_config base versioned_fs)
 buildnr=$(read_buildnr)
+suppress=$(read_config usb_update suppress)
+
+if [ "$suppress" = "1" ]; then
+	exit 0
+fi
 
 if [ "$versioned_fs" != "1" ]; then
 	echo "ERROR: usb_upgrade requires base.versioned_fs=1" >&2
@@ -15,4 +20,3 @@ fi
 
 echo "Making USB olpc-update image..."
 mkisofs -o $outputdir/$(image_name).usb -quiet -cache-inodes -iso-level 4 -publisher "olpc-os-builder" -R -V "$majver.$minver.$relver $buildnr" $fsmount/versions/pristine/*
-
