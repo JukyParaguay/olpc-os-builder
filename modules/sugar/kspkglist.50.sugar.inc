@@ -17,6 +17,7 @@ sugar-cp-background
 sugar-cp-webaccount
 
 # additional sugar packages
+dconf
 webkitgtk3
 espeak
 etoys
