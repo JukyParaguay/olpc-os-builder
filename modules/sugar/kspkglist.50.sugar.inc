@@ -5,12 +5,16 @@ sugar-toolkit
 sugar-toolkit-gtk3
 
 # sugar control panels
+sugar-cp-background
+sugar-cp-backup
 sugar-cp-datetime
 sugar-cp-frame
 sugar-cp-language
 sugar-cp-modemconfiguration
 sugar-cp-network
 sugar-cp-power
+sugar-cp-updater
+sugar-cp-webaccount
 
 # additional sugar packages
 libxml2-python
@@ -50,9 +54,6 @@ pybox2d
 
 # for text-to-speech in Read
 gstreamer-plugins-espeak
-
-# using a non-upstream updater temporarily (#10641)
-sugar-update-control
 
 # explicitly specify dependencies on GNOME's implementation of certain
 # components, otherwise the KDE ones will be brought in by default
